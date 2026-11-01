@@ -6,13 +6,14 @@ import { mkdtempSync, mkdirSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 
-test("real Pi runtime reloads the harness and starts fresh worker/review sessions without inference", { timeout: 60000 }, async () => {
+for (const development of [false, true]) test(`real Pi reloads worker/review sessions with development=${development} without inference`, { timeout: 60000 }, async () => {
   const root = mkdtempSync(join(tmpdir(), "lemmaduck-pi-"));
   const data = join(root, "data"); mkdirSync(join(data, "config"), { recursive: true });
   // Fixture attestation applies only to this temporary profile. No credentials, no model request.
   writeFileSync(join(data, "config/billing.json"), JSON.stringify({ "gemini-cli-acp": { extraUsageDisabled: true } }));
   const project = join(root, "project"); mkdirSync(project);
-  const child = spawn(process.execPath, [process.env.LEMMADUCK_TEST_CLI || resolve("dist/cli.js"), "agent", project, "--rpc"], {
+  if (development) writeFileSync(join(project, ".lemmaduck-kind"), "development\n");
+  const child = spawn(process.execPath, [process.env.LEMMADUCK_TEST_CLI || resolve("dist/cli.js"), "agent", project, "--rpc", ...(development ? ["--pi"] : [])], {
     env: { ...process.env, LEMMADUCK_DATA_DIR: data, LEMMADUCK_STATE_DIR: join(root, "state") }, stdio: "pipe",
   });
   let seq = 0; const pending = new Map<string, { resolve: (x: any) => void; reject: (error: Error) => void }>(); const errors: string[] = [];

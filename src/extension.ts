@@ -3,7 +3,7 @@ import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import type { Model } from "@earendil-works/pi-ai";
-import { billingConfirmed, geminiHome } from "./config.js";
+import { billingConfirmed, claudePlanSignedIn, geminiHome } from "./config.js";
 import { profileDir, projectPath, repoRoot } from "./paths.js";
 import { assertManagedProject, assertPrivateAuthStore, assertRoute, classifyFailure, confinedPath, type Provider } from "./security.js";
 import { ALIASES, enabledProviders, providerLabel, readProviders } from "./providers.js";
@@ -32,6 +32,9 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   let contextAlert = 0;
   const gemini = registerGemini(pi, store, () => current, () => review);
   const notify = (ctx: ExtensionContext, text: string, error = false) => ctx.ui.notify(text, error ? "error" : "info");
+  const verifyClaude = (provider: string | undefined) => {
+    if (provider === "claude-bridge" && !claudePlanSignedIn()) throw new Error("Claude Code did not confirm a first-party Claude plan login. Run lemmaduck login claude before using this subscription route.");
+  };
   const guard = (ctx: ExtensionContext) => {
     assertManagedProject(store.project);
     assertPrivateAuthStore(join(profileDir, "auth.json"));
@@ -104,6 +107,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       }
       if (!provider) return;
       if (!billingConfirmed(provider)) throw new Error(`Account extra-usage setting is unconfirmed. Run: lemmaduck billing confirm ${provider} --extra-usage-off after checking your account.`);
+      verifyClaude(provider);
       const models = ctx.modelRegistry.getAll().filter(model => model.provider === provider);
       if (!models.length) throw new Error(`No account models available yet. Run lemmaduck login ${provider}, then restart the harness.`);
       const choice = models.length === 1 ? models[0]!.id : await ctx.ui.select("Select model (availability requires account verification)", models.map(model => model.id));
@@ -185,7 +189,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   });
   pi.on("model_select", async (event, ctx) => { current = ctx; if (!changing && `${event.model.provider}/${event.model.id}` !== selected) { selected = undefined; await gemini.reset(); notify(ctx, "Use /switch before sending input so the handoff starts a fresh session."); } });
   pi.on("input", (_event, ctx) => { current = ctx; try { guard(ctx); return { action: "continue" }; } catch (error) { notify(ctx, String(error), true); return { action: "handled" }; } });
-  pi.on("before_provider_request", (_event, ctx) => { try { guard(ctx); } catch (error) { ctx.abort(); notify(ctx, String(error), true); } });
+  pi.on("before_provider_request", (_event, ctx) => { try { guard(ctx); verifyClaude(ctx.model?.provider); } catch (error) { ctx.abort(); notify(ctx, String(error), true); } });
   pi.on("before_agent_start", (event, ctx) => {
     current = ctx; store.task.status = "running"; store.save(); visual.start();
     if (!store.task.goal) store.task.goal = event.prompt;

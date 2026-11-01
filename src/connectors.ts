@@ -4,7 +4,7 @@ import { isAbsolute, join } from "node:path";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 import { StdioClientTransport } from "@modelcontextprotocol/sdk/client/stdio.js";
 import { StreamableHTTPClientTransport } from "@modelcontextprotocol/sdk/client/streamableHttp.js";
-import { installHome, privateDir, repoRoot, stateRoot } from "./paths.js";
+import { installHome, packageVersion, privateDir, repoRoot, stateRoot } from "./paths.js";
 import { atomicJson } from "./state.js";
 
 type Effect = "read" | "draft" | "write" | "send";
@@ -65,7 +65,7 @@ export async function connectorCommand(argv: string[]): Promise<void> {
   const conn = Object.hasOwn(links, account) ? links[account] : undefined;
   if (!conn || !platforms.includes(conn.platform) || !conn.tools) throw new Error("Configure the account in " + config);
   if (!(op === "tools" && argv.length === 2) && !(op === "call" && tool && file && [4, 6].includes(argv.length))) throw new Error(help);
-  const client = new Client({ name: "lemmaduck", version: "0.4.0" });
+  const client = new Client({ name: "lemmaduck", version: packageVersion });
   try {
     await client.connect(transport(conn));
     if (op === "tools") {

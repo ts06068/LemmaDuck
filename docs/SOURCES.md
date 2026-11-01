@@ -44,3 +44,9 @@ Additional provider registration follows the installed Pi 0.87.1 provider catalo
 and models.json schema. Local and compatible API fixture tests verify the
 registered route; support for an API protocol is not proof of account entitlement
 or a successful request to every provider in that catalog.
+
+## Paseo and coding
+
+- Paseo 0.14.0 and its dependency graph are pinned in `locks/paseo/package-lock.json`. The custom provider extends native `omp` and uses the `rpc-ui` integration. [Paseo custom providers](https://github.com/getpaseo/paseo/blob/v0.14.0/docs/custom-providers.md)
+- OMP 18.14.2 uses the official Linux x64 binary with its recorded SHA-256. The provider list in `locks/omp-providers.json` comes from the same tagged source. Upstream `disabledProviders` filters background discovery as well as available models. [OMP release](https://github.com/can1357/oh-my-pi/releases/tag/v18.14.2) · [Model registry](https://github.com/can1357/oh-my-pi/blob/v18.14.2/packages/coding-agent/src/config/model-registry.ts)
+- Claude policy was checked on November 1, 2026. Personal official SDK login still uses subscription limits. The direct Console API route has separate billing and third-party login remains subject to provider conditions. [Plan guidance](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) · [Login conditions](https://support.claude.com/en/articles/13189465-log-in-to-your-claude-account)

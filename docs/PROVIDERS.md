@@ -1,6 +1,47 @@
 # Registering model providers
 
-The default routes are ChatGPT (`openai-codex`), Claude (`claude-bridge`) and Gemini (`gemini-cli-acp`). `chatgpt` is the user-facing command; `gpt` remains a compatibility alias. Provider and model IDs are not renamed, so saved sessions remain valid.
+Paseo is the default workbench. OMP handles coding. Pi handles research, writing, read-only review and assistant tasks. Each engine keeps its own credentials and sessions.
+
+Pi's default routes are ChatGPT (`openai-codex`), Claude (`claude-bridge`) and Gemini (`gemini-cli-acp`). `chatgpt` is the user-facing command and `gpt` remains a compatibility alias. Saved provider and model IDs remain valid.
+
+## Claude subscriptions and the current policy
+
+Checked on November 1, 2026. Anthropic's official guidance says that the metering change planned for June 15 is paused. Signing into the official Claude Agent SDK or `claude -p` with your own Claude plan still draws on subscription limits. Using a Console API key follows API billing. Some plans include monthly Console API credits, whose availability depends on the linked account. [Claude plan and Agent SDK guidance](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan)
+
+Third-party login permission remains conditional. Anthropic recommends API keys for third-party tools and separately restricts credential brokerage, login services for other users and attempts to present a third-party client as an official product. This personal harness uses the published Claude Code executable through the official SDK. [Login policy](https://support.claude.com/en/articles/13189465-log-in-to-your-claude-account) · [Claude Code compliance](https://code.claude.com/docs/en/legal-and-compliance)
+
+On the host, run these commands for your own Claude account.
+
+```sh
+lemmaduck login claude
+lemmaduck billing confirm claude --extra-usage-off
+lemmaduck agent /path/to/project --pi
+```
+
+The login command invokes official `claude auth login --claudeai` in a dedicated profile. Confirm billing only after checking your account's extra-usage and auto-refill settings. In Pi enter `/switch claude` and choose a model. LemmaDuck checks official `claude auth status --json` before selecting Claude and before a request. This verifies the local authentication route. Live entitlement and remaining usage are determined by Anthropic. [Authentication](https://code.claude.com/docs/en/authentication)
+
+The managed runtime removes API-key and alternate billing variables from the inherited environment, requires the `claude-bridge` SDK transport, and pauses on quota errors. It retains the existing task journal and handoffs. The pinned `pi-claude-bridge` 0.8.0 works with Pi 0.87.1. Loading it directly into OMP 18.14.2 fails an extension import, so Claude subscription sessions use Pi. OMP coding supports the separately enabled Console API route below.
+
+If you previously registered `anthropic --subscription`, that old registration is inactive. To remove its local credential and use the official route, run `lemmaduck providers remove anthropic`, then `lemmaduck login claude`. Removal also handles an orphaned direct Anthropic OAuth credential. It preserves other accounts.
+
+### Explicit Claude Console API use
+
+```sh
+lemmaduck providers add anthropic --allow-paid-api
+lemmaduck login anthropic
+```
+
+The second command explains how to supply `LEMMADUCK_MODEL_ANTHROPIC_KEY` through your host's secret manager. It does not open an OAuth prompt. The API route is labeled as potentially chargeable even when your Console account has credits. In OMP, both registration and the dedicated key must be present. The generated model configuration stores only the variable name. A quota-limited subscription never automatically enables this route.
+
+## OMP coding accounts
+
+Run `lemmaduck code /path/to/repo` in Paseo's terminal. For ChatGPT, enter `/login openai-codex` in OMP and complete your own account login, then choose a model with `/model`. Pi login and billing confirmations are scoped to Pi. Check OMP's account-side paid-extra settings separately.
+
+For local or compatible hosted models, register a JSON endpoint as described below. OMP imports explicitly registered loopback models and API endpoints with their dedicated `LEMMADUCK_MODEL_*` key present. It uses the same profile when launched from **New Agent → LemmaDuck Code**. OMP's normal development tools and project instructions apply to these sessions.
+
+OMP keeps its profile at `omp/agent` inside the LemmaDuck data directory. Generated `models.yml` and `config/omp-code.yml` select the allowed providers and disable automatic cross-model fallback. Built-in provider discovery is disabled for unselected providers using the catalog pinned to OMP 18.14.2. Register local models explicitly instead of relying on automatic localhost discovery. The profile is configuration isolation. An operating-system network boundary is still required for a restricted execution host.
+
+## Pi provider catalog
 
 Run `lemmaduck providers catalog` to see the built-in provider IDs supported by the pinned Pi version. Registering a route enables its available model catalog; account entitlements still determine which requests succeed. This supports Pi providers and compatible endpoints, not every proprietary web app or undocumented model protocol.
 
@@ -17,7 +58,7 @@ Other built-in IDs from `lemmaduck providers catalog` use the same commands. Clo
 
 ## Additional subscription OAuth
 
-For a built-in provider that supports your subscription through OAuth:
+For another built-in provider whose terms support your subscription through OAuth, use the following commands. Claude uses the dedicated SDK route above.
 
 ```sh
 lemmaduck providers add PROVIDER_ID --subscription --extra-usage-off

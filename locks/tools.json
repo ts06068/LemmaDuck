@@ -2,6 +2,12 @@
   "platform": "linux-x86_64",
   "tools": [
     {
+      "name": "omp",
+      "version": "18.14.2",
+      "url": "https://github.com/can1357/oh-my-pi/releases/download/v18.14.2/omp-linux-x64",
+      "sha256": "cde0bc4ac8ec333c4880039a5242ff33dbfc6544747d67aeb99bb077874aeec1"
+    },
+    {
       "name": "fd",
       "version": "10.5.0",
       "url": "https://github.com/sharkdp/fd/releases/download/v10.5.0/fd-v10.5.0-x86_64-unknown-linux-musl.tar.gz",

@@ -1,4 +1,5 @@
 import { existsSync, readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import { binDir, configDir, dataRoot, editorApp, privateDir, profileDir, repoRoot } from "./paths.js";
 import { atomicJson } from "./state.js";
@@ -11,6 +12,19 @@ export const claudeCLI = claudeCLIPath;
 export const claudeHome = join(dataRoot, "claude");
 export const geminiHome = join(dataRoot, "google");
 export const googleACP = join(dataRoot, "tools/antigravity-acp-1.2.1/agy_acp_server.par");
+
+export function isClaudePlanStatus(status: { loggedIn?: unknown; authMethod?: unknown; apiProvider?: unknown }): boolean {
+  return status?.loggedIn === true && status.authMethod === "claude.ai" && status.apiProvider === "firstParty";
+}
+
+export function claudePlanSignedIn(): boolean {
+  try {
+    const output = execFileSync(claudeCLI, ["auth", "status", "--json"], {
+      cwd: claudeHome, env: harnessEnv(), encoding: "utf8", timeout: 10000, stdio: ["ignore", "pipe", "pipe"],
+    });
+    return isClaudePlanStatus(JSON.parse(output));
+  } catch { return false; }
+}
 
 export function configure(): void {
   for (const dir of [configDir, profileDir, claudeHome, join(geminiHome, ".gemini")]) privateDir(dir);

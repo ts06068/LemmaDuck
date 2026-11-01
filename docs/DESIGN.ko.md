@@ -2,7 +2,7 @@
 
 **저장소** `ts06068/lemmaduck`　·　**명령 이름** `lemmaduck`　·　**설계 기준일** 2026-11-01
 
-연구자가 Herdr나 Warp에서 질문을 열면, 에이전트가 업무 요청과 문헌을 찾아 경쟁 가설을 세우고 실험을 실행한다. 연구자는 가설의 채택·기각 근거를 보고, 같은 결과에서 재생성한 표·그림·원고와 자기 문체의 답신을 검토한다. **Lemma**는 다음 주장을 지탱하는 작은 결과, **Duck**은 개발자가 문제를 설명하며 생각을 다듬는 러버덕을 뜻한다.
+연구자가 Paseo에서 질문을 열면, 에이전트가 업무 요청과 문헌을 찾아 경쟁 가설을 세우고 실험을 실행한다. 연구자는 가설의 채택·기각 근거를 보고, 같은 결과에서 재생성한 표·그림·원고와 자기 문체의 답신을 검토한다. **Lemma**는 다음 주장을 지탱하는 작은 결과, **Duck**은 개발자가 문제를 설명하며 생각을 다듬는 러버덕을 뜻한다.
 
 이 문서는 새 저장소에 들어갈 제품·구현·검수 명세다. 기계 판독 목록은 `catalog/full.json`, pstack·gstack의 원본 목록은 `locks/`에 있다. 함께 제공한 `tools/workflow_sources.py`는 두 원본을 내려받고 검증하는 도구다. 아래의 LemmaDuck 설치·연결 명령은 구현할 인터페이스를 뜻한다.
 
@@ -10,14 +10,14 @@
 
 | 작업 위치 | 기본 작업대 | 작업이 실제로 실행되는 위치 |
 | --- | --- | --- |
-| Windows 11 x64 PC | Herdr App. Warp에서도 같은 프로젝트를 연다 | WSL2 Ubuntu x64 또는 원격 Linux. 장시간 세션은 서버에 유지한다 |
-| Surface Pro 11 ARM64 | Warp Windows ARM64 | SSH로 동일 호스트에 접속한다. ARM에서 Linux x64 전용 패키지를 실행할 필요가 없다 |
-| Galaxy Tab S11 Ultra | 인증된 브라우저의 `pi-web-ui` | 웹 세션 게이트웨이에서 호스트의 작업을 재개한다. `kkkiio/pi-web-ui` 확장과 자체 Pi RPC 웹 클라이언트는 각각 검수한다 |
-| Ubuntu 서버·클라우드 GPU | Herdr App의 원격 머신 또는 Herdr TUI, Warp SSH | 서버에서 모델 워커·실험·CI 작업을 실행한다. 끊긴 화면을 다시 열 수 있다 |
+| Windows 11 x64 PC | Paseo Desktop. Warp는 선택 터미널이다 | WSL2 Ubuntu x64 또는 원격 Linux. 장시간 세션은 서버에 유지한다 |
+| Surface Pro 11 ARM64 | Paseo Desktop ARM64 | SSH로 동일 호스트에 접속한다. ARM에서 Linux x64 전용 패키지를 실행할 필요가 없다 |
+| Galaxy Tab S11 Ultra | Paseo Android | 같은 Linux 호스트에 연결한다. 개발은 LemmaDuck Code, 연구·업무는 터미널의 Pi 세션을 연다 |
+| Ubuntu 서버·클라우드 GPU | Paseo 데몬과 원격 클라이언트, 선택 Warp SSH | 서버에서 모델 워커·실험·CI 작업을 실행한다. 끊긴 화면을 다시 열 수 있다 |
 | 폐쇄망 Windows Server 2022 | 기관 승인 로컬 UI·작업 큐 | 네이티브 R/Python/SQL과 승인된 로컬 모델. 컨테이너 없는 설치·복원 경로를 둔다 |
 | 기존 편집 환경 | VS Code 폴더·프로젝트·diff 관리 | 원하는 경우 Webview로 해당 작업을 연다. Zellij·Neovim/LazyVim과 macOS의 cmux도 선택 경로로 제공한다 |
 
-Herdr는 작업별 탭, 워커 상태, SSH 세션 관리를 맡는다. Warp에서는 자기 에이전트와 외부 Pi·Codex·Claude 프로세스를 구분해 표시한다. 웹 확장은 로컬 바인딩 후 사설망·인증 프록시를 통해 접근한다. 원격 화면은 기존 서버의 `task_id`를 가리킨다. 기기마다 새 작업을 만들면 재접속 시험에 실패한 것으로 본다. [Herdr](https://herdr.dev/) · [Herdr Windows](https://github.com/herdrdev/herdr-app) · [Warp 다운로드](https://www.warp.dev/download) · [Pi 웹 확장](https://github.com/kkkiio/pi-web-ui)
+Paseo가 호스트·작업공간·에이전트 대화·터미널 연결을 맡는다. 개발은 네이티브 OMP 프로바이더인 **LemmaDuck Code**로 연다. 연구·원고·비서는 터미널에서 Pi를 실행한다. 같은 호스트·계정·프로젝트에서 세션을 재개한다. Herdr와 Warp는 선택 작업대다. [Paseo](https://paseo.sh/) · [연결 가이드](https://paseo.sh/docs/connectivity)
 
 **원클릭 계약**. 새 릴리스는 Windows용 실행 런처와 Linux용 부트스트랩을 제공한다. GUI의 **전체 환경 설정**과 CLI의 `lemmaduck setup --full`이 같은 설치 계획을 쓴다. OS·CPU·망을 감지하고, 릴리스와 체크섬을 확인하고, 실행 호스트·UI·모듈 전체를 등록하고, 계정별 로그인 화면으로 연결한 뒤 `doctor` 보고서를 연다. 개인 OAuth 로그인·조직 동의·폐쇄망 반입은 해당 계정과 기관의 절차를 따른다. 두 번째 실행은 이미 맞는 항목을 건너뛴다. 중단 후 재개, dry run, 버전 지정 복원, 처음 연결하는 계정의 범위 선택까지 설치 계약에 포함한다.
 
@@ -27,16 +27,16 @@ Herdr는 작업별 탭, 워커 상태, SSH 세션 관리를 맡는다. Warp에�
 
 | 구성 | 결정 및 동작 |
 | --- | --- |
-| 하네스 | TypeScript **Pi SDK/확장/RPC**가 주 실행기다. **Oh My Pi(OMP)**는 별도 실행 프로필이다. 공식 Codex·Claude Code 세션, Cursor 및 Warp 자체 agent는 기능과 인증 조건을 표시하는 호스트 어댑터로 둔다 |
+| 하네스 | 개발은 **OMP 18.14.2**, 연구·원고·비서는 **Pi 0.87.1 SDK/확장/RPC**를 쓴다. OMP 개발 세션과 Pi 태스크 저널은 독립적이다. 공식 Codex·Claude Code 세션, Cursor 및 Warp 자체 agent는 기능과 인증 조건을 표시하는 호스트 어댑터로 둔다 |
 | 모델과 비용 | 기존 ChatGPT/Codex 구독 로그인, Claude 구독의 허용된 Agent SDK 브리지, Google Antigravity ACP를 이어받는다. 모델·계정은 사용자가 선택한다. 한도에 도달하면 체크포인트에서 멈춘다. 직접 등록한 API·Ollama·vLLM은 독립 경로다. 공급자가 보고하지 않은 사용량은 `null`이다 |
-| 프로토콜 | Pi RPC는 UI↔Pi, ACP는 클라이언트↔지원 에이전트, MCP는 에이전트↔도구·자료의 경계다. 호스트별 스트리밍, 취소, 복구, 미터링, 파일 편집, 서브에이전트 가능 여부를 협상한다 |
+| 프로토콜 | Paseo의 네이티브 OMP 프로바이더는 `rpc-ui`, Pi 터미널 및 테스트는 Pi RPC를 쓴다. ACP는 클라이언트↔지원 에이전트, MCP는 에이전트↔도구·자료의 경계다. 호스트별 스트리밍, 취소, 복구, 미터링, 파일 편집, 서브에이전트 가능 여부를 협상한다 |
 | 태스크 | `/task new`, `/switch`, `/handoff`, `/review`, `/usage`와 작업·검토 모드를 보존한다. 사용자가 모델을 바꿔도 승인된 입력, 결정, 미해결 질문, 산출물, 검증 결과를 인계한다 |
 | 문맥·기억 | 프로젝트 지침, 계정 범위, 승인 자료, 현재 가설, 열린 일을 따로 관리한다. 검색은 메타데이터·키워드/FTS와 권한을 상속한 임베딩/RAG를 결합한다. 스킬은 필요할 때 본문을 펼치고 요약에서 출처·페이지·버전으로 돌아갈 수 있게 한다 |
 | 상태·관찰 | 작업별 이벤트 저널과 재구축 가능한 SQLite 인덱스를 둔다. 실행·시도·부모 실행 ID, 선택 모델, 입력 해시, 도구 결과·종료 코드, 산출물, 판단, 사용량을 기록한다. 플랫폼이 노출하는 사건만 수집한다. 기본 운영은 로컬 최소 계측이다 |
 | 병렬 작업 | 조정자, 실행자, 독립 검토자를 작업 필요에 따라 배정한다. 변경 단위마다 worktree와 책임자를 하나 정한다. budget·기한·동시성·중단 조건을 선언하고, 합류 시 결과와 충돌을 확인한다. 리뷰 세션은 읽기 전용이다 |
 | 부작용과 복구 | 읽기·초안·내부 변경·외부 발송/공개·삭제를 구분한다. 효과를 일으키기 전에 계정·대상·범위와 사용자가 준 권한을 확인한다. 동작 키와 서비스 영수증을 저장한다. 전송 도중 끊기면 `unknown`에서 실제 결과를 대조한 뒤 재시도한다 |
 
-LemmaDuck의 실행 환경은 Linux x64, Node 22.19 이상과 Pi 0.87.1이다. 구독 경로는 계정별로 검증한다. [Pi SDK](https://pi.dev/docs/latest/sdk) · [Oh My Pi](https://github.com/can1357/oh-my-pi) · [Claude 구독과 SDK](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) · [Google 인증](https://antigravity.google/docs/install)
+LemmaDuck의 실행 환경은 Linux x64, Node 22.19 이상, Paseo 0.14.0, OMP 18.14.2와 Pi 0.87.1이다. 구독 경로는 계정별로 검증한다. [Pi SDK](https://pi.dev/docs/latest/sdk) · [Oh My Pi](https://github.com/can1357/oh-my-pi) · [Claude 구독과 SDK](https://support.claude.com/en/articles/15036540-use-the-claude-agent-sdk-with-your-claude-plan) · [Google 인증](https://antigravity.google/docs/install)
 
 ## 3. pstack과 gstack을 전체로 탑재하는 방법
 

@@ -24,11 +24,11 @@
       "area": "공통",
       "title": "기기별 에이전트 작업대",
       "capabilities": [
-        "Herdr App·herdr-core·SSH",
-        "Herdr TUI",
-        "Warp·외부 에이전트 터미널",
-        "Surface ARM64 호스트 접속",
-        "Galaxy Tab 인증 브라우저·Pi RPC 게이트웨이",
+        "Paseo Desktop·Android·호스트 데몬",
+        "Paseo Terminal·네이티브 OMP 프로바이더",
+        "Herdr·Warp 선택 작업대",
+        "Surface ARM64 원격 Linux x64 접속",
+        "Galaxy Tab Paseo 연결",
         "VS Code 프로젝트·diff",
         "선택 Zellij·Neovim/LazyVim·VS Code Webview·cmux(macOS)"
       ],
@@ -39,8 +39,8 @@
       "area": "공통",
       "title": "모델과 하네스 선택",
       "capabilities": [
-        "Pi TypeScript SDK·extensions·RPC",
-        "OMP 별도 하네스",
+        "연구·원고·비서 Pi SDK·extensions·RPC",
+        "개발 OMP 전용 프로필·rpc-ui",
         "ChatGPT/Codex 구독",
         "Claude Code/Agent SDK 브리지",
         "Gemini/Antigravity ACP",
@@ -366,28 +366,28 @@
     {
       "id": "windows-x64",
       "device": "Windows 11 x64",
-      "workbench": "Herdr App / Warp",
+      "workbench": "Paseo Desktop / 선택 Herdr·Warp",
       "execution": "WSL2 Ubuntu x64 또는 SSH Linux",
       "release_test": "실제 클린 PC"
     },
     {
       "id": "surface-arm64",
       "device": "Surface Pro 11 / Windows ARM64",
-      "workbench": "Warp ARM64",
+      "workbench": "Paseo Desktop ARM64",
       "execution": "SSH Linux x64",
       "release_test": "실제 ARM 기기에서 재접속"
     },
     {
       "id": "android-tablet",
       "device": "Galaxy Tab S11 Ultra",
-      "workbench": "인증 브라우저 UI",
-      "execution": "SSH 터널 또는 사설 HTTPS 프록시 뒤 Pi RPC 호스트",
+      "workbench": "Paseo Android",
+      "execution": "같은 Linux x64 호스트의 OMP·Pi 세션",
       "release_test": "동일 task·업로드·재접속"
     },
     {
       "id": "linux-remote",
       "device": "Ubuntu x86_64 / GPU",
-      "workbench": "Herdr SSH / herdr TUI / Warp SSH",
+      "workbench": "Paseo 데몬 / 선택 SSH 터미널",
       "execution": "Pi/OMP와 승인한 job",
       "release_test": "SSH 끊김·GPU job 복구"
     },
@@ -401,7 +401,7 @@
     {
       "id": "macos-optional",
       "device": "macOS",
-      "workbench": "Herdr App / Warp / cmux",
+      "workbench": "Paseo Desktop / 선택 Warp·cmux",
       "execution": "로컬 또는 SSH",
       "release_test": "선택 클라이언트 수용시험"
     }
@@ -427,9 +427,9 @@
     },
     {
       "id": "omp",
-      "route": "Oh My Pi 독립 실행기",
+      "route": "개발 전용 OMP 18.14.2 · Paseo LemmaDuck Code",
       "class": "harness",
-      "boundary": "Pi와 개별 어댑터 호환성 검증"
+      "boundary": "Pi 태스크·구독 브리지와 별도 프로필. Claude API는 명시 등록과 키 필요"
     },
     {
       "id": "api",

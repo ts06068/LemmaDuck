@@ -20,6 +20,25 @@ jobs:
       - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
       - run: npm run check
       - run: npm run build
-      - run: npm test
+      - name: Test with loopback-only networking
+        run: >-
+          sudo unshare --net -- bash -euc
+          'ip link set lo up; exec runuser -u "$1" -- env "PATH=$2" npm test'
+          -- "$(id -un)" "$PATH"
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
       - run: ./lemmaduck setup --full --dry-run
+      - name: Install the pinned OMP test binary
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools")
+          from coding import install_omp
+          spec = next(tool for tool in json.loads(Path("locks/tools.json").read_text())["tools"] if tool.get("name") == "omp")
+          install_omp(Path(os.environ["RUNNER_TEMP"]) / "lemmaduck-omp", spec)
+          PY
+      - name: Check real OMP protocols without external networking
+        run: >-
+          sudo unshare --net -- bash -euc
+          'ip link set lo up; exec runuser -u "$1" -- env "PATH=$2" python3 tests/omp_smoke.py "$3"'
+          -- "$(id -un)" "$PATH" "$RUNNER_TEMP/lemmaduck-omp"

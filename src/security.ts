@@ -28,6 +28,9 @@ export function assertProvider(provider: string): asserts provider is Provider {
 
 export function assertRoute(model: { provider: string; api?: string; baseUrl?: string }): void {
   assertProvider(model.provider);
+  if (model.provider === "claude-bridge" && (model.api !== "claude-bridge" || model.baseUrl !== "claude-bridge")) {
+    throw new Error("Claude plan requests must use the managed Claude Code / Agent SDK transport.");
+  }
   if (model.provider === "openai-codex") {
     if (!model.api?.includes("codex")) throw new Error("ChatGPT must use the Codex subscription transport.");
     const url = new URL(model.baseUrl || "https://chatgpt.com/backend-api/codex");
@@ -45,6 +48,9 @@ export function assertPrivateAuthStore(path: string): void {
   const extras = readProviders();
   for (const [name, value] of Object.entries(entries)) {
     const extra = extras.find(p => p.id === name);
+    if (name === "anthropic" && value?.type !== "api_key") {
+      throw new Error("Direct Anthropic OAuth is disabled. Remove the old route with lemmaduck providers remove anthropic, then run lemmaduck login claude.");
+    }
     const permitted = name === "openai-codex" ? value?.type === "oauth" : extra && (extra.billing === "subscription" ? value?.type === "oauth" : ["api_key", "oauth"].includes(value?.type || ""));
     if (!permitted) {
       throw new Error(`Unexpected credential route in dedicated Pi profile: ${name}. Use lemmaduck login.`);

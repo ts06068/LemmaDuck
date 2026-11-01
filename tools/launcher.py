@@ -13,6 +13,7 @@ import sys
 import tempfile
 
 import workflow_sources
+from coding import configure_paseo, install_omp, install_paseo
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -21,10 +22,15 @@ from install_paths import DATA_ROOT, INSTALL_HOME, STATE_ROOT
 SOURCES = json.loads((ROOT / "locks/upstreams.json").read_text())["workflow_sources"]
 CACHE = Path(os.environ.get("LEMMADUCK_WORKFLOWS_DIR", DATA_ROOT / "workflow-sources"))
 CORE = ROOT / "dist/cli.js"
-CORE_COMMANDS = {"agent", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector"}
-DESCRIPTION = """Run LemmaDuck in a Herdr terminal on your Linux host.
-Agent commands: agent [PROJECT], login PROVIDER, billing confirm PROVIDER --extra-usage-off,
-providers list, status [PROJECT], connector list|tools|call ... . Run 'agent' in a project terminal."""
+OMP = next(tool for tool in json.loads((ROOT / "locks/tools.json").read_text())["tools"] if tool.get("name") == "omp")
+PASEO_LOCK = ROOT / "locks/paseo"
+PASEO_RUNTIME = DATA_ROOT / "tools" / ("paseo-" + hashlib.sha256((PASEO_LOCK / "package-lock.json").read_bytes()).hexdigest()[:16])
+PASEO = PASEO_RUNTIME / "node_modules/.bin/paseo"
+CORE_COMMANDS = {"agent", "code", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector"}
+DESCRIPTION = """Use Paseo to open your Linux host. Run 'agent PROJECT' for a project or
+'code PROJECT' for an OMP coding session. 'agent PROJECT --pi' opens the research worker.
+Other commands: login PROVIDER, billing confirm PROVIDER --extra-usage-off,
+providers list, status [PROJECT], connector list|tools|call ... ."""
 
 
 def spec_dir(spec):
@@ -75,7 +81,8 @@ def setup(args):
     steps = ["Check Linux x86_64, Git, Python 3.12+ and Node 22.19+",
              "Install the locked npm dependencies and build the Pi worker"]
     if args.full:
-        steps += ["Verify the Google Antigravity ACP runtime",
+        steps += [f"Install the locked Paseo host and checksum-verified OMP {OMP['version']}; register LemmaDuck Code",
+                  "Verify the Google Antigravity ACP runtime",
                   "Fetch and verify every pinned pstack and gstack file"]
     launcher = INSTALL_HOME / ".local/bin/lemmaduck"
     steps += [f"Link the launcher at {launcher}"]
@@ -84,7 +91,7 @@ def setup(args):
     if args.dry_run:
         return
     if platform.system() != "Linux" or platform.machine().lower() not in ("x86_64", "amd64"):
-        raise ValueError("Run setup on an x86_64 Linux host or in x64 WSL2 Ubuntu. Connect to that host from Herdr.")
+        raise ValueError("Run setup on an x86_64 Linux host or in x64 WSL2 Ubuntu. Connect to that host from Paseo.")
     if sys.version_info < (3, 12) or not shutil.which("git"):
         raise ValueError("Install Python 3.12 or newer and Git on the execution host.")
     if os.path.lexists(launcher) and launcher.resolve() != ROOT / "lemmaduck":
@@ -106,12 +113,16 @@ def setup(args):
             run(["npm", "run", "build"], cwd=ROOT, env=env)
             stamp.write_text(fingerprint + "\n")
         if args.full:
+            install_paseo(PASEO_RUNTIME, PASEO_LOCK, env)
+            install_omp(DATA_ROOT / "bin/omp", OMP)
             run([sys.executable, ROOT / "scripts/install-google.py"], env=env)
             for spec in SOURCES.values():
                 install_source(spec)
         launcher.parent.mkdir(parents=True, exist_ok=True)
         if not launcher.is_symlink():
             launcher.symlink_to(ROOT / "lemmaduck")
+        if args.full:
+            configure_paseo(Path(os.environ.get("PASEO_HOME") or INSTALL_HOME / ".paseo"), launcher, env)
     print(f"Ready. Run {launcher} doctor. Account sign-in is a separate step.")
 
 
@@ -163,7 +174,12 @@ def doctor(args):
     print(f"Host: {platform.system()} {platform.machine()} | Python {platform.python_version()}")
     print("Git:", git_ok or "missing")
     print("Node/npm:", "ready" if node_ok else "missing or too old")
+    paseo_ok = os.access(PASEO, os.X_OK)
+    print("Paseo host:", "installed" if paseo_ok else "missing; run lemmaduck setup --full")
     print("Pi worker:", "built" if CORE.is_file() else "run lemmaduck setup --full")
+    omp_ok = os.access(DATA_ROOT / "bin/omp", os.X_OK)
+    print("OMP coding worker:", str(DATA_ROOT / "bin/omp") if omp_ok else "missing; run lemmaduck setup --full")
+    ready = ready and omp_ok and paseo_ok
     for spec in SOURCES.values():
         path = spec_dir(spec)
         state = "missing"
@@ -199,13 +215,19 @@ def core(argv):
 def main():
     argv = sys.argv[1:]
     try:
+        if argv and argv[0] == "paseo":
+            if not os.access(PASEO, os.X_OK):
+                raise ValueError("Run lemmaduck setup --full to install the Paseo host.")
+            env = runtime_env()
+            env.setdefault("PASEO_HOME", str(INSTALL_HOME / ".paseo"))
+            os.execve(PASEO, [str(PASEO), *argv[1:]], env)
         if argv and argv[0] in CORE_COMMANDS:
             return core(argv)
         parser = argparse.ArgumentParser(description=DESCRIPTION, formatter_class=argparse.RawDescriptionHelpFormatter)
         parser.add_argument("--version", action="version", version=json.loads((ROOT / "package.json").read_text())["version"])
         sub = parser.add_subparsers(dest="command", required=True)
         p = sub.add_parser("setup", help="Build the worker and install its launcher")
-        p.add_argument("--full", action="store_true", help="Also install the full workflow sources and Google worker")
+        p.add_argument("--full", action="store_true", help="Also install OMP, its Paseo profile, pinned workflow sources and Google worker")
         p.add_argument("--dry-run", action="store_true")
         p.set_defaults(handler=setup)
         p = sub.add_parser("doctor", help="Inspect this host and verify installed workflow sources")

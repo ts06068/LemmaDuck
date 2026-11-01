@@ -2,12 +2,13 @@
 import { spawn, execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
-import { billingConfirmed, claudeCLI, claudeHome, configure, confirmBilling, googleACP, geminiHome, harnessEnv, piCLI } from "./config.js";
+import { billingConfirmed, claudeCLI, claudePlanSignedIn, configure, confirmBilling, googleACP, geminiHome, harnessEnv, piCLI } from "./config.js";
 import { binDir, configDir, profileDir, projectPath, repoRoot } from "./paths.js";
 import { assertManagedProject, assertPrivateAuthStore, assertProvider, billingEnvNames, PROVIDERS, type Provider } from "./security.js";
+import { codingEnv } from "./coding.js";
 import { acquireProjectLock, renderHandoff, TaskStore } from "./state.js";
 import { workspaceName } from "./workspace-ui.js";
-import { ALIASES, enabledProviders, providerLabel, readProviders } from "./providers.js";
+import { ALIASES, CLAUDE_API_KEY_ENV, enabledProviders, providerLabel, readProviders } from "./providers.js";
 import { claudeExtensionPath } from "./dependencies.js";
 
 function provider(value?: string): Provider { const p = ALIASES[value || ""] || value || ""; assertProvider(p); return p; }
@@ -30,11 +31,23 @@ function authStatus(): Record<string, boolean | null> {
   if (existsSync(file)) { try { assertPrivateAuthStore(file); gpt = Boolean(JSON.parse(readFileSync(file, "utf8"))["openai-codex"]); } catch { /* doctor shows unverified */ } }
   // File presence is a local storage hint; only a live request validates auth.
   const googleStore = existsSync(join(geminiHome, ".gemini/antigravity-acp/acp_token.json"));
-  return { "openai-codex": gpt, "claude-bridge": existsSync(join(claudeHome, ".credentials.json")), "gemini-cli-acp": googleStore ? true : null };
+  return { "openai-codex": gpt, "claude-bridge": claudePlanSignedIn(), "gemini-cli-acp": googleStore ? true : null };
 }
 
 async function main(): Promise<number> {
-  const [command = "help", arg, ...rest] = process.argv.slice(2);
+  const [command = "help", ...argv] = process.argv.slice(2);
+  let [arg, ...rest] = argv;
+  if (command === "agent" || command === "code") {
+    if (arg?.startsWith("-")) { arg = undefined; rest = argv; }
+    const project = projectPath(arg || process.cwd());
+    const marker = join(project, ".lemmaduck-kind");
+    if (command === "code" || (!rest.includes("--pi") && existsSync(marker) && readFileSync(marker, "utf8").trim() === "development")) {
+      const omp = join(binDir, "omp");
+      if (!existsSync(omp)) throw new Error("OMP is missing. Run lemmaduck setup --full on the Paseo host.");
+      const args = rest.flatMap(option => option === "--rpc" ? ["--mode", "rpc"] : [option]);
+      return run(omp, args, project, codingEnv());
+    }
+  }
   if (command === "--version" || command === "version") { console.log(JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8")).version); return 0; }
   if (command === "setup") return run("python3", [join(repoRoot, "scripts/setup.py"), ...[arg, ...rest].filter((s): s is string => s !== undefined)], repoRoot, process.env);
   if (command === "providers") { await (await import("./provider-command.js")).providerCommand(arg, rest); configure(); return 0; }
@@ -48,7 +61,7 @@ async function main(): Promise<number> {
       neovim: version(join(binDir, "nvim")), zellij: version(join(binDir, "zellij")),
       compiler: version(join(binDir, "cc")), treesitter: version(join(binDir, "tree-sitter")),
     }, credentialsPresent: authStatus(), billingConfirmed: Object.fromEntries(PROVIDERS.map(p => [p, billingConfirmed(p)])), registeredProviders: enabledProviders().map(id => ({ id, label: providerLabel(id) })), excludedEnvironmentVariableNames: billingEnvNames(),
-      authenticationCheck: "Local storage markers only; the official Google Antigravity ACP server validates its own OAuth credentials during connection. null means unknown.",
+      authenticationCheck: "Claude uses its official CLI auth status. Other entries are local storage hints. null means unknown.",
       liveProviderValidation: "Not inferred from installation or credentials. Run the verification protocol in VALIDATION.md.",
     };
     console.log(JSON.stringify(report, null, 2));
@@ -62,11 +75,15 @@ async function main(): Promise<number> {
   }
   if (command === "login") {
     const p = provider(arg);
+    if (p === "anthropic") {
+      const keyName = readProviders().find(extra => extra.id === p)?.apiKeyEnv || CLAUDE_API_KEY_ENV;
+      console.log(`This route uses Console API billing. Supply ${keyName} through your host's secret manager. For a personal Claude plan run lemmaduck login claude.`); return 0;
+    }
     if (p === "openai-codex" || readProviders().some(extra => extra.id === p)) {
       console.log(`In Pi, run /login ${p}, complete authentication, then /quit. Route: ${providerLabel(p)}.`);
       return run(process.execPath, [piCLI, "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-context-files", "--no-tools", "--no-approve", "--provider", p], repoRoot);
     }
-    if (p === "claude-bridge") return run(claudeCLI, ["auth", "login"], repoRoot);
+    if (p === "claude-bridge") return run(claudeCLI, ["auth", "login", "--claudeai"], repoRoot);
     if (!existsSync(googleACP)) throw new Error("Install the official Google server: python3 scripts/install-google.py");
     console.log("Google Antigravity ACP: personal subscription OAuth only. This is separate from Gemini CLI login.");
     await (await import("./google-login.js")).loginGoogle(); return 0;
@@ -106,7 +123,7 @@ async function main(): Promise<number> {
       return await run(process.execPath, args, project, harnessEnv(), release.track);
     } finally { release(); }
   }
-  console.log(`LemmaDuck — code, research, writing, and personal projects\n  lemmaduck setup [--dry-run]     Install workspace tools and settings\n  lemmaduck doctor\n  lemmaduck providers list|catalog|add|remove\n  lemmaduck login chatgpt|claude|gemini|REGISTERED_ID\n  lemmaduck billing confirm chatgpt|claude|gemini --extra-usage-off\n  lemmaduck open PROJECT          Zellij + LazyVim + agent\n  lemmaduck agent PROJECT         Agent only\n  lemmaduck status PROJECT        Task and handoff\n  lemmaduck reconcile PROJECT ID completed|failed 'observed result'\n  lemmaduck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
+  console.log(`LemmaDuck — code, research, writing, and personal projects\n  lemmaduck setup [--dry-run]     Install workspace tools and settings\n  lemmaduck doctor\n  lemmaduck providers list|catalog|add|remove\n  lemmaduck login chatgpt|claude|gemini|REGISTERED_ID\n  lemmaduck billing confirm chatgpt|claude|gemini --extra-usage-off\n  lemmaduck open PROJECT          Zellij + LazyVim + agent\n  lemmaduck paseo [COMMAND]       Open or manage the Paseo host\n  lemmaduck agent [PROJECT]       Project worker (development: OMP; otherwise Pi)\n  lemmaduck code [PROJECT]        OMP coding in any project\n  lemmaduck agent PROJECT --pi    Managed research, writing or assistant worker\n  lemmaduck status PROJECT        Task and handoff\n  lemmaduck reconcile PROJECT ID completed|failed 'observed result'\n  lemmaduck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
   return 0;
 }
 main().then(code => { process.exitCode = code; }).catch(error => { console.error(String(error)); process.exitCode = 1; });

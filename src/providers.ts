@@ -4,6 +4,7 @@ import { randomUUID } from "node:crypto";
 import { configDir, privateDir } from "./paths.js";
 
 export const DEFAULT_PROVIDERS = ["openai-codex", "claude-bridge", "gemini-cli-acp"] as const;
+export const CLAUDE_API_KEY_ENV = "LEMMADUCK_MODEL_ANTHROPIC_KEY";
 export const ALIASES: Record<string, string> = { chatgpt: "openai-codex", gpt: "openai-codex", claude: "claude-bridge", gemini: "gemini-cli-acp" };
 export const DEFAULT_LABELS: Record<string, string> = {
   "openai-codex": "ChatGPT (subscription)", "claude-bridge": "Claude (subscription)", "gemini-cli-acp": "Gemini (subscription)",
@@ -58,14 +59,21 @@ export function writeProviders(providers: ExtraProvider[]): void {
   const temp = `${file}.${randomUUID()}.tmp`;
   writeFileSync(temp, JSON.stringify(providers.map(validateProvider), null, 2) + "\n", { mode: 0o600 }); renameSync(temp, file);
 }
-export function enabledProviders(): string[] { return [...DEFAULT_PROVIDERS, ...readProviders().map(p => p.id)]; }
+// Old direct Anthropic OAuth entries stay removable without becoming active or changing billing.
+export function enabledProviders(): string[] {
+  return [...DEFAULT_PROVIDERS, ...readProviders().filter(p => !(p.id === "anthropic" && p.billing === "subscription")).map(p => p.id)];
+}
 export function providerLabel(id: string): string {
   const p = readProviders().find(p => p.id === id);
   return DEFAULT_LABELS[id] || (p ? `${p.label} (${p.billing === "api" ? "API · charges possible" : p.billing})` : id);
 }
 export function customModels(providers = readProviders()): object {
-  return { providers: Object.fromEntries(providers.filter(p => p.baseUrl).map(p => [p.id, {
+  const configured = Object.fromEntries(providers.filter(p => p.baseUrl).map(p => [p.id, {
     baseUrl: p.baseUrl, api: p.api, models: p.models,
     ...(p.apiKeyEnv ? { apiKey: `\${${p.apiKeyEnv}}` } : p.billing === "local" ? { apiKey: "local-no-key" } : {}),
-  }])) };
+  }]));
+  if (providers.some(p => p.id === "anthropic" && p.billing === "api" && !p.baseUrl)) {
+    return { providers: { ...configured, anthropic: { apiKey: `\${${CLAUDE_API_KEY_ENV}}` } } };
+  }
+  return { providers: configured };
 }

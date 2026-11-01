@@ -1,6 +1,6 @@
 {
   "name": "lemmaduck",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "type": "module",
   "engines": {
     "node": ">=22.19.0"
@@ -26,7 +26,7 @@
     "tsx": "4.22.4",
     "typescript": "6.0.3"
   },
-  "description": "A Herdr-first workspace for research, writing and development with selectable agent workers and pinned workflows.",
+  "description": "A Paseo workspace with OMP for development and Pi for research, writing and assistant tasks.",
   "bin": {
     "lemmaduck": "lemmaduck"
   },

@@ -1,6 +1,6 @@
 # Connect a work or personal account
 
-`lemmaduck connector list` shows the 15 platform families in the design and locally configured accounts. An account name such as `work.github` and one such as `personal.github` identify separate connections. The CLI supports **MCP over HTTPS** (or loopback HTTP) and **local stdio MCP servers**. Each server supplies its own platform integration and OAuth scopes. A missing integration stays unconfigured. A ChatGPT or Herdr login does not authorize any of these servers.
+`lemmaduck connector list` shows the 15 platform families in the design and locally configured accounts. An account name such as `work.github` and one such as `personal.github` identify separate connections. The CLI supports **MCP over HTTPS** (or loopback HTTP) and **local stdio MCP servers**. Each server supplies its own platform integration and OAuth scopes. A missing integration stays unconfigured. Each connector requires its own account authorization, independently of Paseo and the model providers.
 
 Create `~/.config/lemmaduck/connections.json` on the host where you run the CLI. Set permissions to `600` and keep it outside your Git projects. Only configure servers and tool names you have verified. For GitHub's official remote MCP endpoint, a read-only example is:
 

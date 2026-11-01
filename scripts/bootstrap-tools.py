@@ -64,7 +64,7 @@ def link(name, target):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--node-only', action='store_true', help='Install only the Node runtime for Herdr or another terminal.')
+    parser.add_argument('--node-only', action='store_true', help='Install only the Node runtime for the Paseo host or another terminal.')
     args = parser.parse_args()
     if platform.system() != 'Linux' or platform.machine() != 'x86_64':
         raise SystemExit('This pinned bootstrap targets Linux x86_64.')
