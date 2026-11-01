@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+"""Launch an isolated LemmaDuck editor; credentials remain in the shared engine."""
+import argparse
+import json
+import os
+from pathlib import Path
+import shutil
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+META = json.loads((ROOT / "distro.json").read_text())
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--version", action="version", version=META["name"] + " " + META["version"])
+    parser.add_argument("--doctor", action="store_true")
+    parser.add_argument("--print-command", action="store_true", help="Print launch arguments without starting the editor")
+    if META["id"] == "neovim":
+        parser.add_argument("--profile", choices=["minimal", "lazyvim"], default="minimal")
+    parser.add_argument("project", nargs="?", default=".")
+    parser.add_argument("editor_args", nargs=argparse.REMAINDER)
+    args = parser.parse_args()
+    project = Path(args.project).expanduser().resolve()
+    if not project.is_dir():
+        parser.error("project must be an existing directory")
+    editor = os.environ.get("LEMMADUCK_EDITOR", "emacs" if META["id"] == "emacs" else "nvim")
+    engine = os.environ.get("LEMMADUCK_EXECUTABLE", "lemmaduck")
+    if args.doctor:
+        checks = {"distro": META["id"], "version": META["version"], "editor": shutil.which(editor),
+                  "engine": shutil.which(engine), "engine_reference": META["engine"].get("testedCommit", META["engine"].get("revision")),
+                  "project": str(project), "live_account_check": "not performed"}
+        print(json.dumps(checks, indent=2))
+        return 0 if checks["editor"] and checks["engine"] else 1
+    env = dict(os.environ)
+    env["LEMMADUCK_PROJECT"] = str(project)
+    env["LEMMADUCK_DISTRO_ROOT"] = str(ROOT)
+    extra = args.editor_args[1:] if args.editor_args[:1] == ["--"] else args.editor_args
+    if META["id"] == "emacs":
+        state = Path(env.get("XDG_STATE_HOME", str(Path.home() / ".local/state"))) / "lemmaduck-emacs"
+        # JSON string quoting is valid for a plain Emacs Lisp string literal.
+        expression = "(setq user-emacs-directory " + json.dumps(str(state) + "/", ensure_ascii=False) + ")"
+        command = [editor, "-Q", "--eval", expression, "--load", str(ROOT / "init.el"), *extra]
+    else:
+        env["NVIM_APPNAME"] = "lemmaduck-neovim"
+        env["LEMMADUCK_NVIM_PROFILE"] = args.profile
+        command = [editor, "-u", str(ROOT / "init.lua"), *extra]
+    if args.print_command:
+        print(json.dumps({"command": command, "cwd": str(project),
+                          "environment": {key: env[key] for key in ["LEMMADUCK_PROJECT", "LEMMADUCK_DISTRO_ROOT", "NVIM_APPNAME", "LEMMADUCK_NVIM_PROFILE"] if key in env}}, indent=2))
+        return 0
+    if not shutil.which(editor):
+        parser.error(f"{editor} is not installed; see README prerequisites")
+    if META["id"] == "emacs":
+        state.mkdir(parents=True, exist_ok=True)
+    os.chdir(project)
+    os.execvpe(editor, command, env)
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -1,6 +1,6 @@
 {
   "name": "lemmaduck",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "type": "module",
   "engines": {
     "node": ">=22.19.0"
@@ -70,7 +70,9 @@
     "src/",
     "tsconfig.json",
     "VALIDATION.md",
-    "distro.json"
+    "distro.json",
+    "distros/",
+    "release-manifest.json"
   ],
   "lemmaduckDistro": "base",
   "keywords": [

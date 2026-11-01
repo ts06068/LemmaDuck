@@ -55,3 +55,31 @@ jobs:
           sudo unshare --net -- bash -euc
           'ip link set lo up; exec runuser -u "$1" -- env "PATH=$2" python3 tests/omp_smoke.py "$3"'
           -- "$(id -un)" "$PATH" "$RUNNER_TEMP/lemmaduck-omp"
+
+  editors:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        distro: [emacs, neovim]
+    defaults:
+      run:
+        working-directory: distros/${{ matrix.distro }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install Emacs
+        if: matrix.distro == 'emacs'
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends emacs-nox
+      - name: Install Neovim
+        if: matrix.distro == 'neovim'
+        run: sudo apt-get update -qq && sudo apt-get install -y --no-install-recommends neovim
+      - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Check Emacs integration
+        if: matrix.distro == 'emacs'
+        run: emacs -Q --batch -L lisp -l tests/test-editor.el -f ert-run-tests-batch-and-exit
+      - name: Check Neovim integration
+        if: matrix.distro == 'neovim'
+        run: nvim --headless -u ./init.lua -c "luafile tests/editor.lua"

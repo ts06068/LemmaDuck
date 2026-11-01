@@ -1,0 +1,35 @@
+{
+  "name": "@ts06068/lemmaduck-neovim",
+  "version": "0.1.0-alpha.2",
+  "description": "LemmaDuck Neovim distro: isolated editor starter for the shared LemmaDuck engine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts06068/lemmaduck.git",
+    "directory": "distros/neovim"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "tag": "preview"
+  },
+  "bin": {
+    "lemmaduck-neovim": "bin/lemmaduck-neovim"
+  },
+  "files": [
+    "bin/",
+    "init.lua",
+    "lua/",
+    "profiles/",
+    "assets/",
+    "distro.json",
+    "docs/",
+    "release-manifest.json"
+  ],
+  "lemmaduckDistro": "neovim",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "license": "UNLICENSED"
+}

@@ -1,7 +1,7 @@
 <h1 align="center">LemmaDuck</h1>
 <p align="center"><strong>Talk to the duck. Test your hunch.</strong></p>
 
-LemmaDuck is your lab copilot, available in three distros. Choose the workspace you
+LemmaDuck is your lab copilot, available in three distros from this one repository. Choose the workspace you
 want; the shared engine handles models, account sign-in, research tasks and project
 connections. Code development uses **OMP**. Research, writing, review and assistant
 work use the managed **Pi** worker.
@@ -9,23 +9,23 @@ work use the managed **Pi** worker.
 <table>
   <tr>
     <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck#getting-started-with-paseo"><img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="LemmaDuck Base: yellow voxel duck with a proof slate"></a></td>
-    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck-emacs"><img src="assets/brand/lemmaduck-emacs.png" width="176" height="176" alt="LemmaDuck Emacs: purple lambda beret and proof slate"></a></td>
-    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck-neovim"><img src="assets/brand/lemmaduck-neovim.png" width="176" height="176" alt="LemmaDuck Neovim: green colon-w cap and proof slate"></a></td>
+    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/emacs"><img src="assets/brand/lemmaduck-emacs.png" width="176" height="176" alt="LemmaDuck Emacs: purple lambda beret and proof slate"></a></td>
+    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/neovim"><img src="assets/brand/lemmaduck-neovim.png" width="176" height="176" alt="LemmaDuck Neovim: green colon-w cap and proof slate"></a></td>
   </tr>
   <tr>
     <th><a href="https://github.com/ts06068/lemmaduck">Base</a></th>
-    <th><a href="https://github.com/ts06068/lemmaduck-emacs">Emacs</a></th>
-    <th><a href="https://github.com/ts06068/lemmaduck-neovim">Neovim</a></th>
+    <th><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/emacs">Emacs</a></th>
+    <th><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/neovim">Neovim</a></th>
   </tr>
   <tr>
-    <td align="center">Paseo desktop / tablet<br>Shared engine · v0.5.0</td>
+    <td align="center">Paseo desktop / tablet<br>Shared engine · v0.5.1</td>
     <td align="center">Emacs research workspace<br>Terminal integration · preview</td>
     <td align="center">Neovim editor workspace<br>Terminal integration · preview</td>
   </tr>
   <tr>
     <td align="center"><a href="#getting-started-with-paseo">Get started</a> · <a href="https://github.com/ts06068/lemmaduck/releases">Releases</a></td>
-    <td align="center"><a href="https://github.com/ts06068/lemmaduck-emacs#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck-emacs/releases">Releases</a></td>
-    <td align="center"><a href="https://github.com/ts06068/lemmaduck-neovim#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck-neovim/releases">Releases</a></td>
+    <td align="center"><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/emacs#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck/releases?q=emacs-v">Releases</a></td>
+    <td align="center"><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/neovim#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck/releases?q=neovim-v">Releases</a></td>
   </tr>
 </table>
 
@@ -34,6 +34,10 @@ for project navigation and editing. The editor distros connect to the same insta
 engine on the same host and account; they do not need another model subscription.
 Their first preview launches the workers in editor terminals. Native ACP/RPC chat
 buffers and attachment to an already-running Paseo conversation are separate work.
+
+Clone once: Base and the shared engine live at the repository root; the editor
+workspaces live in `distros/emacs` and `distros/neovim`. All three release channels
+and package workflows are maintained in this repository.
 
 Release names, tags, download filenames and manifests identify the distro.
 See [the distro and package reference](docs/DISTROS.md).

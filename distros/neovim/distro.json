@@ -1,0 +1,19 @@
+{
+  "schemaVersion": 1,
+  "id": "neovim",
+  "name": "LemmaDuck Neovim",
+  "version": "0.1.0-alpha.2",
+  "channel": "preview",
+  "repository": "https://github.com/ts06068/lemmaduck",
+  "githubPackage": "@ts06068/lemmaduck-neovim",
+  "engine": {
+    "repository": "https://github.com/ts06068/lemmaduck",
+    "version": "0.5.1",
+    "sourceDirectory": ".",
+    "revision": "same-checkout"
+  },
+  "integration": "shared-cli-terminal",
+  "host": "Linux x86_64",
+  "editorMinimum": "0.9.5",
+  "sourceDirectory": "distros/neovim"
+}

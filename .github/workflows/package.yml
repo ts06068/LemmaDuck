@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing tested distro release tag (base-vVERSION)'
+        description: 'Existing tested tag: base-vVERSION, emacs-vVERSION or neovim-vVERSION'
         required: true
         type: string
 permissions:
@@ -23,13 +23,41 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
-      - run: npm run check && npm run build
-      - name: Build the scoped package
+      - name: Resolve and validate distro identity
+        id: identity
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
+        run: python3 scripts/build_release.py --tag "$RELEASE_TAG" --describe --github-output "$GITHUB_OUTPUT"
+      - name: Check Base
+        if: steps.identity.outputs.distro == 'base'
+        run: |
+          npm ci --include=dev --ignore-scripts --no-audit --no-fund
+          npm run check
+          npm run build
+      - name: Check Emacs
+        if: steps.identity.outputs.distro == 'emacs'
+        working-directory: distros/emacs
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends emacs-nox
+          python3 -m unittest discover -s tests -p 'test_*.py'
+          emacs -Q --batch -L lisp -l tests/test-editor.el -f ert-run-tests-batch-and-exit
+      - name: Check Neovim
+        if: steps.identity.outputs.distro == 'neovim'
+        working-directory: distros/neovim
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends neovim
+          python3 -m unittest discover -s tests -p 'test_*.py'
+          nvim --headless -u ./init.lua -c "luafile tests/editor.lua"
+      - name: Build distro-labelled assets
         env:
           RELEASE_TAG: ${{ inputs.tag }}
         run: python3 scripts/build_release.py --tag "$RELEASE_TAG" --npm
-      - name: Publish base distro to GitHub Packages
+      - name: Publish the selected distro to GitHub Packages
         env:
           NODE_AUTH_TOKEN: ${{ github.token }}
-        run: npm publish build/release/*.npm.tgz --registry=https://npm.pkg.github.com --tag latest --ignore-scripts
+          DISTRO: ${{ steps.identity.outputs.distro }}
+          VERSION: ${{ steps.identity.outputs.version }}
+          PACKAGE_TAG: ${{ steps.identity.outputs.package_tag }}
+        run: npm publish "build/release/$DISTRO/lemmaduck-$DISTRO-$VERSION.npm.tgz" --registry=https://npm.pkg.github.com --tag "$PACKAGE_TAG" --ignore-scripts

@@ -1,0 +1,35 @@
+{
+  "name": "@ts06068/lemmaduck-emacs",
+  "version": "0.1.0-alpha.2",
+  "description": "LemmaDuck Emacs distro: isolated editor starter for the shared LemmaDuck engine",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ts06068/lemmaduck.git",
+    "directory": "distros/emacs"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com",
+    "tag": "preview"
+  },
+  "bin": {
+    "lemmaduck-emacs": "bin/lemmaduck-emacs"
+  },
+  "files": [
+    "bin/",
+    "init.el",
+    "lisp/",
+    "profiles/",
+    "assets/",
+    "distro.json",
+    "docs/",
+    "release-manifest.json"
+  ],
+  "lemmaduckDistro": "emacs",
+  "os": [
+    "linux"
+  ],
+  "cpu": [
+    "x64"
+  ],
+  "license": "UNLICENSED"
+}

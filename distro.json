@@ -2,10 +2,11 @@
   "schemaVersion": 1,
   "id": "base",
   "name": "LemmaDuck Base",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "channel": "stable",
   "repository": "https://github.com/ts06068/lemmaduck",
   "githubPackage": "@ts06068/lemmaduck-base",
   "integration": "paseo",
-  "host": "Linux x86_64"
+  "host": "Linux x86_64",
+  "sourceDirectory": "."
 }

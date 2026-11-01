@@ -1,4 +1,13 @@
-# Validation for LemmaDuck 0.5.0
+# Validation for LemmaDuck 0.5.1
+
+The monorepo keeps the engine at the root and imports the editor previews into
+`distros/emacs` and `distros/neovim`. Main CI runs the engine checks below plus
+both editor suites. Packaging checks build all three source/npm assets, verify
+checksums and metadata, reject mismatched distro tags, and launch the extracted
+editor scripts in command-preview mode. Live account calls and native editor
+RPC/ACP integration are outside these tests.
+
+# Engine validation inherited from 0.5.0
 
 Recorded on November 1, 2026. Execution host was Linux x86-64 with Python 3.12.14 and Node 24.22.1. Task data and model responses were synthetic. Cloud inference and personal subscription sign-in require owner-side validation.
 

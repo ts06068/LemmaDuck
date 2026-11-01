@@ -1,4 +1,4 @@
-name: Release LemmaDuck Base
+name: Release LemmaDuck distro
 on:
   release:
     types: [published]
@@ -14,17 +14,44 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 24
+          registry-url: https://npm.pkg.github.com
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
-      - run: npm run check && npm run build
+      - name: Resolve and validate distro identity
+        id: identity
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: python3 scripts/build_release.py --tag "$RELEASE_TAG" --describe --github-output "$GITHUB_OUTPUT"
+      - name: Check Base
+        if: steps.identity.outputs.distro == 'base'
+        run: |
+          npm ci --include=dev --ignore-scripts --no-audit --no-fund
+          npm run check
+          npm run build
+      - name: Check Emacs
+        if: steps.identity.outputs.distro == 'emacs'
+        working-directory: distros/emacs
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends emacs-nox
+          python3 -m unittest discover -s tests -p 'test_*.py'
+          emacs -Q --batch -L lisp -l tests/test-editor.el -f ert-run-tests-batch-and-exit
+      - name: Check Neovim
+        if: steps.identity.outputs.distro == 'neovim'
+        working-directory: distros/neovim
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends neovim
+          python3 -m unittest discover -s tests -p 'test_*.py'
+          nvim --headless -u ./init.lua -c "luafile tests/editor.lua"
       - name: Build distro-labelled assets
         env:
           RELEASE_TAG: ${{ github.event.release.tag_name }}
         run: python3 scripts/build_release.py --tag "$RELEASE_TAG" --npm
-      - name: Attach verified assets
+      - name: Attach this distro's assets
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
-        run: gh release upload "$RELEASE_TAG" build/release/*
+          DISTRO: ${{ steps.identity.outputs.distro }}
+        run: gh release upload "$RELEASE_TAG" build/release/"$DISTRO"/*
