@@ -1,6 +1,6 @@
 # Installing LemmaDuck
 
-Follow [Getting started with Paseo](../README.md#getting-started-with-paseo) on your x86-64 Linux host. From an authenticated source checkout, run:
+Follow [Getting started with Paseo](GETTING_STARTED.md#getting-started-with-paseo) on your x86-64 Linux host. From an authenticated source checkout, run:
 
 ```sh
 ./lemmaduck setup --full

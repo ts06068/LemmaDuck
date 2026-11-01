@@ -32,7 +32,7 @@ lemmaduck --version
 The npm package contains the compiled worker; setup uses it without reinstalling
 development dependencies or recompiling the package. Full setup installs the
 pinned host runtimes and workflow sources. Provider sign-in remains a separate
-step in the [main walkthrough](../README.md#4-sign-in-to-one-worker-and-ask-it-to-check-the-claim).
+step in the [getting started guide](GETTING_STARTED.md#4-sign-in-to-one-worker-and-ask-it-to-check-the-claim).
 
 Add whichever editor workspace you want (both can coexist):
 

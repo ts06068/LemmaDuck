@@ -32,7 +32,7 @@ unchanged. The OS editor binary is a separate prerequisite.
 
 ### Install from source
 
-1. Clone the monorepo once and follow the [base installation and account setup](https://github.com/ts06068/lemmaduck#getting-started-with-paseo). If you already have the checkout, update it and reuse it. The editor and engine are tested together at the same commit; no second repository is required.
+1. Clone the monorepo once and follow the [base installation and account setup](../../docs/GETTING_STARTED.md#getting-started-with-paseo). If you already have the checkout, update it and reuse it. The editor and engine are tested together at the same commit; no second repository is required.
 2. From the repository root, enter this distro and check the local programs:
 
 ```sh

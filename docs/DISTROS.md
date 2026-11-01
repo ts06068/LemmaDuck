@@ -17,7 +17,7 @@ archive's `distro.json`. An editor version does not imply a new engine version.
 
 ## Install and choose a workspace
 
-Complete the root [installation and account setup](../README.md#getting-started-with-paseo)
+Complete the [installation and account setup](GETTING_STARTED.md#getting-started-with-paseo)
 once. From the checkout root, launch either editor against your project:
 
 ```sh
