@@ -67,6 +67,26 @@ def build_fingerprint(env):
     return digest.hexdigest()
 
 
+def packaged_install():
+    """Published npm packages already contain a compiled, versioned worker."""
+    package = json.loads((ROOT / "package.json").read_text())
+    return package.get("name") == "@ts06068/lemmaduck-base"
+
+
+def prepare_core(env):
+    if packaged_install():
+        if not CORE.is_file():
+            raise ValueError("The npm package is missing its compiled worker. Reinstall @ts06068/lemmaduck-base.")
+        print("Using the compiled worker and dependencies installed by npm.", flush=True)
+        return
+    stamp = ROOT / "node_modules/.lemmaduck-build"
+    fingerprint = build_fingerprint(env)
+    if not (CORE.is_file() and stamp.is_file() and stamp.read_text().strip() == fingerprint):
+        run(["npm", "ci", "--include=dev", "--ignore-scripts", "--no-audit", "--no-fund"], cwd=ROOT, env=env)
+        run(["npm", "run", "build"], cwd=ROOT, env=env)
+        stamp.write_text(fingerprint + "\n")
+
+
 def install_source(spec):
     target = spec_dir(spec)
     if target.exists():
@@ -82,7 +102,8 @@ def install_source(spec):
 
 def setup(args):
     steps = ["Check Linux x86_64, Git, Python 3.12+ and Node 22.19+",
-             "Install the locked npm dependencies and build the Pi worker"]
+             "Use the compiled worker installed by npm" if packaged_install()
+             else "Install the locked npm dependencies and build the Pi worker"]
     if args.full:
         steps += [f"Install the locked Paseo host, OMP {OMP['version']} and Jujutsu {JJ['version']}; register LemmaDuck Code",
                   "Verify the Google Antigravity ACP runtime",
@@ -109,12 +130,7 @@ def setup(args):
         env = runtime_env()
         if not node_ready(env):
             run([sys.executable, ROOT / "scripts/bootstrap-tools.py", "--node-only"], env=env)
-        stamp = ROOT / "node_modules/.lemmaduck-build"
-        fingerprint = build_fingerprint(env)
-        if not (CORE.is_file() and stamp.is_file() and stamp.read_text().strip() == fingerprint):
-            run(["npm", "ci", "--include=dev", "--ignore-scripts", "--no-audit", "--no-fund"], cwd=ROOT, env=env)
-            run(["npm", "run", "build"], cwd=ROOT, env=env)
-            stamp.write_text(fingerprint + "\n")
+        prepare_core(env)
         if args.full:
             install_paseo(PASEO_RUNTIME, PASEO_LOCK, env)
             install_omp(DATA_ROOT / "bin/omp", OMP)

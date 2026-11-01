@@ -18,7 +18,7 @@ work use the managed **Pi** worker.
     <th><a href="https://github.com/ts06068/lemmaduck/tree/main/distros/neovim">Neovim</a></th>
   </tr>
   <tr>
-    <td align="center">Paseo desktop / tablet<br>Shared engine · v0.5.1</td>
+    <td align="center">Paseo desktop / tablet<br>Shared engine · v0.5.2</td>
     <td align="center">Emacs research workspace<br>Terminal integration · preview</td>
     <td align="center">Neovim editor workspace<br>Terminal integration · preview</td>
   </tr>
@@ -35,12 +35,12 @@ engine on the same host and account; they do not need another model subscription
 Their first preview launches the workers in editor terminals. Native ACP/RPC chat
 buffers and attachment to an already-running Paseo conversation are separate work.
 
-Clone once: Base and the shared engine live at the repository root; the editor
+Install with npm or clone once: Base and the shared engine live at the repository root; the editor
 workspaces live in `distros/emacs` and `distros/neovim`. All three release channels
 and package workflows are maintained in this repository.
 
 Release names, tags, download filenames and manifests identify the distro.
-See [the distro and package reference](docs/DISTROS.md).
+See [npm installation and updates](docs/INSTALL.md) and [the distro reference](docs/DISTROS.md).
 
 ## Getting started with Paseo
 
@@ -61,19 +61,31 @@ Use **x86-64 Linux**, Git and Python 3.12 or later. Ubuntu 24.04 is a suitable h
 
 ### 2. Install once and connect the client
 
-In the **Linux host shell**, clone this repository. The example uses GitHub CLI; `git clone https://github.com/ts06068/lemmaduck.git` also works. [GitHub CLI](https://cli.github.com/)
+In the **Linux host shell**, install the Base npm package. Use Node.js 22.19+,
+npm, Git and Python 3.12+. GitHub Packages requires a one-time registry login:
+use your GitHub username and a classic token with `read:packages` at the password
+prompt. [Installation, updates and the login-free release-URL option](docs/INSTALL.md).
 
 ```sh
-mkdir -p "$HOME/src"
-gh auth login --hostname github.com --git-protocol https --web
-gh repo clone ts06068/lemmaduck "$HOME/src/lemmaduck"
-cd "$HOME/src/lemmaduck"
-./lemmaduck setup --full
+npm config set @ts06068:registry https://npm.pkg.github.com --location=user
+npm login --scope=@ts06068 --auth-type=legacy --registry=https://npm.pkg.github.com
+npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-base@latest
 export PATH="$HOME/.local/bin:$PATH"
+lemmaduck setup --full
 lemmaduck doctor
 ```
 
-Full setup installs Paseo **0.14.0**, OMP **18.14.2**, Jujutsu **0.46.0**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. Keep the checkout at this path. Use `./lemmaduck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
+For an editor workspace, keep Base installed and add
+`@ts06068/lemmaduck-emacs@preview` or `@ts06068/lemmaduck-neovim@preview` using the
+same `npm install --global --prefix "$HOME/.local"` command. Their executable
+names are `lemmaduck-emacs` and `lemmaduck-neovim`.
+
+To update, rerun the npm install command for the packages/channels you use, then
+run `lemmaduck setup --full` and reopen the workers. State and credentials remain
+in their existing user directories. Developers can still clone this repository
+and run `./lemmaduck setup --full` from the checkout.
+
+Full setup installs Paseo **0.14.0**, OMP **18.14.2**, Jujutsu **0.46.0**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. For a source install, keep the checkout at its installed path. Use `lemmaduck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
 
 - **Local Paseo Desktop** — Open the local host. If it was running during setup, run `lemmaduck paseo reload` in the host shell.
 - **Headless Linux or WSL2** — Run `lemmaduck paseo` in the host shell and follow its connection prompt. On desktop choose **Settings → Add host → Remote SSH** for an SSH-reachable server. On Android use **Pair Device** and the QR from the host, or add a direct address on your private network. Use a connection approved for the host and its data. [Paseo connectivity](https://paseo.sh/docs/connectivity)

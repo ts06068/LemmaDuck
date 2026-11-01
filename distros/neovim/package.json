@@ -1,6 +1,6 @@
 {
   "name": "@ts06068/lemmaduck-neovim",
-  "version": "0.1.0-alpha.2",
+  "version": "0.1.0-alpha.3",
   "description": "LemmaDuck Neovim distro: isolated editor starter for the shared LemmaDuck engine",
   "repository": {
     "type": "git",
@@ -31,5 +31,8 @@
   "cpu": [
     "x64"
   ],
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.19.0"
+  }
 }

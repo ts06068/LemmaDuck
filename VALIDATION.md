@@ -1,4 +1,9 @@
-# Validation for LemmaDuck 0.5.1
+# Validation for LemmaDuck 0.5.2
+
+The npm upgrade check installs the prior public Base/editor packages in an
+isolated prefix, upgrades to the current packages, exercises all three CLIs and
+the compiled worker, and verifies that existing task state survives. Packaged
+setup tests ensure it never reinstalls development dependencies or recompiles.
 
 The monorepo keeps the engine at the root and imports the editor previews into
 `distros/emacs` and `distros/neovim`. Main CI runs the engine checks below plus

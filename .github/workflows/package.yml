@@ -3,12 +3,15 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Existing tested tag: base-vVERSION, emacs-vVERSION or neovim-vVERSION'
+        description: 'Tested package-enabled tag (Base 0.5.2+ or editor alpha.3+)'
         required: true
         type: string
 permissions:
   contents: read
   packages: write
+concurrency:
+  group: package-${{ inputs.tag }}
+  cancel-in-progress: false
 jobs:
   publish:
     runs-on: ubuntu-24.04
@@ -60,4 +63,4 @@ jobs:
           DISTRO: ${{ steps.identity.outputs.distro }}
           VERSION: ${{ steps.identity.outputs.version }}
           PACKAGE_TAG: ${{ steps.identity.outputs.package_tag }}
-        run: npm publish "build/release/$DISTRO/lemmaduck-$DISTRO-$VERSION.npm.tgz" --registry=https://npm.pkg.github.com --tag "$PACKAGE_TAG" --ignore-scripts
+        run: python3 scripts/publish_package.py "build/release/$DISTRO/lemmaduck-$DISTRO-$VERSION.npm.tgz" --tag "$PACKAGE_TAG"

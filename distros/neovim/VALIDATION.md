@@ -1,6 +1,6 @@
 # Validation
 
-This is the `neovim` distro, version `0.1.0-alpha.2`.
+This is the `neovim` distro, version `0.1.0-alpha.3`.
 
 The automated checks exercise argument handling with spaces and shell characters,
 project validation, isolated editor startup, and missing-program diagnostics.

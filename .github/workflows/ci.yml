@@ -39,6 +39,21 @@ jobs:
           'ip link set lo up; exec runuser -u "$1" -- env "PATH=$2" npm test'
           -- "$(id -un)" "$PATH"
       - run: python3 -m unittest discover -s tests -p 'test_*.py'
+      - name: Build npm install candidates
+        run: |
+          for distro in base emacs neovim; do
+            python3 scripts/build_release.py --distro "$distro" --npm
+          done
+      - name: Fetch previous versions for the upgrade test
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/previous-packages"
+          gh release download base-v0.5.1 --pattern '*.npm.tgz' --dir "$RUNNER_TEMP/previous-packages"
+          gh release download emacs-v0.1.0-alpha.2 --pattern '*.npm.tgz' --dir "$RUNNER_TEMP/previous-packages"
+          gh release download neovim-v0.1.0-alpha.2 --pattern '*.npm.tgz' --dir "$RUNNER_TEMP/previous-packages"
+      - name: Test actual global npm installation and upgrade
+        run: python3 scripts/test_npm_install.py --previous "$RUNNER_TEMP/previous-packages"
       - run: ./lemmaduck setup --full --dry-run
       - name: Install the pinned OMP test binary
         run: |

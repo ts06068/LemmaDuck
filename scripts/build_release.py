@@ -90,6 +90,10 @@ def main():
             package["name"] = meta["githubPackage"]
             package["publishConfig"] = {"registry":"https://npm.pkg.github.com"}
             package["lemmaduckDistro"] = meta["id"]
+            # npm owns installed dependencies; setup must not rebuild a global
+            # package or install development tooling into that directory.
+            package.pop("devDependencies", None)
+            package.pop("scripts", None)
             (staging / "package.json").write_text(json.dumps(package, indent=2) + "\n")
             if meta["id"] == "base":
                 if not (ROOT / "dist/cli.js").is_file():
@@ -99,6 +103,7 @@ def main():
                 lock = json.loads(lockpath.read_text())
                 lock["name"] = package["name"]
                 lock["packages"][""]["name"] = package["name"]
+                lock["packages"][""].pop("devDependencies", None)
                 lockpath.write_text(json.dumps(lock, indent=2) + "\n")
             result = subprocess.check_output(["npm", "pack", "--ignore-scripts", "--json", "--pack-destination", str(output)], cwd=staging, text=True)
             packed = output / json.loads(result)[0]["filename"]

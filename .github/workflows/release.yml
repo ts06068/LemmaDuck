@@ -4,6 +4,10 @@ on:
     types: [published]
 permissions:
   contents: write
+  packages: write
+concurrency:
+  group: package-${{ github.event.release.tag_name }}
+  cancel-in-progress: false
 jobs:
   assets:
     runs-on: ubuntu-24.04
@@ -54,4 +58,23 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ github.event.release.tag_name }}
           DISTRO: ${{ steps.identity.outputs.distro }}
-        run: gh release upload "$RELEASE_TAG" build/release/"$DISTRO"/*
+        run: |
+          gh release edit "$RELEASE_TAG" --title "$RELEASE_TAG"
+          gh release upload "$RELEASE_TAG" build/release/"$DISTRO"/*
+      - name: Match existing distro release titles to their tags
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api "repos/$GITHUB_REPOSITORY/releases?per_page=100" --paginate --jq '.[] | select(.name != .tag_name) | .tag_name' |
+          while IFS= read -r tag; do
+            case "$tag" in
+              base-v*|emacs-v*|neovim-v*) gh release edit "$tag" --title "$tag" ;;
+            esac
+          done
+      - name: Publish npm package
+        env:
+          NODE_AUTH_TOKEN: ${{ github.token }}
+          DISTRO: ${{ steps.identity.outputs.distro }}
+          VERSION: ${{ steps.identity.outputs.version }}
+          PACKAGE_TAG: ${{ steps.identity.outputs.package_tag }}
+        run: python3 scripts/publish_package.py "build/release/$DISTRO/lemmaduck-$DISTRO-$VERSION.npm.tgz" --tag "$PACKAGE_TAG"

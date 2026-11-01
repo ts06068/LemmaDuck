@@ -6,9 +6,9 @@ code lives in `distros/`. Editor configuration and task state remain separate.
 
 | Distro | Source directory | Release tag | GitHub Packages name |
 | --- | --- | --- | --- |
-| Base | `.` | `base-v0.5.1` | `@ts06068/lemmaduck-base` |
-| Emacs | `distros/emacs` | `emacs-v0.1.0-alpha.2` | `@ts06068/lemmaduck-emacs` |
-| Neovim | `distros/neovim` | `neovim-v0.1.0-alpha.2` | `@ts06068/lemmaduck-neovim` |
+| Base | `.` | `base-v0.5.2` | `@ts06068/lemmaduck-base` |
+| Emacs | `distros/emacs` | `emacs-v0.1.0-alpha.3` | `@ts06068/lemmaduck-emacs` |
+| Neovim | `distros/neovim` | `neovim-v0.1.0-alpha.3` | `@ts06068/lemmaduck-neovim` |
 
 Versions are independent. The editor manifests name the shared engine version
 and `same-checkout` revision. CI tests them together. Release packaging resolves
@@ -35,7 +35,7 @@ live conversation from another client are not implemented. Details:
 All three release channels live in [this repository's Releases](https://github.com/ts06068/lemmaduck/releases).
 Use a consistent identity at every layer:
 
-- Title: `LemmaDuck Base v0.5.1`, `LemmaDuck Emacs v0.1.0-alpha.2`, etc.
+- Title: exactly the tag, such as `base-v0.5.2` or `emacs-v0.1.0-alpha.3`.
 - Tag: `<distro>-v<version>`; versions must match that distro's manifests.
 - Assets: `lemmaduck-<distro>-<version>.zip`, `.tar.gz`, `.npm.tgz`, `.manifest.json`, `.sha256`.
 - Source archives and npm transports include `release-manifest.json` with distro,
@@ -65,22 +65,20 @@ Outputs are separated under `build/release/<distro>/`. Add `--tag DISTRO-vVERSIO
 to validate a proposed release tag. Stage new files before a local check; release
 CI reads a clean tagged checkout and records its source SHA.
 
-## GitHub Packages
+## npm installation and updates
 
-The manual **Actions → Publish GitHub package → Run workflow** accepts an existing
-tested release tag and selects the corresponding package. The three scoped
-package names remain distinct, but all `repository` fields point to
-`ts06068/lemmaduck`. Editor packages also set `repository.directory` to their
-subdirectory. Publishing uses `GITHUB_TOKEN` and `npm.pkg.github.com`; it does not
-publish to npmjs.org or run on an ordinary push.
+All three npm packages are published on GitHub Packages when their release is
+published. Base uses the `latest` channel and editor previews use `preview`.
+All packages link to this repository; editors also record `repository.directory`.
+The registry publisher verifies the uploaded integrity and channel version.
+See [installation, authentication and update commands](INSTALL.md).
 
-Base preserves its source package name and `lemmaduck` CLI. Packaging renames its
-GitHub transport to `@ts06068/lemmaduck-base`. Editor transports contain their
-launchers and configurations; they are not MELPA, ELPA or LuaRocks registrations.
-Registry authentication is required for GitHub npm packages, including public
-ones. Public source release downloads remain available without registry login.
-Configured package identities do not mean that registry versions are published;
-only a successful package workflow establishes publication.
+Base preserves its source package name and `lemmaduck` CLI; its published name
+is `@ts06068/lemmaduck-base`. Editor packages provide their own launcher commands
+and require Base plus their OS editor. These are not MELPA, ELPA or LuaRocks
+registrations. GitHub's npm registry requires authentication even for public
+packages; public `.npm.tgz` release URLs provide an alternative without registry
+login. Direct-URL installations require a new release URL for each update.
 
 ## Moving from the separate previews
 
@@ -88,9 +86,10 @@ Emacs `0.1.0-alpha.1` was imported from commit
 `9f561a2f1f7f7599317d9c12348d532c4e1870be` of the former Emacs repository; Neovim
 `0.1.0-alpha.1` was imported from
 `de3271eb0469bfd1004a8d958a585a94b4817414` of the former Neovim repository.
-The old repositories preserve those releases and point here. New work and new
-releases belong to this repository. Existing tags and released archives are not
-rewritten. Update launcher paths to `distros/<editor>/bin/lemmaduck-<editor>`.
+The standalone repositories were retired after consolidation; their origin
+commit IDs above record provenance. Current code and releases are maintained
+only here. For source installations, update launcher paths to
+`distros/<editor>/bin/lemmaduck-<editor>`, or install the npm packages.
 
 Use the same execution host, OS account and project path to continue saved tasks.
 Editor state directories remain `lemmaduck-emacs` and `lemmaduck-neovim`; the

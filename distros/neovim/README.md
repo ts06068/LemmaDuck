@@ -2,7 +2,7 @@
 <h1 align="center">LemmaDuck Neovim</h1>
 <p align="center"><strong>Talk to the duck. Test your hunch.</strong></p>
 
-**Distro: `neovim` · Version: `0.1.0-alpha.2` · Preview**
+**Distro: `neovim` · Version: `0.1.0-alpha.3` · Preview**
 
 An isolated Neovim workspace for the shared [LemmaDuck engine](https://github.com/ts06068/lemmaduck).
 Code development uses OMP. Research, writing and assistant work use the managed Pi worker.
@@ -13,6 +13,24 @@ Model routing, account sign-in, connector permissions and task records stay in t
 ## Getting started
 
 Use the same **Linux x86-64 host and user account** as LemmaDuck, with Python 3.12+ and Neovim 0.9.5+ for the minimal profile; Neovim 0.11+ for the optional LazyVim profile. On a remote host, run this editor in an SSH terminal; a local desktop-to-remote native editor connection is not part of this preview.
+
+### Install with npm
+
+Follow the [one-time registry login and Base installation](../../docs/INSTALL.md),
+then add this editor distro:
+
+```sh
+npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-neovim@preview
+export PATH="$HOME/.local/bin:$PATH"
+lemmaduck-neovim --doctor
+lemmaduck-neovim /path/to/project
+```
+
+Repeat the install command to update to the current `preview`; update Base with
+`@ts06068/lemmaduck-base@latest`. Editor state and engine task locations remain
+unchanged. The OS editor binary is a separate prerequisite.
+
+### Install from source
 
 1. Clone the monorepo once and follow the [base installation and account setup](https://github.com/ts06068/lemmaduck#getting-started-with-paseo). If you already have the checkout, update it and reuse it. The editor and engine are tested together at the same commit; no second repository is required.
 2. From the repository root, enter this distro and check the local programs:
@@ -60,19 +78,19 @@ Native ACP/RPC chat buffers, cross-client attachment to a live conversation, and
 
 ## Releases and packages
 
-All releases are published in the main `ts06068/lemmaduck` repository. Tags are **`neovim-vVERSION`**. Release titles are **`LemmaDuck Neovim vVERSION`**.
+All releases are published in the main `ts06068/lemmaduck` repository. Tags are **`neovim-vVERSION`**. Release titles are also **`neovim-vVERSION`**.
 Download assets begin with **`lemmaduck-neovim-VERSION`**, and each archive contains a `release-manifest.json` with distro, version, engine reference and source commit. Verify downloads against the attached SHA-256 file.
 
 An editor-only release archive can also be extracted and launched with `./bin/lemmaduck-neovim`; install the shared engine separately using the main repository. Development and release commands below assume the full monorepo checkout.
 
-The optional GitHub Packages identity is **`@ts06068/lemmaduck-neovim`**. This is an npm transport for the starter files and launcher, not a MELPA or LuaRocks publication. GitHub Packages requires registry authentication; source clones and public release archives are the simplest installation path. Publishing uses the separate manual **Publish GitHub package** workflow and does not happen on an ordinary push.
+The npm package is **`@ts06068/lemmaduck-neovim`**, hosted on GitHub Packages with the **`preview`** update channel. Release publication automatically publishes the package. See [installation and updates](../../docs/INSTALL.md) for registry login, exact versions and public release-URL installs. This is an npm distribution of the launcher and editor files; it is not a MELPA or LuaRocks registration.
 
 ## Development
 
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py'
 nvim --headless -u ./init.lua -c "luafile tests/editor.lua"
-python3 ../../scripts/build_release.py --distro neovim --tag neovim-v0.1.0-alpha.2 --npm
+python3 ../../scripts/build_release.py --distro neovim --tag neovim-v0.1.0-alpha.3 --npm
 ```
 
 Release packaging uses Git-tracked files. Stage new files before a local packaging check. The release workflow builds from the tagged commit after running the editor checks. See [validation](VALIDATION.md).
