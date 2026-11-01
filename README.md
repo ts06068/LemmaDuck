@@ -1,4 +1,4 @@
-<h1 align="center">🦆 LemmaDuck</h1>
+<h1 align="center"><a id="-lemmaduck"></a><img src="assets/brand/lemmaduck.webp" width="40" height="40" alt="Rubber duck"> LemmaDuck</h1>
 <p align="center"><strong>Your lab copilot for research, writing, and code.</strong><br>Talk to the duck. Test your hunch.</p>
 
 <p align="center">
@@ -50,6 +50,39 @@ duck paseo
 `duck` is the everyday command; `lemmaduck` remains available for compatibility.
 
 Connect with [Paseo Desktop or Android](https://paseo.sh/download). The [getting started guide](docs/GETTING_STARTED.md) walks through host connection, model sign-in, and your first research task.
+
+**🖥️ Windows → Linux GPU server:** SSH into the server, install LemmaDuck there, and run `duck code /path/to/project` or `duck agent /path/to/project`. WSL is not required on Windows for this setup. VS Code Remote–SSH and [Paseo Remote SSH](https://paseo.sh/docs/connectivity#ssh) also work; GPU jobs use the server's configured CUDA/Python environment. For long sessions over plain SSH, run `duck` inside tmux.
+
+<a id="install-with-an-agent"></a>
+
+<details>
+<summary>🤖 Install with an AI agent — copy this prompt</summary>
+
+Paste this into your coding agent. Add your server's SSH alias and preferred editor if needed.
+
+```text
+Install LemmaDuck from https://github.com/ts06068/lemmaduck on my execution host.
+Read the current README, docs/INSTALL.md, docs/GETTING_STARTED.md, and
+docs/PROVIDERS.md first, then carry out the setup.
+
+Identify the execution host; ask if it is unclear. When I use Windows with a
+remote Linux server, install on that server. Use Base unless I request Emacs
+or Neovim. Check the documented OS, architecture, runtime, and editor requirements.
+
+Install or update via npm in my user prefix ($HOME/.local), using the documented
+package names and channels. Preserve existing projects, configuration, and
+credentials. Use existing registry authentication, or let me log in privately;
+the documented public release archive is an alternative. Never request secrets
+in chat. Add the command directory to PATH, then run duck setup --full.
+
+Verify duck --version and duck doctor, plus the selected editor's --doctor.
+Guide me through my chosen model's login and let me confirm its account settings.
+Report installed versions, checks that passed, any remaining manual steps, and
+the commands to start a project and update later. Do not mark unfinished setup
+or untested model access as verified.
+```
+
+</details>
 
 <details>
 <summary>Use Emacs or Neovim</summary>
