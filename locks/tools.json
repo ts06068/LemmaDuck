@@ -2,6 +2,12 @@
   "platform": "linux-x86_64",
   "tools": [
     {
+      "name": "jj",
+      "version": "0.46.0",
+      "url": "https://github.com/jj-vcs/jj/releases/download/v0.46.0/jj-v0.46.0-x86_64-unknown-linux-musl.tar.gz",
+      "sha256": "fce0271158e665ceb82dc66c5eb95b1728649094e9133074f3b5baece345fc08"
+    },
+    {
       "name": "omp",
       "version": "18.14.2",
       "url": "https://github.com/can1357/oh-my-pi/releases/download/v18.14.2/omp-linux-x64",

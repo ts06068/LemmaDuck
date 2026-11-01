@@ -31,7 +31,10 @@ test("public coding entry point selects isolated OMP and requires explicit API r
     const models = () => JSON.parse(readFileSync(join(data, "omp/agent/models.yml"), "utf8"));
     writeFileSync(join(project, ".lemmaduck-kind"), "development\n");
     const launch = JSON.parse(cli("agent", project, "--rpc"));
-    assert.deepEqual(launch.args, ["--mode", "rpc"]);
+    assert.deepEqual(launch.args.slice(-2), ["--mode", "rpc"]);
+    assert.ok(launch.args.includes("--append-system-prompt"));
+    assert.equal(launch.args[launch.args.indexOf("--thinking") + 1], "medium");
+    assert.equal(launch.args[launch.args.indexOf("--provider") + 1], "openai-codex");
     assert.equal(launch.cwd, project);
     assert.equal(launch.env.PI_CODING_AGENT_DIR, join(data, "omp/agent"));
     for (const name of ["ANTHROPIC_API_KEY", "CLAUDE_CODE_OAUTH_TOKEN", "OMP_AUTH_BROKER_TOKEN", "LEMMADUCK_WORK_SECRET"]) assert.equal(launch.env[name], undefined);
@@ -39,7 +42,7 @@ test("public coding entry point selects isolated OMP and requires explicit API r
     assert.deepEqual(config().enabledModels, ["openai-codex/*"]);
     for (const provider of ["anthropic", "zenmux", "openrouter", "ollama"]) assert.ok(config().disabledProviders.includes(provider));
     assert.equal(config().retry.modelFallback, false);
-    assert.deepEqual(JSON.parse(cli("code", project, "--mode", "rpc-ui")).args, ["--mode", "rpc-ui"]);
+    assert.deepEqual(JSON.parse(cli("code", project, "--mode", "rpc-ui")).args.slice(-2), ["--mode", "rpc-ui"]);
     const local = join(root, "local.json");
     writeFileSync(local, JSON.stringify({ id: "duck-local", label: "Fixture", billing: "local", baseUrl: "http://127.0.0.1:9876/v1", api: "openai-completions", models: [{ id: "synthetic-model" }] }));
     cli("providers", "add", local); cli("code", project, "--version");

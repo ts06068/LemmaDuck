@@ -27,7 +27,7 @@ import { createAssistantMessageEventStream } from ${JSON.stringify(fileURLToPath
 import { appendFileSync } from 'node:fs';
 export default function(pi) {
   pi.registerProvider('openai-codex', { name: 'Offline fixture', api: 'openai-codex-responses', baseUrl: 'https://chatgpt.com/backend-api/codex', apiKey: 'offline-fixture',
-    models: [{ id: 'fixture', name: 'fixture', reasoning: false, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 128000, maxTokens: 1000 }],
+    models: [{ id: 'fixture', name: 'fixture', reasoning: true, input: ['text'], cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0 }, contextWindow: 128000, maxTokens: 1000 }],
     streamSimple(model, context) {
       appendFileSync(${JSON.stringify(callsFile)}, 'call\\n');
       const stream = createAssistantMessageEventStream();
@@ -77,7 +77,28 @@ export default function(pi) {
   }
   const prompt = (message: string) => request("prompt", { message });
   try {
-    await request("get_commands"); await prompt("/switch chatgpt");
+    const available = await request("get_commands");
+    assert.ok(available.commands.some((item: any) => item.name === "ask"));
+    await prompt("/ask Check the causal reasoning in this argument"); await idle();
+    assert.equal(task().route.profile, "reasoning");
+    assert.equal(task().route.requestedThinking, "high");
+    assert.equal(task().route.appliedThinking, "high");
+    assert.equal(readFileSync(callsFile, "utf8").trim().split("\n").length, 1);
+    const routed = await request("get_state");
+    await prompt("Follow-up on that argument"); await idle();
+    assert.equal((await request("get_state")).sessionId, routed.sessionId);
+    await prompt("/route abduction");
+    await prompt("/ask Compare possible mechanisms"); await idle();
+    assert.equal(task().route.profile, "abduction");
+    assert.notEqual((await request("get_state")).sessionId, routed.sessionId);
+    await prompt("/route auto");
+    const callsBeforeUnsupported = readFileSync(callsFile, "utf8");
+    await prompt("/ask Draft an email reply");
+    await prompt("/ask Fix the bug in this code");
+    assert.equal(readFileSync(callsFile, "utf8"), callsBeforeUnsupported);
+    assert.ok(notices.some(message => /No ready model/.test(message)));
+    assert.ok(notices.some(message => /Code development uses OMP/.test(message)));
+    await prompt("/switch chatgpt");
     await prompt('FIXTURE_CMD:{"command":"cat large.txt; exit 1"}'); await idle();
     const failed = task().operations.find((op: any) => op.tool === "bash");
     assert.equal(failed.status, "failed"); assert.equal(failed.exitCode, 1);

@@ -6,17 +6,41 @@ import os
 from pathlib import Path
 import sys
 import tempfile
+import tarfile
 import unittest
 from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
 from coding import configure_paseo, install_omp
+from vcs import install_jj
 import launcher
 import argparse
 
 
 class CodingTest(unittest.TestCase):
+    def test_jj_install_verifies_archive_and_preserves_existing_binary_on_failure(self):
+        archive = io.BytesIO()
+        payload = b"synthetic jj executable"
+        with tarfile.open(fileobj=archive, mode="w:gz") as tar:
+            member = tarfile.TarInfo("release/jj")
+            member.size = len(payload)
+            tar.addfile(member, io.BytesIO(payload))
+        packed = archive.getvalue()
+        spec = {"url": "https://github.com/example/release", "sha256": hashlib.sha256(packed).hexdigest()}
+        with tempfile.TemporaryDirectory() as tmp:
+            binary = Path(tmp) / "jj"
+            with patch("vcs.urlopen", return_value=io.BytesIO(packed)):
+                install_jj(binary, spec)
+            self.assertEqual(binary.read_bytes(), payload)
+            with patch("vcs.urlopen", side_effect=AssertionError("Unexpected network access")):
+                install_jj(binary, spec)
+            changed = {**spec, "sha256": "0" * 64}
+            with patch("vcs.urlopen", return_value=io.BytesIO(packed)):
+                with self.assertRaisesRegex(ValueError, "SHA-256"):
+                    install_jj(binary, changed)
+            self.assertEqual(binary.read_bytes(), payload)
+
     def test_provider_merge_preserves_existing_configuration_and_is_idempotent(self):
         with tempfile.TemporaryDirectory() as tmp, redirect_stdout(io.StringIO()):
             home = Path(tmp)

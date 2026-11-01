@@ -43,8 +43,8 @@ export class ACPWorker {
     const meta = params.toolCall._meta as { mcp?: { server?: string; serverName?: string; tool?: string; name?: string } } | undefined;
     const mcp = meta?.mcp;
     const managed = this.options.mcpServers?.some(server => server.name === "lemmaduck") && (
-      (mcp?.server === "lemmaduck" && /^(read_task_artifact|propose_checkpoint|read|grep|find|ls|write|edit|bash)$/.test(mcp.tool || "")) ||
-      (kind === "other" && /^(read_task_artifact|propose_checkpoint|read|grep|find|ls|write|edit|bash) \(lemmaduck MCP Server\)$/.test(params.toolCall.title || ""))
+      (mcp?.server === "lemmaduck" && /^(read_task_artifact|propose_checkpoint|inspect_vcs|list_connections|list_connection_tools|call_connection|read|grep|find|ls|write|edit|bash)$/.test(mcp.tool || "")) ||
+      (kind === "other" && /^(read_task_artifact|propose_checkpoint|inspect_vcs|list_connections|list_connection_tools|call_connection|read|grep|find|ls|write|edit|bash) \(lemmaduck MCP Server\)$/.test(params.toolCall.title || ""))
     );
     const denied = this.options.review && !managed && !["read", "search", "think"].includes(kind || "");
     const detail = JSON.stringify(params.toolCall.rawInput ?? { locations: params.toolCall.locations, content: params.toolCall.content });

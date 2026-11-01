@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { billingConfirmed, claudeCLI, claudePlanSignedIn, configure, confirmBilling, googleACP, geminiHome, harnessEnv, piCLI } from "./config.js";
 import { binDir, configDir, profileDir, projectPath, repoRoot } from "./paths.js";
 import { assertManagedProject, assertPrivateAuthStore, assertProvider, billingEnvNames, PROVIDERS, type Provider } from "./security.js";
-import { codingEnv } from "./coding.js";
+import { codingEnv, codingArgs } from "./coding.js";
 import { acquireProjectLock, renderHandoff, TaskStore } from "./state.js";
 import { workspaceName } from "./workspace-ui.js";
 import { ALIASES, CLAUDE_API_KEY_ENV, enabledProviders, providerLabel, readProviders } from "./providers.js";
@@ -45,13 +45,19 @@ async function main(): Promise<number> {
       const omp = join(binDir, "omp");
       if (!existsSync(omp)) throw new Error("OMP is missing. Run lemmaduck setup --full on the Paseo host.");
       const args = rest.flatMap(option => option === "--rpc" ? ["--mode", "rpc"] : [option]);
-      return run(omp, args, project, codingEnv());
+      return run(omp, codingArgs(args), project, codingEnv());
     }
   }
   if (command === "--version" || command === "version") { console.log(JSON.parse(readFileSync(join(repoRoot, "package.json"), "utf8")).version); return 0; }
   if (command === "setup") return run("python3", [join(repoRoot, "scripts/setup.py"), ...[arg, ...rest].filter((s): s is string => s !== undefined)], repoRoot, process.env);
   if (command === "providers") { await (await import("./provider-command.js")).providerCommand(arg, rest); configure(); return 0; }
   if (command === "connector") { await (await import("./connectors.js")).connectorCommand([arg, ...rest].filter((s): s is string => s !== undefined)); return 0; }
+  if (command === "routing") { (await import("./routing.js")).routingCommand(arg); return 0; }
+  if (command === "vcs") {
+    const view = rest[0] || "status";
+    if (!["status", "diff", "log"].includes(view) || rest.length > 1) throw new Error("Use: lemmaduck vcs PATH status|diff|log");
+    console.log(JSON.stringify((await import("./vcs.js")).vcsRead(projectPath(arg || process.cwd()), view as "status" | "diff" | "log"), null, 2)); return 0;
+  }
   configure();
   if (command === "ui" && arg === "reload") throw new Error("Live layout replacement is unavailable: Zellij cannot reliably preserve running pane commands. New workspaces use the new bars; keep existing sessions until their work is saved and finished.");
   if (command === "doctor") {
@@ -119,7 +125,7 @@ async function main(): Promise<number> {
         "--theme", join(repoRoot, "config/pi/lemmaduck-mono.json"), "--use-theme", "lemmaduck-mono",
         "--session-dir", join(store.dir, "sessions"), "--models", enabledProviders().map(id => `${id}/*`).join(","), "--tools", "read,bash,edit,write,grep,find,ls,read_task_artifact,propose_checkpoint"];
       if (rest.includes("--rpc")) args.push("--mode", "rpc");
-      else console.log("LemmaDuck: /switch selects the worker, /task shows saved state, /workflow attaches a playbook. Escape cancels the active turn.");
+      else console.log("LemmaDuck: /ask REQUEST routes a new segment; /switch selects manually; /task shows state; /workflow attaches a playbook. Escape cancels the active turn.");
       return await run(process.execPath, args, project, harnessEnv(), release.track);
     } finally { release(); }
   }

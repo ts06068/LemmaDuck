@@ -39,7 +39,7 @@ export PATH="$HOME/.local/bin:$PATH"
 lemmaduck doctor
 ```
 
-Full setup installs Paseo **0.14.0**, OMP **18.14.2**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. Keep the checkout at this path. Use `./lemmaduck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
+Full setup installs Paseo **0.14.0**, OMP **18.14.2**, Jujutsu **0.46.0**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. Keep the checkout at this path. Use `./lemmaduck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
 
 - **Local Paseo Desktop** — Open the local host. If it was running during setup, run `lemmaduck paseo reload` in the host shell.
 - **Headless Linux or WSL2** — Run `lemmaduck paseo` in the host shell and follow its connection prompt. On desktop choose **Settings → Add host → Remote SSH** for an SSH-reachable server. On Android use **Pair Device** and the QR from the host, or add a direct address on your private network. Use a connection approved for the host and its data. [Paseo connectivity](https://paseo.sh/docs/connectivity)
@@ -111,6 +111,45 @@ lemmaduck agent "$HOME/projects/duck-code"
 For an existing checkout, use `lemmaduck code /path/to/repo`. To use Paseo's chat, open that same folder as a workspace, choose **New Agent → LemmaDuck Code** and select your configured model. The terminal command and the Paseo provider use the same OMP profile. Register an account or a local model on the host first. For ChatGPT, open the terminal command, enter `/login openai-codex` and sign in to your own account, then select a model with `/model`. A registered loopback model can run without a cloud account. [Model configuration and Claude billing](docs/PROVIDERS.md)
 
 Try “Reproduce the failing test, fix the underlying function and rerun that test.” Review the diff in Paseo or VS Code. For a manuscript or a read-only research review in that same checkout, run `lemmaduck agent /path/to/repo --pi` in a terminal. OMP keeps its coding sessions separately from Pi's task journal. In OMP, `/review` reviews code changes. In Pi, `/review` starts a separate read-only research segment.
+
+## Let the task choose the worker
+
+After signing in and confirming account billing settings, use `/ask` in the Pi prompt. The harness selects a ready provider, model and requested reasoning level for a fresh task segment. Normal follow-ups stay with that worker.
+
+| Task | Default | Reasoning preference |
+| --- | --- | --- |
+| Schedules, email and routine assistance | Gemini in Pi | low |
+| Manuscript sentences, translation and editing | Gemini in Pi | medium |
+| Research design, proof and demanding analysis | ChatGPT, then Claude, in Pi | high |
+| Abduction and competing explanations | ChatGPT, then Claude, in Pi | high |
+| Code implementation and debugging | ChatGPT in OMP | medium |
+
+```text
+/ask Draft a Korean reply using the selected email and my approved examples.
+/ask Edit the selected manuscript paragraph without changing its claims or citations.
+/ask Generate competing hypotheses for this observation and propose a discriminating experiment.
+```
+
+Use `/route writing` or `/route abduction` to set the profile explicitly and `/route auto` to restore classification. `/switch` still opens a manual model picker. The router uses visible task cues and account readiness; it does not claim to find the optimal model. Gemini's current ACP connection manages its actual model and reasoning internally. LemmaDuck records that limitation instead of claiming the preferred level was applied. Other models use the levels their runtime supports.
+
+To customize provider order, exact model IDs and reasoning levels, run `lemmaduck routing init` in the **host shell**, then edit the path it prints. `lemmaduck routing show` displays the effective policy. Explicit OMP `--model`/`--thinking` options and Paseo's model choice override coding launch defaults. [Routing and limitations](docs/ROUTING.md)
+
+Writing routes preserve the author's intent, facts and approved voice samples, separate factual issues from stylistic edits, and keep drafts reviewable. Coding starts by inspecting existing behavior, standard-library facilities and installed dependencies. [Writing and desloping](docs/WRITING.md)
+
+## Git, Jujutsu and project management
+
+Keep using VS Code to navigate and edit the checkout. LemmaDuck detects Git or Jujutsu, records version-control state in Pi task checkpoints, and exposes status/diff/log inspection to the worker. OMP uses the host's normal Git/jj workflow for development. Jujutsu inspection reads recorded state without automatically snapshotting working-copy changes. [VCS guide](docs/VCS.md)
+
+```sh
+lemmaduck vcs /path/to/repo status
+lemmaduck connector add work.github github
+lemmaduck connector add work.linear linear
+lemmaduck connector add work.jira jira
+```
+
+The connector commands create local presets. Supply account credentials, discover the server's tools, and allow the operations you intend to use. Pi and Gemini share those allowed tools; OMP can call the same connector CLI. Read-only reviews reject external modifications. Other remote effects display the account and full payload for confirmation and receive a replay-protected receipt. [Connect GitHub, Linear and Jira](docs/CONNECTORS.md)
+
+Use `/task link ISSUE_URL` in Pi to preserve a GitHub, Linear or Jira reference across handoffs. A link records context; it does not create an automatic two-way status sync.
 
 ## Workflows and project types
 

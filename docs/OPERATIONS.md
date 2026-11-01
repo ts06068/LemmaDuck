@@ -11,10 +11,12 @@ lemmaduck status /absolute/path/to/project
 lemmaduck agent /absolute/path/to/project --pi
 ```
 
-Return to the same host, account and absolute project path. In the agent prompt, use `/task` to inspect the current goal and `/handoff` to save its inputs and decisions. Use `/switch` when you are ready to continue with a worker.
+Return to the same host, account and absolute project path. In the agent prompt, use `/task` to inspect the current goal and `/handoff` to save its inputs and decisions. Use `/ask REQUEST` to route a new segment automatically or `/switch` to select a worker manually. `/route` shows the current profile and last routing decision.
 
 If an operation is listed as `unknown`, inspect its effect in the target system first. Record the observation with `lemmaduck reconcile PROJECT OPERATION_ID completed 'observed result'` or use `failed` when failure is confirmed. Keep provider credentials and private task journals on the execution host.
 
 ## Reopen a coding session
 
 Reconnect to the same host and open the original **LemmaDuck Code** conversation in Paseo. From a terminal use `lemmaduck code /path/to/repo --resume` to choose an OMP session for that workspace. A Pi task ID and a Paseo/OMP session ID identify different records. For a research handoff, record the coding commit, test command and result in the Pi task.
+
+Model-routing overrides live at the path printed by `lemmaduck routing path`. Connector configuration lives at `~/.config/lemmaduck/connections.json`; its credentials remain in named environment variables. Connector receipts live under the task state root in `connector-receipts/ACCOUNT`. An unknown connector outcome requires checking the service before reconciling the corresponding task operation. `/task link URL` retains an issue/PR reference in the handoff.

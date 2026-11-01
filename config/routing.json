@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "defaultProfile": "reasoning",
+  "profiles": {
+    "routine": { "providers": ["gemini"], "thinking": "low", "models": {} },
+    "writing": { "providers": ["gemini"], "thinking": "medium", "models": {} },
+    "reasoning": { "providers": ["chatgpt", "claude"], "thinking": "high", "models": {} },
+    "abduction": { "providers": ["chatgpt", "claude"], "thinking": "high", "models": {} },
+    "coding": { "providers": ["chatgpt"], "thinking": "medium", "models": {} }
+  }
+}

@@ -1,10 +1,11 @@
 import { appendFileSync, closeSync, existsSync, mkdirSync, openSync, readFileSync, readdirSync, realpathSync, renameSync, rmSync, statSync, writeFileSync } from "node:fs";
 import { createHash, randomUUID } from "node:crypto";
-import { execFileSync } from "node:child_process";
 import { join } from "node:path";
 import { privateDir, stateRoot } from "./paths.js";
 import { withinRoot, type Provider } from "./security.js";
 import { detectWarnings, excerpt, HANDOFF_BYTES, saveArtifact } from "./artifacts.js";
+import { detectVcs, vcsRead } from "./vcs.js";
+import type { Profile, Route } from "./routing.js";
 
 export type Status = "idle" | "running" | "paused" | "rate_limited" | "needs_reconciliation" | "complete";
 export interface OperationCompletion {
@@ -19,7 +20,7 @@ export interface Operation {
   reconciliation?: { at: string; note: string }[]; warningsResolved?: { at: string; note: string };
   terminationReason?: OperationCompletion["terminationReason"]; error?: string;
 }
-export interface Snapshot { at: string; head: string | null; status: string; diffStat: string }
+export interface Snapshot { at: string; head: string | null; status: string; diffStat: string; backend?: string; note?: string; error?: string }
 export interface Usage { id: string; provider: string; model: string; kind: "reported" | "estimated" | "unknown"; input?: number; output?: number; cacheRead?: number; cacheWrite?: number }
 export interface Task {
   version: 2; id: string; project: string; goal: string; status: Status;
@@ -27,7 +28,10 @@ export interface Task {
   decisions: string[]; nextSteps: string[]; inputs: string[];
   operations: Operation[]; sessions: { provider: string; model: string; path?: string; at: string }[];
   baseline: Snapshot; snapshot: Snapshot; lastResult?: string; error?: string;
-  nextSegment?: { provider: Provider; model: string; review: boolean };
+  nextSegment?: { provider: Provider; model: string; review: boolean; route?: Route };
+  routingProfile?: Profile;
+  route?: Route;
+  issueLinks?: string[];
   validations: string[];
   references?: { state: string; warnings: string };
   workflow?: { name: string; commit: string; path: string; artifactId: string };
@@ -41,17 +45,15 @@ export function atomicJson(path: string, value: unknown): void {
   renameSync(tmp, path);
 }
 
-function git(project: string, args: string[]): string {
-  try { return execFileSync("git", ["-C", project, ...args], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"], timeout: 5000, maxBuffer: 1024 * 1024 }).trim(); }
-  catch { return ""; }
-}
-
 export function snapshot(project: string): Snapshot {
-  return {
-    at: new Date().toISOString(), head: git(project, ["rev-parse", "HEAD"]) || null,
-    status: git(project, ["status", "--short"]),
-    diffStat: git(project, ["diff", "--stat", "HEAD"]) || git(project, ["diff", "--stat"]),
-  };
+  const result: Snapshot = { at: new Date().toISOString(), backend: detectVcs(project).backend, head: null, status: "", diffStat: "" };
+  if (result.backend === "none") return result;
+  try {
+    const status = vcsRead(project, "status"); result.status = status.output; result.note = status.note;
+    result.diffStat = vcsRead(project, "stat").output;
+    try { result.head = vcsRead(project, "head").output || null; } catch { /* unborn Git repository */ }
+  } catch (error) { result.error = String(error); }
+  return result;
 }
 
 export function projectId(project: string): string { return createHash("sha256").update(project).digest("hex").slice(0, 16); }
@@ -181,8 +183,9 @@ export function renderHandoff(task: Task): string {
     section("Next steps", task.nextSteps.join("\n"), 1000),
     section("Validation records (user-confirmed, not independently proved)", (task.validations || []).join("\n"), 900),
     section("Selected inputs", task.inputs.join("\n"), 600),
+    ...(task.issueLinks?.length ? [section("Linked issues / pull requests", task.issueLinks.join("\n"), 800)] : []),
     section("Existing changes at task start", task.baseline.status, 600),
-    section("Current Git state", task.snapshot.status + "\n" + task.snapshot.diffStat, 900),
+    section("Current version control state", [task.snapshot.backend || "git", task.snapshot.note, task.snapshot.error, task.snapshot.status, task.snapshot.diffStat].filter(Boolean).join("\n"), 900),
     section("Recent operations", recent, 1800),
     section("Last response (possibly partial)", task.lastResult || "", 1100),
     section("Error / uncertainty", task.error || "", 400),
@@ -195,7 +198,7 @@ export type ProjectLease = (() => void) & { track: (pid: number) => void };
 export function acquireProjectLock(project: string, root = stateRoot): ProjectLease {
   const locks = privateDir(join(root, "locks"));
   project = realpathSync(project);
-  const scope = git(project, ["rev-parse", "--show-toplevel"]) || project;
+  const scope = detectVcs(project).root;
   const path = join(locks, projectId(scope) + ".lock");
   const token = randomUUID();
   const mutex = join(locks, ".registry");
@@ -217,7 +220,7 @@ export function acquireProjectLock(project: string, root = stateRoot): ProjectLe
       try { owner = JSON.parse(readFileSync(file, "utf8")); } catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") continue; throw new Error(`Unrecognized project lock: ${name}`); }
       const livePid = [owner.pid, ...(owner.children || [])].find(alive);
       if (!livePid) { renameSync(file, `${file}.stale-${owner.token}`); continue; }
-      const occupied = owner.scope || (git(owner.project, ["rev-parse", "--show-toplevel"]) || owner.project);
+      const occupied = owner.scope || detectVcs(owner.project).root;
       if (withinRoot(scope, occupied) || withinRoot(occupied, scope)) throw new Error(`Project already has an active harness writer (PID ${livePid}) in an overlapping workspace.`);
     }
     const fd = openSync(path, "wx", 0o600);

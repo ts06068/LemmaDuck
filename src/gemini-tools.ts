@@ -15,6 +15,8 @@ import { Instructions } from "./workflow.js";
 import { RESULT_BYTES, resultEnvelope } from "./artifacts.js";
 import type { TaskStore } from "./state.js";
 import { piRoot } from "./dependencies.js";
+import { vcsTool } from "./vcs-tool.js";
+import { connectionToolDefinitions } from "./connection-tools.js";
 import { createManagedShell } from "./shell.js";
 
 // Give Google's official model loop the same Pi tools through MCP. Its native
@@ -34,9 +36,11 @@ export async function startGeminiTools(store: TaskStore, options: {
   const { createCodingTools, createReadOnlyTools } = await import(pathToFileURL(join(piRoot, "dist/core/tools/index.js")).href) as typeof import("@earendil-works/pi-coding-agent");
   const shell = await createManagedShell(store);
   const tools = new Map([...createReadOnlyTools(store.project), ...(options.review ? [] : createCodingTools(store.project))].map(tool => [tool.name, tool]));
+  for (const tool of connectionToolDefinitions(store, { review: () => options.review, approve: (detail, signal) => options.approve(detail, signal || lifecycle.signal) })) tools.set(tool.name, tool);
+  tools.set("inspect_vcs", vcsTool(store.project));
   const advertised = [...taskTools, ...[...tools.values()].map(tool => ({
     name: tool.name, description: tool.name === "bash" ? shell.definition.description : tool.description, inputSchema: tool.parameters,
-    annotations: { readOnlyHint: ["read", "grep", "find", "ls"].includes(tool.name), openWorldHint: tool.name === "bash" },
+    annotations: { readOnlyHint: ["read", "grep", "find", "ls", "inspect_vcs", "list_connections", "list_connection_tools"].includes(tool.name), openWorldHint: tool.name === "bash" },
   }))];
   const mcp = new Server({ name: "lemmaduck", version: packageVersion }, { capabilities: { tools: {} } });
   mcp.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: advertised }));

@@ -20,6 +20,19 @@ jobs:
       - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
       - run: npm run check
       - run: npm run build
+      - name: Install the pinned Jujutsu test binary
+        run: |
+          python3 - <<'PY'
+          import json, os, sys
+          from pathlib import Path
+          sys.path.insert(0, "tools")
+          from vcs import install_jj
+          spec = next(tool for tool in json.loads(Path("locks/tools.json").read_text())["tools"] if tool.get("name") == "jj")
+          binary = Path(os.environ["RUNNER_TEMP"]) / "lemmaduck-vcs" / "jj"
+          install_jj(binary, spec)
+          with open(os.environ["GITHUB_PATH"], "a") as target:
+              target.write(str(binary.parent) + "\n")
+          PY
       - name: Test with loopback-only networking
         run: >-
           sudo unshare --net -- bash -euc

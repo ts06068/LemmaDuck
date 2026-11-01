@@ -14,6 +14,7 @@ import tempfile
 
 import workflow_sources
 from coding import configure_paseo, install_omp, install_paseo
+from vcs import install_jj
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "scripts"))
@@ -23,14 +24,16 @@ SOURCES = json.loads((ROOT / "locks/upstreams.json").read_text())["workflow_sour
 CACHE = Path(os.environ.get("LEMMADUCK_WORKFLOWS_DIR", DATA_ROOT / "workflow-sources"))
 CORE = ROOT / "dist/cli.js"
 OMP = next(tool for tool in json.loads((ROOT / "locks/tools.json").read_text())["tools"] if tool.get("name") == "omp")
+JJ = next(tool for tool in json.loads((ROOT / "locks/tools.json").read_text())["tools"] if tool.get("name") == "jj")
 PASEO_LOCK = ROOT / "locks/paseo"
 PASEO_RUNTIME = DATA_ROOT / "tools" / ("paseo-" + hashlib.sha256((PASEO_LOCK / "package-lock.json").read_bytes()).hexdigest()[:16])
 PASEO = PASEO_RUNTIME / "node_modules/.bin/paseo"
-CORE_COMMANDS = {"agent", "code", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector"}
+CORE_COMMANDS = {"agent", "code", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector", "routing", "vcs"}
 DESCRIPTION = """Use Paseo to open your Linux host. Run 'agent PROJECT' for a project or
 'code PROJECT' for an OMP coding session. 'agent PROJECT --pi' opens the research worker.
 Other commands: login PROVIDER, billing confirm PROVIDER --extra-usage-off,
-providers list, status [PROJECT], connector list|tools|call ... ."""
+providers list, routing show|init|path, vcs PROJECT status|diff|log,
+status [PROJECT], connector list|add|discover|allow|tools|call ... ."""
 
 
 def spec_dir(spec):
@@ -81,7 +84,7 @@ def setup(args):
     steps = ["Check Linux x86_64, Git, Python 3.12+ and Node 22.19+",
              "Install the locked npm dependencies and build the Pi worker"]
     if args.full:
-        steps += [f"Install the locked Paseo host and checksum-verified OMP {OMP['version']}; register LemmaDuck Code",
+        steps += [f"Install the locked Paseo host, OMP {OMP['version']} and Jujutsu {JJ['version']}; register LemmaDuck Code",
                   "Verify the Google Antigravity ACP runtime",
                   "Fetch and verify every pinned pstack and gstack file"]
     launcher = INSTALL_HOME / ".local/bin/lemmaduck"
@@ -115,6 +118,7 @@ def setup(args):
         if args.full:
             install_paseo(PASEO_RUNTIME, PASEO_LOCK, env)
             install_omp(DATA_ROOT / "bin/omp", OMP)
+            install_jj(DATA_ROOT / "bin/jj", JJ)
             run([sys.executable, ROOT / "scripts/install-google.py"], env=env)
             for spec in SOURCES.values():
                 install_source(spec)

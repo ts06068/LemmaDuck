@@ -14,6 +14,7 @@ test("incremental Gemini input never replays earlier user messages", () => {
 });
 test("two Gemini turns stream into the correct Pi response and cumulative usage is differenced", async () => {
   const dir = mkdtempSync(join(tmpdir(), "lemmaduck-gemini-")); const store = new TaskStore(dir, dir);
+  store.task.route = { profile: "writing", provider: "gemini-cli-acp", model: "cli-default", requestedThinking: "medium", appliedThinking: "provider-managed", reason: "fixture", at: new Date().toISOString() };
   let config: any; let calls = 0; const sent: string[] = [];
   const bridge = registerGemini({ registerProvider: (_id: string, value: any) => { config = value; } } as any, store, () => undefined, () => false, options => ({
     sessionId: "fixture", close() {}, async prompt(text) { sent.push(text); calls++; options.update({ sessionId: "fixture", update: { sessionUpdate: "agent_message_chunk", content: { type: "text", text: `response-${calls}` } } }); return { stopReason: "end_turn", usage: { inputTokens: calls * 10, outputTokens: calls * 2, totalTokens: calls * 12 } }; },
@@ -23,6 +24,7 @@ test("two Gemini turns stream into the correct Pi response and cumulative usage 
   const a = await config.streamSimple(model, { messages: [first] }).result();
   const b = await config.streamSimple(model, { messages: [first, a, second] }).result();
   assert.equal(a.content[0].text, "response-1"); assert.equal(b.content[0].text, "response-2");
+  assert.match(sent[0]!, /Protect numbers, denominators/);
   assert.equal(sent[1], "second request");
   const usage = readFileSync(join(store.dir, "usage.jsonl"), "utf8").trim().split("\n").map(JSON.parse);
   assert.deepEqual(usage.map(row => row.input), [10, 10]); await bridge.reset();

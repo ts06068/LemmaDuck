@@ -116,7 +116,7 @@ export function confinedPath(root: string, requested: string): string {
   }
   if (!withinRoot(canonicalRoot, resolved)) throw new Error("Symlink escapes the selected project.");
   const segments = relative(canonicalRoot, resolved).split(sep);
-  if (segments.some(p => [".git", ".ssh", ".aws", ".codex", ".claude", ".gemini"].includes(p)) ||
+  if (segments.some(p => [".git", ".jj", ".ssh", ".aws", ".codex", ".claude", ".gemini"].includes(p)) ||
       segments.some(p => p === ".env" || p.startsWith(".env."))) {
     throw new Error("Credential/configuration paths are not available through agent file tools.");
   }

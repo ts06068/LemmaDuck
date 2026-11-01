@@ -1,9 +1,10 @@
 import { existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
+import { pathToFileURL } from "node:url";
 import { join } from "node:path";
 import type { ExtensionAPI, ExtensionContext, ExtensionCommandContext } from "@earendil-works/pi-coding-agent";
 import type { Model } from "@earendil-works/pi-ai";
-import { billingConfirmed, claudePlanSignedIn, geminiHome } from "./config.js";
+import { billingConfirmed, claudePlanSignedIn, geminiHome, googleACP } from "./config.js";
 import { profileDir, projectPath, repoRoot } from "./paths.js";
 import { assertManagedProject, assertPrivateAuthStore, assertRoute, classifyFailure, confinedPath, type Provider } from "./security.js";
 import { ALIASES, enabledProviders, providerLabel, readProviders } from "./providers.js";
@@ -14,10 +15,16 @@ import { artifactParams, checkpointParams, callTaskTool, taskTools } from "./tas
 import { resultEnvelope, RESULT_BYTES, excerpt, HANDOFF_BYTES, saveArtifact } from "./artifacts.js";
 import { contextPercent, HarnessUI, isMotion } from "./ui.js";
 import { createManagedShell } from "./shell.js";
+import { connectionToolDefinitions, connectionToolNames } from "./connection-tools.js";
+import { classifyRequest, chooseRoute, PROFILES, readRouting, routeInstructions, type Route, type Profile } from "./routing.js";
+import { vcsTool } from "./vcs-tool.js";
+import { piRoot } from "./dependencies.js";
 
 export default async function extension(pi: ExtensionAPI): Promise<void> {
   if (process.env.LEMMADUCK_LAUNCHED !== "1") throw new Error("Start this extension with lemmaduck agent <project>.");
   const store = new TaskStore(projectPath(process.cwd()));
+  const { defaultModelPerProvider } = await import(pathToFileURL(join(piRoot, "dist/core/model-resolver.js")).href) as { defaultModelPerProvider: Record<string, string> };
+  defaultModelPerProvider["claude-bridge"] ||= defaultModelPerProvider.anthropic!;
   let current: ExtensionContext | undefined;
   let review = false;
   let changing = false;
@@ -29,6 +36,8 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   const approvedTools = new Set<string>();
   const shell = await createManagedShell(store);
   pi.registerTool(shell.definition);
+  pi.registerTool(vcsTool(store.project));
+  for (const tool of connectionToolDefinitions(store, { review: () => review, approve: async (detail, signal) => !!current?.hasUI && current.ui.confirm("Apply connector action", detail, { signal }) })) pi.registerTool(tool);
   let contextAlert = 0;
   const gemini = registerGemini(pi, store, () => current, () => review);
   const notify = (ctx: ExtensionContext, text: string, error = false) => ctx.ui.notify(text, error ? "error" : "info");
@@ -46,7 +55,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (selected !== `${ctx.model.provider}/${ctx.model.id}`) throw new Error("Use /switch to select the model and create a compact handoff first.");
     if (["rate_limited", "needs_reconciliation"].includes(store.task.status)) throw new Error("Task is paused. Inspect /task, then /switch to continue with the provider you choose.");
   };
-  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint"]);
+  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs"]);
   pi.registerTool({ name: "read_task_artifact", label: "Task artifact", description: taskTools[0]!.description, parameters: artifactParams,
     async execute(_id, args) { return { content: [{ type: "text", text: JSON.stringify(callTaskTool(store.dir, store.task, "read_task_artifact", args)) }], details: {} }; } });
   pi.registerTool({ name: "propose_checkpoint", label: "Propose checkpoint", description: taskTools[1]!.description, parameters: checkpointParams,
@@ -92,7 +101,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (!isMotion(value)) return notify(ctx, "Usage: /ui motion full|reduced|off");
     visual.setMotion(value); notify(ctx, `Motion: ${value}`);
   } });
-  async function switchTo(args: string, ctx: ExtensionCommandContext, readonly: boolean): Promise<void> {
+  async function switchTo(args: string, ctx: ExtensionCommandContext, readonly: boolean, automatic?: { route: Route; prompt: string }): Promise<void> {
     try {
       if (!ctx.isIdle()) throw new Error("Stop the active turn with Escape and wait for it to settle before switching.");
       store.assertSwitchable();
@@ -110,20 +119,52 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       verifyClaude(provider);
       const models = ctx.modelRegistry.getAll().filter(model => model.provider === provider);
       if (!models.length) throw new Error(`No account models available yet. Run lemmaduck login ${provider}, then restart the harness.`);
-      const choice = models.length === 1 ? models[0]!.id : await ctx.ui.select("Select model (availability requires account verification)", models.map(model => model.id));
+      const choice = automatic ? automatic.route.model : models.length === 1 ? models[0]!.id : await ctx.ui.select("Select model (availability requires account verification)", models.map(model => model.id));
       const model = models.find(model => model.id === choice); if (!model) return;
       assertRoute(model);
       store.checkpoint("paused"); await gemini.reset(); changing = true;
-      store.task.nextSegment = { provider, model: model.id, review: readonly }; store.save();
+      store.task.nextSegment = { provider, model: model.id, review: readonly, ...(automatic ? { route: automatic.route } : {}) }; store.save();
       // Pi 0.87 recreates extensions on replacement. The new extension instance
       // consumes the intent in session_start using its fresh ExtensionAPI.
       const changed = await ctx.newSession({ withSession: async fresh => {
-        fresh.ui.notify("Fresh session opened. Check the worker shown below, then enter the next instruction.", "info");
+        if (automatic) {
+          const saved = new TaskStore(store.project).task;
+          if (saved.route?.at !== automatic.route.at || fresh.model?.provider !== provider || fresh.model?.id !== model.id) throw new Error("Automatic selection failed; request was not sent.");
+          fresh.ui.notify(`Route: ${saved.route.profile} → ${provider}/${model.id}; reasoning ${saved.route.requestedThinking} requested, ${saved.route.appliedThinking} applied. ${saved.route.reason}`, "info");
+          await fresh.sendUserMessage(automatic.prompt, { expandPromptTemplates: false });
+        } else fresh.ui.notify("Fresh session opened. Check the worker shown below, then enter the next instruction.", "info");
       } });
       if (changed.cancelled) { delete store.task.nextSegment; store.save(); }
     } catch (error) { if (!changing) notify(ctx, String(error), true); else process.stderr.write(`Switch failed: ${String(error)}\n`); }
     finally { changing = false; }
   }
+  pi.registerCommand("route", { description: "Set /ask profile: auto|routine|writing|reasoning|abduction; /route shows current choice", handler: async (args, ctx) => {
+    try {
+      if (!ctx.isIdle()) throw new Error("Wait for the active turn to settle.");
+      const name = args.trim();
+      if (name === "auto") delete store.task.routingProfile;
+      else if (name) {
+        if (!PROFILES.includes(name as Profile) || name === "coding") throw new Error("Use auto, routine, writing, reasoning or abduction. Coding runs in OMP.");
+        store.task.routingProfile = name as Profile;
+      }
+      store.save(); notify(ctx, `Next /ask: ${store.task.routingProfile || "auto"}. Last route: ${JSON.stringify(store.task.route || null)}`);
+    } catch (error) { notify(ctx, String(error), true); }
+  } });
+  pi.registerCommand("ask", { description: "Automatically select a ready model and reasoning level for a new task segment: /ask REQUEST", handler: async (args, ctx) => {
+    try {
+      if (!args.trim()) throw new Error("Usage: /ask REQUEST. Ordinary follow-ups stay with the active worker.");
+      if (args.trimStart().startsWith("/")) throw new Error("/ask expects a natural-language request, not another command.");
+      const config = readRouting();
+      const classified = classifyRequest(args, config.defaultProfile);
+      const profile = store.task.routingProfile || classified.profile;
+      if (profile === "coding") throw new Error("Code development uses OMP. In the host terminal run: lemmaduck code " + JSON.stringify(store.project));
+      const picked = chooseRoute(profile, ctx.modelRegistry.getAvailable(), provider => billingConfirmed(provider) &&
+        (provider !== "claude-bridge" || claudePlanSignedIn()) &&
+        (provider !== "gemini-cli-acp" || (existsSync(googleACP) && existsSync(join(geminiHome, ".gemini/antigravity-acp/acp_token.json")))), defaultModelPerProvider, config);
+      picked.route.reason = (store.task.routingProfile ? "User-selected profile. " : classified.reason + ". ") + picked.route.reason;
+      await switchTo(picked.route.provider, ctx, false, { route: picked.route, prompt: args });
+    } catch (error) { notify(ctx, String(error), true); }
+  } });
   pi.registerCommand("switch", { description: "Checkpoint and select ChatGPT / Claude / Gemini or a registered provider", handler: (args, ctx) => switchTo(args, ctx, false) });
   pi.registerCommand("review", { description: "Start an explicitly selected read-only review segment", handler: (args, ctx) => switchTo(args, ctx, true) });
   pi.registerCommand("task", { description: "Show task; /task goal|next|decision|add|reconcile ...", handler: async (args, ctx) => {
@@ -132,6 +173,11 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       const match = /^(\S+)(?:\s+([\s\S]*))?$/.exec(args.trim());
       const command = match?.[1]; const text = match?.[2] || ""; const parts = text.split(/\s+/);
       if (command === "new" && text) { store.newTask(text); selected = undefined; await gemini.reset(); }
+      else if (command === "link" && text) {
+        const url = new URL(text);
+        if (url.protocol !== "https:" || url.username || url.password) throw new Error("Use an HTTPS issue or pull request URL without credentials.");
+        store.task.issueLinks = [...new Set([...(store.task.issueLinks || []), url.href])];
+      }
       else if (command === "goal" && text) store.task.goal = text;
       else if (command === "next" && text) store.task.nextSteps = [text];
       else if (command === "decision" && text) store.task.decisions.push(text);
@@ -179,13 +225,18 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
         const model = ctx.modelRegistry.find(intent.provider, intent.model);
         if (!model || !(await pi.setModel(model))) throw new Error(`Authentication/model unavailable. Run lemmaduck login ${intent.provider}.`);
         selected = `${intent.provider}/${intent.model}`; review = intent.review;
+        if (intent.route) {
+          pi.setThinkingLevel(model.reasoning ? intent.route.requestedThinking : "off");
+          intent.route.appliedThinking = intent.provider === "gemini-cli-acp" ? "provider-managed" : model.reasoning ? pi.getThinkingLevel() : "unsupported (off)";
+          store.task.route = intent.route; store.event("auto_route", intent.route);
+        } else delete store.task.route;
         store.task.provider = intent.provider; store.task.model = intent.model; store.task.status = "idle"; delete store.task.error;
         store.task.sessions.push({ provider: intent.provider, model: intent.model, path: ctx.sessionManager.getSessionFile(), at: new Date().toISOString() });
         store.checkpoint(); store.event("switch", intent);
       } catch (error) { notify(ctx, String(error), true); }
       finally { changing = false; }
     }
-    tools(); visual.attach(ctx); ctx.ui.setStatus("lemmaduck", selected ? `${review ? "REVIEW" : "WORK"} · ${providerLabel(store.task.provider || "")} · ${selected}` : `Choose /switch · ${readProviders().length ? "registered routes only" : "subscription only"}`);
+    tools(); visual.attach(ctx); ctx.ui.setStatus("lemmaduck", selected ? `${review ? "REVIEW" : "WORK"} · ${providerLabel(store.task.provider || "")} · ${selected}` : `Choose /ask or /switch · ${readProviders().length ? "registered routes only" : "subscription only"}`);
   });
   pi.on("model_select", async (event, ctx) => { current = ctx; if (!changing && `${event.model.provider}/${event.model.id}` !== selected) { selected = undefined; await gemini.reset(); notify(ctx, "Use /switch before sending input so the handoff starts a fresh session."); } });
   pi.on("input", (_event, ctx) => { current = ctx; try { guard(ctx); return { action: "continue" }; } catch (error) { notify(ctx, String(error), true); return { action: "handled" }; } });
@@ -200,12 +251,12 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (ctx.model?.provider === "gemini-cli-acp") { gemini.updatePacket(); return; }
     // The official Claude bridge also receives custom messages. No default-prompt spoofing.
     const mode = review ? "Read-only review: report findings without editing or shell execution." : "Work only on the current task. Record uncertainty and actual validation.";
-    return { message: { customType: "lemmaduck-task", content: `${instructions.packet()}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n${mode}`, display: false } };
+    return { message: { customType: "lemmaduck-task", content: `${instructions.packet()}\n${routeInstructions(store.task.route?.profile)}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n${mode}`, display: false } };
   });
   pi.on("tool_call", async (event, ctx) => {
     try {
       guard(ctx);
-      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint"].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
+      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs"].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
       const input = event.input as Record<string, unknown>;
       if (typeof input.path === "string") input.path = confinedPath(store.project, input.path);
       if (event.toolName === "bash") {

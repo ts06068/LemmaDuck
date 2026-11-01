@@ -506,6 +506,14 @@
       "boundary": "team·project"
     },
     {
+      "id": "jira",
+      "realm": "work",
+      "transport": "Atlassian official remote MCP v2 / scoped API token or OAuth adapter",
+      "read": "projects, issues, transitions and comments",
+      "actions": "issue creation, edits, transitions and comments",
+      "boundary": "organization, cloudId, project and explicit tool effects"
+    },
+    {
       "id": "github",
       "realm": "work/personal isolated",
       "transport": "GitHub App / 공식 MCP",
