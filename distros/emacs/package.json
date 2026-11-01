@@ -1,6 +1,6 @@
 {
   "name": "@ts06068/lemmaduck-emacs",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "description": "LemmaDuck Emacs distro: isolated editor starter for the shared LemmaDuck engine",
   "repository": {
     "type": "git",
@@ -12,6 +12,7 @@
     "tag": "preview"
   },
   "bin": {
+    "duck-emacs": "bin/lemmaduck-emacs",
     "lemmaduck-emacs": "bin/lemmaduck-emacs"
   },
   "files": [

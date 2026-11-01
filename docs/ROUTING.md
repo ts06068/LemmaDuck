@@ -16,14 +16,14 @@ In Pi, `/ask REQUEST` classifies a new task segment using Korean/English task cu
 
 The router checks local authentication availability, subscription billing confirmation and configured models. It does not make a trial cloud request. An expired token can still fail on first use. If no eligible route exists, it stops and explains how to configure one. Quota errors pause work; there is no automatic error-driven switch to another account or paid API. `/switch` and `/review` remain explicit manual choices.
 
-Classification is a transparent heuristic. It cannot establish that a model is optimal, measure problem difficulty reliably, or replace a domain evaluation. Mixed requests may need an explicit profile. Coding requests detected in Pi direct you to `lemmaduck code PATH`.
+Classification is a transparent heuristic. It cannot establish that a model is optimal, measure problem difficulty reliably, or replace a domain evaluation. Mixed requests may need an explicit profile. Coding requests detected in Pi direct you to `duck code PATH`.
 
 ## Customize providers, models and effort
 
 ```sh
-lemmaduck routing show
-lemmaduck routing init
-lemmaduck routing path
+duck routing show
+duck routing init
+duck routing path
 ```
 
 `init` creates an owner-only file and refuses to overwrite an existing one. Edit the path it prints. Defaults are in [config/routing.json](../config/routing.json). A partial override can prefer Claude for abduction:
@@ -37,7 +37,7 @@ lemmaduck routing path
 }
 ```
 
-Each profile can also set `models` to an object mapping a provider alias to an **exact available model ID**. Obtain IDs from the worker's model picker; registered providers must be added with `lemmaduck providers add` first. An unavailable exact ID is never silently replaced by another model from that provider. With no override, Pi uses its pinned runtime default if present, otherwise the first available model for the provider.
+Each profile can also set `models` to an object mapping a provider alias to an **exact available model ID**. Obtain IDs from the worker's model picker; registered providers must be added with `duck providers add` first. An unavailable exact ID is never silently replaced by another model from that provider. With no override, Pi uses its pinned runtime default if present, otherwise the first available model for the provider.
 
 Reasoning values are `off`, `minimal`, `low`, `medium`, `high`, `xhigh`. Pi clamps the requested level to the selected model's supported levels. The task journal records both requested and applied values. Models without a reasoning control record `unsupported (off)`. The current Gemini ACP route records **provider-managed**: its account runtime chooses the actual model/effort, and observed model IDs are recorded when reported. A requested Gemini level is a policy preference, not a verified setting sent to Google.
 

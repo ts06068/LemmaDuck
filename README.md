@@ -1,4 +1,4 @@
-<h1 align="center">LemmaDuck</h1>
+<h1 align="center">🦆 LemmaDuck</h1>
 <p align="center"><strong>Your lab copilot for research, writing, and code.</strong><br>Talk to the duck. Test your hunch.</p>
 
 <p align="center">
@@ -32,7 +32,9 @@ The editor previews run the shared workers in editor terminals.
 
 <a id="getting-started-with-paseo"></a>
 
-## Quick Start
+<a id="quick-start"></a>
+
+## 🚀 Quick Start
 
 **Host requirements:** Linux x86-64, Node.js 22.19+, Python 3.12+, and Git.
 
@@ -41,9 +43,11 @@ Complete the one-time [GitHub Packages login](docs/INSTALL.md#one-time-registry-
 ```sh
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-base@latest
 export PATH="$HOME/.local/bin:$PATH"
-lemmaduck setup --full
-lemmaduck paseo
+duck setup --full
+duck paseo
 ```
+
+`duck` is the everyday command; `lemmaduck` remains available for compatibility.
 
 Connect with [Paseo Desktop or Android](https://paseo.sh/download). The [getting started guide](docs/GETTING_STARTED.md) walks through host connection, model sign-in, and your first research task.
 
@@ -55,11 +59,11 @@ Install Base first, then add the editor distro you want. The editor itself must 
 ```sh
 # Emacs
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-emacs@preview
-lemmaduck-emacs /path/to/project
+duck-emacs /path/to/project
 
 # Neovim
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-neovim@preview
-lemmaduck-neovim /path/to/project
+duck-neovim /path/to/project
 ```
 
 [Emacs guide](distros/emacs/README.md) · [Neovim guide](distros/neovim/README.md)
@@ -68,25 +72,31 @@ lemmaduck-neovim /path/to/project
 
 [Update with npm](docs/INSTALL.md#update) · [Install without registry login](docs/INSTALL.md#install-without-registry-authentication) · [Install from source](docs/INSTALLATION.md)
 
-## Usage
+<a id="usage"></a>
+
+## 🛠️ Usage
 
 After [connecting a model account](docs/PROVIDERS.md), create a research project:
 
 ```sh
-lemmaduck init "$HOME/projects/my-study" --kind research
-lemmaduck agent "$HOME/projects/my-study"
+duck init "$HOME/projects/my-study" --kind research
+duck agent "$HOME/projects/my-study"
 ```
 
-For software development, run `lemmaduck code /path/to/repo`. To return to saved research work, run `lemmaduck agent /path/to/project` again.
+For software development, run `duck code /path/to/repo`. To return to saved research work, run `duck agent /path/to/project` again.
 
-## How It Works
+<a id="how-it-works"></a>
 
-- **Research and writing.** Pi manages goals, source files, checkpoints, reviews, and handoffs so you can return to an ongoing task.
-- **Code development.** OMP runs coding sessions with the project's tools and instructions, alongside Git or Jujutsu.
-- **Your choice of models.** Use ChatGPT, Claude, Gemini, or explicitly configured API and local-model providers. Set preferred providers, models, and reasoning levels by task.
-- **Connected projects.** Configure GitHub, Linear, and Jira connectors, and keep issue references with your research tasks.
+## ✨ How It Works
 
-## Documentation
+- 🔬 **Research and writing.** Pi manages goals, source files, checkpoints, reviews, and handoffs so you can return to an ongoing task.
+- 💻 **Code development.** OMP runs coding sessions with the project's tools and instructions, alongside Git or Jujutsu.
+- 🧠 **Your choice of models.** Use ChatGPT, Claude, Gemini, or explicitly configured API and local-model providers. Set preferred providers, models, and reasoning levels by task.
+- 🔗 **Connected projects.** Configure GitHub, Linear, and Jira connectors, and keep issue references with your research tasks.
+
+<a id="documentation"></a>
+
+## 📚 Documentation
 
 | Guide | Contents |
 | --- | --- |

@@ -14,9 +14,9 @@ This changes local repository metadata. LemmaDuck never converts a repository au
 Inspect either backend from the host terminal:
 
 ```sh
-lemmaduck vcs /path/to/repo status
-lemmaduck vcs /path/to/repo diff
-lemmaduck vcs /path/to/repo log
+duck vcs /path/to/repo status
+duck vcs /path/to/repo diff
+duck vcs /path/to/repo log
 ```
 
 Pi and Gemini expose the same inspection through `inspect_vcs`. Task checkpoints include backend, revision, status and diff summary. Jujutsu inspection uses `--ignore-working-copy --at-op=@`: it reports the **last recorded working-copy state** and avoids creating an operation or merging concurrent operation heads. Run `jj status` in the terminal when you intend to refresh that snapshot. Untracked files appear in status; they are not guaranteed to have content in a diff. Missing executables or invalid metadata produce an explicit inspection error.

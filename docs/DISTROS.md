@@ -6,9 +6,9 @@ code lives in `distros/`. Editor configuration and task state remain separate.
 
 | Distro | Source directory | Release tag | GitHub Packages name |
 | --- | --- | --- | --- |
-| Base | `.` | `base-v0.5.2` | `@ts06068/lemmaduck-base` |
-| Emacs | `distros/emacs` | `emacs-v0.1.0-alpha.3` | `@ts06068/lemmaduck-emacs` |
-| Neovim | `distros/neovim` | `neovim-v0.1.0-alpha.3` | `@ts06068/lemmaduck-neovim` |
+| Base | `.` | `base-v0.5.3` | `@ts06068/lemmaduck-base` |
+| Emacs | `distros/emacs` | `emacs-v0.1.0-alpha.4` | `@ts06068/lemmaduck-emacs` |
+| Neovim | `distros/neovim` | `neovim-v0.1.0-alpha.4` | `@ts06068/lemmaduck-neovim` |
 
 Versions are independent. The editor manifests name the shared engine version
 and `same-checkout` revision. CI tests them together. Release packaging resolves
@@ -35,7 +35,7 @@ live conversation from another client are not implemented. Details:
 All three release channels live in [this repository's Releases](https://github.com/ts06068/lemmaduck/releases).
 Use a consistent identity at every layer:
 
-- Title: exactly the tag, such as `base-v0.5.2` or `emacs-v0.1.0-alpha.3`.
+- Title: exactly the tag, such as `base-v0.5.3` or `emacs-v0.1.0-alpha.4`.
 - Tag: `<distro>-v<version>`; versions must match that distro's manifests.
 - Assets: `lemmaduck-<distro>-<version>.zip`, `.tar.gz`, `.npm.tgz`, `.manifest.json`, `.sha256`.
 - Source archives and npm transports include `release-manifest.json` with distro,
@@ -73,8 +73,9 @@ All packages link to this repository; editors also record `repository.directory`
 The registry publisher verifies the uploaded integrity and channel version.
 See [installation, authentication and update commands](INSTALL.md).
 
-Base preserves its source package name and `lemmaduck` CLI; its published name
-is `@ts06068/lemmaduck-base`. Editor packages provide their own launcher commands
+Base provides the `duck` CLI and the compatible `lemmaduck` command; its published
+name is `@ts06068/lemmaduck-base`. Editors provide `duck-emacs` and `duck-neovim`
+alongside their original `lemmaduck-*` launcher commands
 and require Base plus their OS editor. These are not MELPA, ELPA or LuaRocks
 registrations. GitHub's npm registry requires authentication even for public
 packages; public `.npm.tgz` release URLs provide an alternative without registry

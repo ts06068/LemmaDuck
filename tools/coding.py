@@ -73,4 +73,4 @@ def configure_paseo(home, launcher, env):
         if (path.read_bytes() if path.exists() else None) != previous:
             raise ValueError(f"{path} changed during setup. Rerun setup to merge the provider.")
         draft.replace(path)
-    print(f"Registered LemmaDuck Code in {path}. For a running host use 'lemmaduck paseo reload'.")
+    print(f"Registered LemmaDuck Code in {path}. For a running host use 'duck paseo reload'.")

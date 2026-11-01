@@ -43,7 +43,7 @@ async function main(): Promise<number> {
     const marker = join(project, ".lemmaduck-kind");
     if (command === "code" || (!rest.includes("--pi") && existsSync(marker) && readFileSync(marker, "utf8").trim() === "development")) {
       const omp = join(binDir, "omp");
-      if (!existsSync(omp)) throw new Error("OMP is missing. Run lemmaduck setup --full on the Paseo host.");
+      if (!existsSync(omp)) throw new Error("OMP is missing. Run duck setup --full on the Paseo host.");
       const args = rest.flatMap(option => option === "--rpc" ? ["--mode", "rpc"] : [option]);
       return run(omp, codingArgs(args), project, codingEnv());
     }
@@ -55,7 +55,7 @@ async function main(): Promise<number> {
   if (command === "routing") { (await import("./routing.js")).routingCommand(arg); return 0; }
   if (command === "vcs") {
     const view = rest[0] || "status";
-    if (!["status", "diff", "log"].includes(view) || rest.length > 1) throw new Error("Use: lemmaduck vcs PATH status|diff|log");
+    if (!["status", "diff", "log"].includes(view) || rest.length > 1) throw new Error("Use: duck vcs PATH status|diff|log");
     console.log(JSON.stringify((await import("./vcs.js")).vcsRead(projectPath(arg || process.cwd()), view as "status" | "diff" | "log"), null, 2)); return 0;
   }
   configure();
@@ -83,7 +83,7 @@ async function main(): Promise<number> {
     const p = provider(arg);
     if (p === "anthropic") {
       const keyName = readProviders().find(extra => extra.id === p)?.apiKeyEnv || CLAUDE_API_KEY_ENV;
-      console.log(`This route uses Console API billing. Supply ${keyName} through your host's secret manager. For a personal Claude plan run lemmaduck login claude.`); return 0;
+      console.log(`This route uses Console API billing. Supply ${keyName} through your host's secret manager. For a personal Claude plan run duck login claude.`); return 0;
     }
     if (p === "openai-codex" || readProviders().some(extra => extra.id === p)) {
       console.log(`In Pi, run /login ${p}, complete authentication, then /quit. Route: ${providerLabel(p)}.`);
@@ -110,11 +110,11 @@ async function main(): Promise<number> {
       if (command === "reconcile") {
         const [id, status, ...note] = rest;
         const operation = store.task.operations.find(op => op.id === id);
-        if (!operation || !["completed", "failed"].includes(status || "") || !note.length) throw new Error("Usage: lemmaduck reconcile PROJECT OPERATION_ID completed|failed 'observed result'");
+        if (!operation || !["completed", "failed"].includes(status || "") || !note.length) throw new Error("Usage: duck reconcile PROJECT OPERATION_ID completed|failed 'observed result'");
         store.reconcile(id!, status === "failed", note.join(" ")); store.checkpoint(); return 0;
       }
       if (command === "context") {
-        const [file] = rest; if (!file) throw new Error("Usage: lemmaduck context PROJECT FILE");
+        const [file] = rest; if (!file) throw new Error("Usage: duck context PROJECT FILE");
         const { confinedPath } = await import("./security.js");
         const path = confinedPath(project, file); if (!existsSync(path)) throw new Error("Input file does not exist.");
         if (!store.task.inputs.includes(path)) store.task.inputs.push(path); store.checkpoint(); console.log("Input selected; use /task add while the agent is running."); return 0;
@@ -129,7 +129,7 @@ async function main(): Promise<number> {
       return await run(process.execPath, args, project, harnessEnv(), release.track);
     } finally { release(); }
   }
-  console.log(`LemmaDuck — code, research, writing, and personal projects\n  lemmaduck setup [--dry-run]     Install workspace tools and settings\n  lemmaduck doctor\n  lemmaduck providers list|catalog|add|remove\n  lemmaduck login chatgpt|claude|gemini|REGISTERED_ID\n  lemmaduck billing confirm chatgpt|claude|gemini --extra-usage-off\n  lemmaduck open PROJECT          Zellij + LazyVim + agent\n  lemmaduck paseo [COMMAND]       Open or manage the Paseo host\n  lemmaduck agent [PROJECT]       Project worker (development: OMP; otherwise Pi)\n  lemmaduck code [PROJECT]        OMP coding in any project\n  lemmaduck agent PROJECT --pi    Managed research, writing or assistant worker\n  lemmaduck status PROJECT        Task and handoff\n  lemmaduck reconcile PROJECT ID completed|failed 'observed result'\n  lemmaduck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
+  console.log(`LemmaDuck — code, research, writing, and personal projects\n  duck setup [--dry-run]     Install workspace tools and settings\n  duck doctor\n  duck providers list|catalog|add|remove\n  duck login chatgpt|claude|gemini|REGISTERED_ID\n  duck billing confirm chatgpt|claude|gemini --extra-usage-off\n  duck open PROJECT          Zellij + LazyVim + agent\n  duck paseo [COMMAND]       Open or manage the Paseo host\n  duck agent [PROJECT]       Project worker (development: OMP; otherwise Pi)\n  duck code [PROJECT]        OMP coding in any project\n  duck agent PROJECT --pi    Managed research, writing or assistant worker\n  duck status PROJECT        Task and handoff\n  duck reconcile PROJECT ID completed|failed 'observed result'\n  duck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
   return 0;
 }
 main().then(code => { process.exitCode = code; }).catch(error => { console.error(String(error)); process.exitCode = 1; });

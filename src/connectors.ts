@@ -16,7 +16,7 @@ type Receipt = { account: string; tool: string; argumentHash: string; state: "pe
 
 export const connectionsFile = join(installHome, ".config", "lemmaduck", "connections.json");
 const platforms = (JSON.parse(readFileSync(join(repoRoot, "catalog/full.json"), "utf8")).connectors as { id: string }[]).map(p => p.id);
-const help = "Use: lemmaduck connector list | add ACCOUNT github|linear|jira | discover ACCOUNT | allow ACCOUNT TOOL read|draft|write|send | tools ACCOUNT | call ACCOUNT TOOL ARGS.json [--apply REQUEST-ID] | receipt ACCOUNT REQUEST-ID";
+const help = "Use: duck connector list | add ACCOUNT github|linear|jira | discover ACCOUNT | allow ACCOUNT TOOL read|draft|write|send | tools ACCOUNT | call ACCOUNT TOOL ARGS.json [--apply REQUEST-ID] | receipt ACCOUNT REQUEST-ID";
 const effects: Effect[] = ["read", "draft", "write", "send"];
 export class UnknownConnectorOutcome extends Error {}
 function validateAccount(account: string): void {

@@ -23,7 +23,7 @@ export function isProvider(value: string): value is Provider {
 }
 
 export function assertProvider(provider: string): asserts provider is Provider {
-  if (!isProvider(provider)) throw new Error(`Provider ${provider} is not enabled. Register it explicitly with lemmaduck providers add; there is no automatic fallback.`);
+  if (!isProvider(provider)) throw new Error(`Provider ${provider} is not enabled. Register it explicitly with duck providers add; there is no automatic fallback.`);
 }
 
 export function assertRoute(model: { provider: string; api?: string; baseUrl?: string }): void {
@@ -49,11 +49,11 @@ export function assertPrivateAuthStore(path: string): void {
   for (const [name, value] of Object.entries(entries)) {
     const extra = extras.find(p => p.id === name);
     if (name === "anthropic" && value?.type !== "api_key") {
-      throw new Error("Direct Anthropic OAuth is disabled. Remove the old route with lemmaduck providers remove anthropic, then run lemmaduck login claude.");
+      throw new Error("Direct Anthropic OAuth is disabled. Remove the old route with duck providers remove anthropic, then run duck login claude.");
     }
     const permitted = name === "openai-codex" ? value?.type === "oauth" : extra && (extra.billing === "subscription" ? value?.type === "oauth" : ["api_key", "oauth"].includes(value?.type || ""));
     if (!permitted) {
-      throw new Error(`Unexpected credential route in dedicated Pi profile: ${name}. Use lemmaduck login.`);
+      throw new Error(`Unexpected credential route in dedicated Pi profile: ${name}. Use duck login.`);
     }
   }
 }

@@ -14,7 +14,7 @@ export function codingArgs(args: string[]): string[] {
   const policy = readRouting().profiles.coding;
   if (!has("--model") && !has("--provider")) {
     const provider = providerId(policy.providers[0]!);
-    if (["claude-bridge", "gemini-cli-acp"].includes(provider)) throw new Error("This subscription transport runs in Pi. Select an OMP-compatible coding provider in lemmaduck routing.");
+    if (["claude-bridge", "gemini-cli-acp"].includes(provider)) throw new Error("This subscription transport runs in Pi. Select an OMP-compatible coding provider in duck routing.");
     const exact = Object.entries(policy.models).find(([id]) => providerId(id) === provider)?.[1];
     extra.push(exact ? "--model" : "--provider", exact ? `${provider}/${exact}` : provider);
   }

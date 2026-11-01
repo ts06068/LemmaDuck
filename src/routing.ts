@@ -70,6 +70,6 @@ export function routingCommand(op = "show"): void {
     writeFileSync(routingFile, readFileSync(join(repoRoot, "config/routing.json")), { flag: "wx", mode: 0o600 });
     console.log(`Created ${routingFile}. Edit provider order, exact model IDs and reasoning levels, then use /ask.`); return;
   }
-  if (op !== "show") throw new Error("Use: lemmaduck routing show|path|init");
+  if (op !== "show") throw new Error("Use: duck routing show|path|init");
   console.log(JSON.stringify(readRouting(), null, 2));
 }

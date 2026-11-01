@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "emacs",
   "name": "LemmaDuck Emacs",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "channel": "preview",
   "repository": "https://github.com/ts06068/lemmaduck",
   "githubPackage": "@ts06068/lemmaduck-emacs",
   "engine": {
     "repository": "https://github.com/ts06068/lemmaduck",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "sourceDirectory": ".",
     "revision": "same-checkout"
   },

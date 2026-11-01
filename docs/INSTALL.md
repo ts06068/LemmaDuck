@@ -25,8 +25,8 @@ Install Base once. `--prefix` keeps the installation in your user directory:
 ```sh
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-base@latest
 export PATH="$HOME/.local/bin:$PATH"
-lemmaduck setup --full
-lemmaduck --version
+duck setup --full
+duck --version
 ```
 
 The npm package contains the compiled worker; setup uses it without reinstalling
@@ -38,17 +38,21 @@ Add whichever editor workspace you want (both can coexist):
 
 ```sh
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-emacs@preview
-lemmaduck-emacs --doctor
-lemmaduck-emacs /path/to/project
+duck-emacs --doctor
+duck-emacs /path/to/project
 
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-neovim@preview
-lemmaduck-neovim --doctor
-lemmaduck-neovim /path/to/project
+duck-neovim --doctor
+duck-neovim /path/to/project
 ```
 
-Base provides the shared `lemmaduck` engine and must be installed before either
+Base provides the shared `duck` engine and must be installed before either
 editor is used. Set `LEMMADUCK_EXECUTABLE` if you deliberately use a different
 engine executable. `LEMMADUCK_EDITOR` selects an installed editor binary.
+
+The short commands are `duck`, `duck-emacs`, and `duck-neovim`. The original
+`lemmaduck`, `lemmaduck-emacs`, and `lemmaduck-neovim` commands remain supported.
+Package names, configuration paths, and task state are unchanged.
 
 ## Update
 
@@ -61,20 +65,20 @@ npm install --global --prefix "$HOME/.local" \
   @ts06068/lemmaduck-base@latest \
   @ts06068/lemmaduck-emacs@preview \
   @ts06068/lemmaduck-neovim@preview
-lemmaduck setup --full
-lemmaduck --version
-lemmaduck-emacs --version
-lemmaduck-neovim --version
+duck setup --full
+duck --version
+duck-emacs --version
+duck-neovim --version
 ```
 
 Finish or stop running workers before updating, then reopen the editor/worker.
 Package updates replace installed program files, while engine task records,
 credentials, editor state and projects stay in their existing user directories.
 Use `npm outdated --global --prefix "$HOME/.local"` to inspect installed versions.
-For an exact version, replace the channel with `@0.5.2` or `@0.1.0-alpha.3`.
+For an exact version, replace the channel with `@0.5.3` or `@0.1.0-alpha.4`.
 
-If migrating from a source checkout, first inspect `command -v lemmaduck` and
-`readlink -f "$HOME/.local/bin/lemmaduck"`. An existing checkout symlink can block
+If migrating from a source checkout, first inspect `command -v duck lemmaduck` and
+the targets of `~/.local/bin/duck` and `~/.local/bin/lemmaduck`. Existing checkout symlinks can block
 npm with EEXIST or keep the old CLI first in PATH. Remove only that old launcher
 symlink after verifying its target, then install with npm. Preserve the checkout,
 projects, credentials and state. Do not force npm to overwrite an unrelated file.
@@ -86,11 +90,11 @@ manage the installed package, but updates require selecting a new release URL:
 
 ```sh
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/base-v0.5.2/lemmaduck-base-0.5.2.npm.tgz
+  https://github.com/ts06068/lemmaduck/releases/download/base-v0.5.3/lemmaduck-base-0.5.3.npm.tgz
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/emacs-v0.1.0-alpha.3/lemmaduck-emacs-0.1.0-alpha.3.npm.tgz
+  https://github.com/ts06068/lemmaduck/releases/download/emacs-v0.1.0-alpha.4/lemmaduck-emacs-0.1.0-alpha.4.npm.tgz
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/neovim-v0.1.0-alpha.3/lemmaduck-neovim-0.1.0-alpha.3.npm.tgz
+  https://github.com/ts06068/lemmaduck/releases/download/neovim-v0.1.0-alpha.4/lemmaduck-neovim-0.1.0-alpha.4.npm.tgz
 ```
 
 Use the registry channels for name-based updates. Direct-URL installs do not gain

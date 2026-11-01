@@ -32,31 +32,31 @@ npm config set @ts06068:registry https://npm.pkg.github.com --location=user
 npm login --scope=@ts06068 --auth-type=legacy --registry=https://npm.pkg.github.com
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-base@latest
 export PATH="$HOME/.local/bin:$PATH"
-lemmaduck setup --full
-lemmaduck doctor
+duck setup --full
+duck doctor
 ```
 
 For an editor workspace, keep Base installed and add
 `@ts06068/lemmaduck-emacs@preview` or `@ts06068/lemmaduck-neovim@preview` using the
 same `npm install --global --prefix "$HOME/.local"` command. Their executable
-names are `lemmaduck-emacs` and `lemmaduck-neovim`.
+names are `duck-emacs` and `duck-neovim` (the original `lemmaduck-*` commands also work).
 
 To update, rerun the npm install command for the packages/channels you use, then
-run `lemmaduck setup --full` and reopen the workers. State and credentials remain
+run `duck setup --full` and reopen the workers. State and credentials remain
 in their existing user directories. Developers can still clone this repository
-and run `./lemmaduck setup --full` from the checkout.
+and run `./duck setup --full` from the checkout.
 
-Full setup installs Paseo **0.14.0**, OMP **18.14.2**, Jujutsu **0.46.0**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. For a source install, keep the checkout at its installed path. Use `lemmaduck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
+Full setup installs Paseo **0.14.0**, OMP **18.14.2**, Jujutsu **0.46.0**, the Pi worker and Google runtime. It verifies **1,137 pstack paths** and **4,528 gstack paths** and adds a **LemmaDuck Code** provider to the host's Paseo configuration. For a source install, keep the checkout at its installed path. Use `duck setup --full --dry-run` to preview. In a new terminal, repeat the `export PATH` line if needed.
 
-- **Local Paseo Desktop** — Open the local host. If it was running during setup, run `lemmaduck paseo reload` in the host shell.
-- **Headless Linux or WSL2** — Run `lemmaduck paseo` in the host shell and follow its connection prompt. On desktop choose **Settings → Add host → Remote SSH** for an SSH-reachable server. On Android use **Pair Device** and the QR from the host, or add a direct address on your private network. Use a connection approved for the host and its data. [Paseo connectivity](https://paseo.sh/docs/connectivity)
+- **Local Paseo Desktop** — Open the local host. If it was running during setup, run `duck paseo reload` in the host shell.
+- **Headless Linux or WSL2** — Run `duck paseo` in the host shell and follow its connection prompt. On desktop choose **Settings → Add host → Remote SSH** for an SSH-reachable server. On Android use **Pair Device** and the QR from the host, or add a direct address on your private network. Use a connection approved for the host and its data. [Paseo connectivity](https://paseo.sh/docs/connectivity)
 
 In Paseo, open a workspace on that host and open its **Terminal**. Use this terminal for the research walkthrough below. For a software project, skip to [Code development with OMP](#code-development-with-omp).
 
 ### 3. Prepare your first project
 
 ```sh
-lemmaduck init "$HOME/projects/duck-first-study" --kind demo
+duck init "$HOME/projects/duck-first-study" --kind demo
 cd "$HOME/projects/duck-first-study"
 python3 reproduce.py
 python3 reproduce.py --check
@@ -69,14 +69,14 @@ The draft reports **25 units**. The observations are **10, 20 and 30**, so their
 In the **ordinary Linux shell**, sign in to the subscription you want to use. For ChatGPT:
 
 ```sh
-lemmaduck login chatgpt
+duck login chatgpt
 ```
 
 When Pi opens, enter `/login openai-codex`, follow the sign-in instructions, then enter `/quit` to return to the shell. After checking that paid extras and auto-refill are disabled on your account, record that setting and start the agent:
 
 ```sh
-lemmaduck billing confirm chatgpt --extra-usage-off
-lemmaduck agent "$HOME/projects/duck-first-study"
+duck billing confirm chatgpt --extra-usage-off
+duck agent "$HOME/projects/duck-first-study"
 ```
 
 **You are now in the agent prompt.** Enter these lines **one at a time**. The last one opens a model picker. Select an available model and press Enter.
@@ -92,7 +92,7 @@ Then give the worker its first request:
 
 > Read observations.csv and draft.md. Recompute the mean, show the arithmetic, and identify the sentence that needs a correction. Leave the original draft intact.
 
-Use `/task` to inspect the saved task and `/usage` to see reported usage. For a personal Claude plan, use `lemmaduck login claude`, confirm the account setting with `lemmaduck billing confirm claude --extra-usage-off`, then enter `/switch claude`. The published Claude Code executable handles sign-in. For Gemini, use the corresponding `gemini` commands. [Provider and billing details](PROVIDERS.md) A worker hitting its quota pauses the task. You choose whether to switch.
+Use `/task` to inspect the saved task and `/usage` to see reported usage. For a personal Claude plan, use `duck login claude`, confirm the account setting with `duck billing confirm claude --extra-usage-off`, then enter `/switch claude`. The published Claude Code executable handles sign-in. For Gemini, use the corresponding `gemini` commands. [Provider and billing details](PROVIDERS.md) A worker hitting its quota pauses the task. You choose whether to switch.
 
 ### 5. Save, review and return
 
@@ -100,8 +100,8 @@ Enter `/handoff` in the agent prompt to save a short packet. To review the work,
 
 ```sh
 export PATH="$HOME/.local/bin:$PATH"
-lemmaduck status "$HOME/projects/duck-first-study"
-lemmaduck agent "$HOME/projects/duck-first-study"
+duck status "$HOME/projects/duck-first-study"
+duck agent "$HOME/projects/duck-first-study"
 ```
 
 Use `/task` to inspect the existing goal, then `/switch chatgpt` to start the next segment. `/task new` starts a different task. If an interrupted operation shows `unknown`, inspect its effect before marking it completed or failed. [Task and recovery reference](OPERATIONS.md)
@@ -111,13 +111,13 @@ Use `/task` to inspect the existing goal, then `/switch chatgpt` to start the ne
 Create a coding project in the host terminal. A development template contains a `.lemmaduck-kind` file, so the usual `agent` command starts OMP automatically.
 
 ```sh
-lemmaduck init "$HOME/projects/duck-code" --kind development
-lemmaduck agent "$HOME/projects/duck-code"
+duck init "$HOME/projects/duck-code" --kind development
+duck agent "$HOME/projects/duck-code"
 ```
 
-For an existing checkout, use `lemmaduck code /path/to/repo`. To use Paseo's chat, open that same folder as a workspace, choose **New Agent → LemmaDuck Code** and select your configured model. The terminal command and the Paseo provider use the same OMP profile. Register an account or a local model on the host first. For ChatGPT, open the terminal command, enter `/login openai-codex` and sign in to your own account, then select a model with `/model`. A registered loopback model can run without a cloud account. [Model configuration and Claude billing](PROVIDERS.md)
+For an existing checkout, use `duck code /path/to/repo`. To use Paseo's chat, open that same folder as a workspace, choose **New Agent → LemmaDuck Code** and select your configured model. The terminal command and the Paseo provider use the same OMP profile. Register an account or a local model on the host first. For ChatGPT, open the terminal command, enter `/login openai-codex` and sign in to your own account, then select a model with `/model`. A registered loopback model can run without a cloud account. [Model configuration and Claude billing](PROVIDERS.md)
 
-Try “Reproduce the failing test, fix the underlying function and rerun that test.” Review the diff in Paseo or VS Code. For a manuscript or a read-only research review in that same checkout, run `lemmaduck agent /path/to/repo --pi` in a terminal. OMP keeps its coding sessions separately from Pi's task journal. In OMP, `/review` reviews code changes. In Pi, `/review` starts a separate read-only research segment.
+Try “Reproduce the failing test, fix the underlying function and rerun that test.” Review the diff in Paseo or VS Code. For a manuscript or a read-only research review in that same checkout, run `duck agent /path/to/repo --pi` in a terminal. OMP keeps its coding sessions separately from Pi's task journal. In OMP, `/review` reviews code changes. In Pi, `/review` starts a separate read-only research segment.
 
 ## Let the task choose the worker
 
@@ -139,7 +139,7 @@ After signing in and confirming account billing settings, use `/ask` in the Pi p
 
 Use `/route writing` or `/route abduction` to set the profile explicitly and `/route auto` to restore classification. `/switch` still opens a manual model picker. The router uses visible task cues and account readiness; it does not claim to find the optimal model. Gemini's current ACP connection manages its actual model and reasoning internally. LemmaDuck records that limitation instead of claiming the preferred level was applied. Other models use the levels their runtime supports.
 
-To customize provider order, exact model IDs and reasoning levels, run `lemmaduck routing init` in the **host shell**, then edit the path it prints. `lemmaduck routing show` displays the effective policy. Explicit OMP `--model`/`--thinking` options and Paseo's model choice override coding launch defaults. [Routing and limitations](ROUTING.md)
+To customize provider order, exact model IDs and reasoning levels, run `duck routing init` in the **host shell**, then edit the path it prints. `duck routing show` displays the effective policy. Explicit OMP `--model`/`--thinking` options and Paseo's model choice override coding launch defaults. [Routing and limitations](ROUTING.md)
 
 Writing routes preserve the author's intent, facts and approved voice samples, separate factual issues from stylistic edits, and keep drafts reviewable. Coding starts by inspecting existing behavior, standard-library facilities and installed dependencies. [Writing and desloping](WRITING.md)
 
@@ -148,10 +148,10 @@ Writing routes preserve the author's intent, facts and approved voice samples, s
 Keep using VS Code to navigate and edit the checkout. LemmaDuck detects Git or Jujutsu, records version-control state in Pi task checkpoints, and exposes status/diff/log inspection to the worker. OMP uses the host's normal Git/jj workflow for development. Jujutsu inspection reads recorded state without automatically snapshotting working-copy changes. [VCS guide](VCS.md)
 
 ```sh
-lemmaduck vcs /path/to/repo status
-lemmaduck connector add work.github github
-lemmaduck connector add work.linear linear
-lemmaduck connector add work.jira jira
+duck vcs /path/to/repo status
+duck connector add work.github github
+duck connector add work.linear linear
+duck connector add work.jira jira
 ```
 
 The connector commands create local presets. Supply account credentials, discover the server's tools, and allow the operations you intend to use. Pi and Gemini share those allowed tools; OMP can call the same connector CLI. Read-only reviews reject external modifications. Other remote effects display the account and full payload for confirmation and receive a replay-protected receipt. [Connect GitHub, Linear and Jira](CONNECTORS.md)
@@ -162,13 +162,13 @@ Use `/task link ISSUE_URL` in Pi to preserve a GitHub, Linear or Jira reference 
 
 | For this work | Start here |
 | --- | --- |
-| Investigate a research question | `lemmaduck init PATH --kind research` creates a protocol and claim ledger. Attach `/workflow pstack:sharpen` in the agent prompt, switch workers, and ask for competing explanations and a discriminating experiment. |
+| Investigate a research question | `duck init PATH --kind research` creates a protocol and claim ledger. Attach `/workflow pstack:sharpen` in the agent prompt, switch workers, and ask for competing explanations and a discriminating experiment. |
 | Build or review software | `--kind development` creates an OMP project with an implementation plan. Look up `pstack:tdd`, `gstack:plan-eng-review` or `gstack:qa`. |
 | Draft in Korean or English | `--kind writing` creates a brief for audience, approved examples, facts and uncertainty. Attach `pstack:technical-writing` or `pstack:unslop`. |
 | Triage messages or follow up on work | `--kind assistant` creates an inbox and action record. Configure each work or personal account separately through the [connector guide](CONNECTORS.md). |
-| Work on an existing project | Use `lemmaduck code PATH` for code or `lemmaduck agent PATH --pi` for research, writing or assistant work. Unmarked projects default to Pi. |
+| Work on an existing project | Use `duck code PATH` for code or `duck agent PATH --pi` for research, writing or assistant work. Unmarked projects default to Pi. |
 
-In a regular shell, run `lemmaduck workflow list pstack` to see available names or `lemmaduck workflow show gstack:qa` to read a pinned entry. In the Pi prompt, `/workflow NAME` attaches that entry to the task and its handoff. The worker can read the full text in chunks. Interactive commands attach one workflow at a time. Cursor-hosted automations, browser QA and deployments require their own host, tools and permissions. [Full workflow inventory](../catalog/workflow-routing.tsv)
+In a regular shell, run `duck workflow list pstack` to see available names or `duck workflow show gstack:qa` to read a pinned entry. In the Pi prompt, `/workflow NAME` attaches that entry to the task and its handoff. The worker can read the full text in chunks. Interactive commands attach one workflow at a time. Cursor-hosted automations, browser QA and deployments require their own host, tools and permissions. [Full workflow inventory](../catalog/workflow-routing.tsv)
 
 ## Development
 

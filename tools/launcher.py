@@ -108,8 +108,9 @@ def setup(args):
         steps += [f"Install the locked Paseo host, OMP {OMP['version']} and Jujutsu {JJ['version']}; register LemmaDuck Code",
                   "Verify the Google Antigravity ACP runtime",
                   "Fetch and verify every pinned pstack and gstack file"]
-    launcher = INSTALL_HOME / ".local/bin/lemmaduck"
-    steps += [f"Link the launcher at {launcher}"]
+    launchers = {INSTALL_HOME / ".local/bin" / name: ROOT / name for name in ("duck", "lemmaduck")}
+    launcher = INSTALL_HOME / ".local/bin/duck"
+    steps += [f"Link the launcher at {path}" for path in launchers]
     for i, step in enumerate(steps, 1):
         print(f"{i}. {step}", flush=True)
     if args.dry_run:
@@ -118,8 +119,9 @@ def setup(args):
         raise ValueError("Run setup on an x86_64 Linux host or in x64 WSL2 Ubuntu. Connect to that host from Paseo.")
     if sys.version_info < (3, 12) or not shutil.which("git"):
         raise ValueError("Install Python 3.12 or newer and Git on the execution host.")
-    if os.path.lexists(launcher) and launcher.resolve() != ROOT / "lemmaduck":
-        raise ValueError(f"Another installation owns {launcher}. Relocate it or run the existing checkout's setup.")
+    for path, target in launchers.items():
+        if os.path.lexists(path) and path.resolve() != target:
+            raise ValueError(f"Another installation owns {path}. Relocate it or run the existing checkout's setup.")
     import fcntl
     DATA_ROOT.mkdir(parents=True, exist_ok=True, mode=0o700)
     with (DATA_ROOT / "lemmaduck-setup.lock").open("a") as lock:
@@ -139,8 +141,9 @@ def setup(args):
             for spec in SOURCES.values():
                 install_source(spec)
         launcher.parent.mkdir(parents=True, exist_ok=True)
-        if not launcher.is_symlink():
-            launcher.symlink_to(ROOT / "lemmaduck")
+        for path, target in launchers.items():
+            if not path.is_symlink():
+                path.symlink_to(target)
         if args.full:
             configure_paseo(Path(os.environ.get("PASEO_HOME") or INSTALL_HOME / ".paseo"), launcher, env)
     print(f"Ready. Run {launcher} doctor. Account sign-in is a separate step.")
@@ -171,7 +174,7 @@ def workflow(args):
         raise ValueError("Unknown workflow or reference. Use 'workflow list' to see the entry points.")
     target = spec_dir(spec)
     if not target.is_dir():
-        raise ValueError(f"{source} is missing. Run 'lemmaduck setup --full' on the execution host.")
+        raise ValueError(f"{source} is missing. Run 'duck setup --full' on the execution host.")
     _, oid, size = inv[path]
     doc = workflow_sources.git(target, "cat-file", "blob", oid)
     if len(doc) != size or hashlib.sha1(f"blob {size}\0".encode() + doc).hexdigest() != oid:
@@ -195,10 +198,10 @@ def doctor(args):
     print("Git:", git_ok or "missing")
     print("Node/npm:", "ready" if node_ok else "missing or too old")
     paseo_ok = os.access(PASEO, os.X_OK)
-    print("Paseo host:", "installed" if paseo_ok else "missing; run lemmaduck setup --full")
-    print("Pi worker:", "built" if CORE.is_file() else "run lemmaduck setup --full")
+    print("Paseo host:", "installed" if paseo_ok else "missing; run duck setup --full")
+    print("Pi worker:", "built" if CORE.is_file() else "run duck setup --full")
     omp_ok = os.access(DATA_ROOT / "bin/omp", os.X_OK)
-    print("OMP coding worker:", str(DATA_ROOT / "bin/omp") if omp_ok else "missing; run lemmaduck setup --full")
+    print("OMP coding worker:", str(DATA_ROOT / "bin/omp") if omp_ok else "missing; run duck setup --full")
     ready = ready and omp_ok and paseo_ok
     for spec in SOURCES.values():
         path = spec_dir(spec)
@@ -217,7 +220,7 @@ def init_project(args):
     dest = args.directory.expanduser().absolute()
     src = ROOT / ("examples/first-study" if args.kind == "demo" else "templates/" + args.kind)
     if dest.exists() or dest.is_symlink():
-        raise ValueError("Choose a new directory. Existing projects can be opened directly with 'lemmaduck agent PATH'.")
+        raise ValueError("Choose a new directory. Existing projects can be opened directly with 'duck agent PATH'.")
     dest.parent.mkdir(parents=True, exist_ok=True)
     shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"), dirs_exist_ok=False)
     print(f"Created {args.kind} project at {dest}")
@@ -225,7 +228,7 @@ def init_project(args):
 
 def core(argv):
     if not CORE.is_file():
-        raise ValueError("The worker has not been built. Run 'lemmaduck setup --full' in this checkout.")
+        raise ValueError("The worker has not been built. Run 'duck setup --full' in this checkout.")
     env = runtime_env()
     if not node_ready(env):
         raise ValueError("Node 22.19+ and npm are required on the execution host.")
@@ -237,7 +240,7 @@ def main():
     try:
         if argv and argv[0] == "paseo":
             if not os.access(PASEO, os.X_OK):
-                raise ValueError("Run lemmaduck setup --full to install the Paseo host.")
+                raise ValueError("Run duck setup --full to install the Paseo host.")
             env = runtime_env()
             env.setdefault("PASEO_HOME", str(INSTALL_HOME / ".paseo"))
             os.execve(PASEO, [str(PASEO), *argv[1:]], env)

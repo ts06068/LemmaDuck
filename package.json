@@ -1,6 +1,6 @@
 {
   "name": "lemmaduck",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "type": "module",
   "engines": {
     "node": ">=22.19.0"
@@ -28,6 +28,7 @@
   },
   "description": "A Paseo workspace with OMP for development and Pi for research, writing and assistant tasks.",
   "bin": {
+    "duck": "duck",
     "lemmaduck": "lemmaduck"
   },
   "os": [
@@ -59,6 +60,7 @@
     "scripts/install-google.py",
     "scripts/rollback.py",
     "npm-shrinkwrap.json",
+    "duck",
     "lemmaduck",
     "tools/*.py",
     "catalog/",

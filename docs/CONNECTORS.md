@@ -7,10 +7,10 @@ A connector is an account-specific MCP connection. Pi and Gemini use the same `l
 In the Paseo host terminal:
 
 ```sh
-lemmaduck connector add work.github github
-lemmaduck connector add work.linear linear
-lemmaduck connector add work.jira jira
-lemmaduck connector list
+duck connector add work.github github
+duck connector add work.linear linear
+duck connector add work.jira jira
+duck connector list
 ```
 
 Each command creates a preset with an **empty tool allowlist**. Existing entries are preserved. Supply these environment variables through the host's secret manager before starting the worker:
@@ -28,14 +28,14 @@ The built-in client supports static Bearer/Basic credentials and stdio servers. 
 Discover the server's current tools and their argument schemas, then allow the specific tools you need:
 
 ```sh
-lemmaduck connector discover work.github
-lemmaduck connector allow work.github get_me read
-lemmaduck connector tools work.github
+duck connector discover work.github
+duck connector allow work.github get_me read
+duck connector tools work.github
 printf '{}\n' > query.json
-lemmaduck connector call work.github get_me query.json
+duck connector call work.github get_me query.json
 
-lemmaduck connector discover work.linear
-lemmaduck connector discover work.jira
+duck connector discover work.linear
+duck connector discover work.jira
 ```
 
 Use exact names returned by discovery for Linear and Jira. For Jira, first allow and call `getAccessibleAtlassianResources` as `read` to obtain the intended `cloudId`. Inspect issue lookup, search, project and transition schemas before allowing them. The Jira endpoint requests flat tools so local permissions apply to each concrete operation; do not grant a generic execute gateway a blanket `read` effect.
@@ -58,8 +58,8 @@ Configure the calendar/email adapter before using those account names. A worker 
 Every remote effect other than `read` requires an interactive confirmation with the account, tool and complete arguments. Read-only review refuses those effects. For direct CLI calls, review the payload and pass a unique receipt ID:
 
 ```text
-lemmaduck connector call ACCOUNT TOOL arguments.json --apply REQUEST-ID
-lemmaduck connector receipt ACCOUNT REQUEST-ID
+duck connector call ACCOUNT TOOL arguments.json --apply REQUEST-ID
+duck connector receipt ACCOUNT REQUEST-ID
 ```
 
 A repeated request ID is refused. A lost or failed response after dispatch records an unknown outcome; agent work pauses for reconciliation. Inspect the actual service and receipt before deciding whether anything should be attempted again. A new ID does not prove a repeat action is safe.

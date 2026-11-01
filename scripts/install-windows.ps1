@@ -62,7 +62,7 @@ case "${origin%.git}" in
     *) echo "Choose a LemmaDuck checkout at $repo." >&2; exit 1 ;;
 esac
 cd "$repo"
-./lemmaduck setup --full
+./duck setup --full
 '@
 $linuxScript = $linuxScript.Replace("`r`n", "`n")
 $encoded = [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($linuxScript))
@@ -91,6 +91,6 @@ $json = @{ profiles = @($profile) } | ConvertTo-Json -Depth 6
 [IO.File]::WriteAllText((Join-Path $fragmentDir 'profiles.json'), $json, (New-Object Text.UTF8Encoding($false)))
 Write-Host ''
 Write-Host 'Open Windows Terminal > LemmaDuck (WSL). Restart the terminal if the profile is not visible.'
-Write-Host 'Inside that Ubuntu tab: ~/.local/bin/lemmaduck login chatgpt; ~/.local/bin/lemmaduck login claude; ~/.local/bin/lemmaduck login gemini'
-Write-Host 'Then create a project under ~/workspace and run ~/.local/bin/lemmaduck agent /path/to/project.'
+Write-Host 'Inside that Ubuntu tab: ~/.local/bin/duck login chatgpt; ~/.local/bin/duck login claude; ~/.local/bin/duck login gemini'
+Write-Host 'Then create a project under ~/workspace and run ~/.local/bin/duck agent /path/to/project.'
 Write-Host 'WSL has its own accounts and files; existing server logins are not copied.'

@@ -129,7 +129,7 @@ export class ACPWorker {
       this.close();
       const detail = `${String(error)} ${this.stderr}`;
       if (/UNSUPPORTED_CLIENT|client is no longer supported/i.test(detail)) throw new Error("Google no longer supports this client for the account. Update the official ACP distribution; no paid fallback was attempted.");
-      if (/invalid_grant|authentication required|credentials missing|login flow|authenticate the ACP/i.test(detail)) throw new Error("Google subscription authentication is required. Run lemmaduck login gemini for the official Antigravity ACP server.");
+      if (/invalid_grant|authentication required|credentials missing|login flow|authenticate the ACP/i.test(detail)) throw new Error("Google subscription authentication is required. Run duck login gemini for the official Antigravity ACP server.");
       throw error;
     }
     return this.session;

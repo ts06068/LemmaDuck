@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "id": "neovim",
   "name": "LemmaDuck Neovim",
-  "version": "0.1.0-alpha.3",
+  "version": "0.1.0-alpha.4",
   "channel": "preview",
   "repository": "https://github.com/ts06068/lemmaduck",
   "githubPackage": "@ts06068/lemmaduck-neovim",
   "engine": {
     "repository": "https://github.com/ts06068/lemmaduck",
-    "version": "0.5.2",
+    "version": "0.5.3",
     "sourceDirectory": ".",
     "revision": "same-checkout"
   },

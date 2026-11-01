@@ -8,14 +8,14 @@ import { DEFAULT_PROVIDERS, enabledProviders, providerLabel, readProviders, vali
 export async function providerCommand(action = "list", args: string[]): Promise<void> {
   if (action === "list") {
     console.log(enabledProviders().map(id => `${id}\t${providerLabel(id)}`).join("\n"));
-    console.log("\nUse lemmaduck providers catalog for built-in routes. Nothing is enabled automatically."); return;
+    console.log("\nUse duck providers catalog for built-in routes. Nothing is enabled automatically."); return;
   }
   if (action === "catalog") {
     const { getBuiltinProviders } = await import("@earendil-works/pi-ai/providers/all");
     console.log(getBuiltinProviders().sort().join("\n")); return;
   }
   const idOrFile = args[0];
-  if (!idOrFile) throw new Error("Usage: lemmaduck providers add PROVIDER_ID|FILE.json --allow-paid-api | --subscription --extra-usage-off\n       lemmaduck providers remove PROVIDER_ID");
+  if (!idOrFile) throw new Error("Usage: duck providers add PROVIDER_ID|FILE.json --allow-paid-api | --subscription --extra-usage-off\n       duck providers remove PROVIDER_ID");
   const providers = readProviders();
   if (action === "remove") {
     if (DEFAULT_PROVIDERS.includes(idOrFile as any)) throw new Error("Default subscription routes cannot be removed.");
@@ -26,19 +26,19 @@ export async function providerCommand(action = "list", args: string[]): Promise<
     if (Object.hasOwn(credentials, idOrFile)) { delete credentials[idOrFile]; atomicJson(auth, credentials); }
     console.log(`Removed ${idOrFile} and its local credential. Provider-side tokens were not revoked.`); return;
   }
-  if (action !== "add") throw new Error("Use lemmaduck providers list|catalog|add|remove.");
+  if (action !== "add") throw new Error("Use duck providers list|catalog|add|remove.");
   const p = validateProvider(existsSync(idOrFile) ? JSON.parse(readFileSync(idOrFile, "utf8")) : {
     id: idOrFile, label: idOrFile, billing: args.includes("--subscription") ? "subscription" : "api",
   });
-  if (p.id === "anthropic" && p.billing === "subscription") throw new Error("For your own Claude plan, run lemmaduck login claude. The direct Anthropic provider accepts explicit Console API billing only.");
+  if (p.id === "anthropic" && p.billing === "subscription") throw new Error("For your own Claude plan, run duck login claude. The direct Anthropic provider accepts explicit Console API billing only.");
   if (p.billing === "api" && !args.includes("--allow-paid-api")) throw new Error("API routes may incur charges. Register explicitly with --allow-paid-api; subscription-only defaults remain unchanged.");
   if (p.billing === "subscription" && !(args.includes("--subscription") && args.includes("--extra-usage-off"))) throw new Error("Check your plan and disable extra usage, then pass --subscription --extra-usage-off. Only OAuth credentials are permitted on this route.");
   if (!p.baseUrl) {
     const { getBuiltinProviders } = await import("@earendil-works/pi-ai/providers/all");
-    if (!(getBuiltinProviders() as string[]).includes(p.id)) throw new Error("Unknown built-in provider. Use lemmaduck providers catalog or a compatible-endpoint JSON file.");
+    if (!(getBuiltinProviders() as string[]).includes(p.id)) throw new Error("Unknown built-in provider. Use duck providers catalog or a compatible-endpoint JSON file.");
   }
   writeProviders([...providers.filter(old => old.id !== p.id), p]);
   if (p.billing === "subscription") confirmBilling(p.id);
   console.log(`Registered ${providerLabel(p.id)}. Restart the agent and use /switch ${p.id}.`);
-  if (p.billing !== "local") console.log(`Authenticate with lemmaduck login ${p.id}${p.apiKeyEnv ? ` or set ${p.apiKeyEnv}` : ""}. No model request was made.`);
+  if (p.billing !== "local") console.log(`Authenticate with duck login ${p.id}${p.apiKeyEnv ? ` or set ${p.apiKeyEnv}` : ""}. No model request was made.`);
 }

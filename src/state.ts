@@ -154,7 +154,7 @@ export class TaskStore {
     this.checkpoint();
   }
   assertSwitchable(): void {
-    if (this.unresolved().length) throw new Error("Unresolved operations remain. Inspect them with /task; record their outcome with lemmaduck reconcile before switching.");
+    if (this.unresolved().length) throw new Error("Unresolved operations remain. Inspect them with /task; record their outcome with duck reconcile before switching.");
   }
   usage(entry: Usage): void {
     const path = join(this.dir, "usage.jsonl");

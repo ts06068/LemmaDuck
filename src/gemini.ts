@@ -18,7 +18,7 @@ import { assertGoogleProfile, googleWorkspace } from "./google-profile.js";
 // tool calls (which would execute the same operation twice).
 export function registerGemini(pi: ExtensionAPI, store: TaskStore, getContext: () => ExtensionContext | undefined, isReview: () => boolean, makeWorker: (options: ACPOptions) => Pick<ACPWorker, "prompt" | "close" | "sessionId"> = options => {
   assertGoogleProfile(geminiHome);
-  if (!existsSync(join(geminiHome, ".gemini/antigravity-acp/acp_token.json"))) throw new Error("Run lemmaduck login gemini once for the official Antigravity ACP server. Gemini CLI credentials are separate.");
+  if (!existsSync(join(geminiHome, ".gemini/antigravity-acp/acp_token.json"))) throw new Error("Run duck login gemini once for the official Antigravity ACP server. Gemini CLI credentials are separate.");
   return new ACPWorker(options);
 }) {
   let worker: Pick<ACPWorker, "prompt" | "close" | "sessionId"> | undefined;

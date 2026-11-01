@@ -21,7 +21,7 @@ import { vcsTool } from "./vcs-tool.js";
 import { piRoot } from "./dependencies.js";
 
 export default async function extension(pi: ExtensionAPI): Promise<void> {
-  if (process.env.LEMMADUCK_LAUNCHED !== "1") throw new Error("Start this extension with lemmaduck agent <project>.");
+  if (process.env.LEMMADUCK_LAUNCHED !== "1") throw new Error("Start this extension with duck agent <project>.");
   const store = new TaskStore(projectPath(process.cwd()));
   const { defaultModelPerProvider } = await import(pathToFileURL(join(piRoot, "dist/core/model-resolver.js")).href) as { defaultModelPerProvider: Record<string, string> };
   defaultModelPerProvider["claude-bridge"] ||= defaultModelPerProvider.anthropic!;
@@ -42,7 +42,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   const gemini = registerGemini(pi, store, () => current, () => review);
   const notify = (ctx: ExtensionContext, text: string, error = false) => ctx.ui.notify(text, error ? "error" : "info");
   const verifyClaude = (provider: string | undefined) => {
-    if (provider === "claude-bridge" && !claudePlanSignedIn()) throw new Error("Claude Code did not confirm a first-party Claude plan login. Run lemmaduck login claude before using this subscription route.");
+    if (provider === "claude-bridge" && !claudePlanSignedIn()) throw new Error("Claude Code did not confirm a first-party Claude plan login. Run duck login claude before using this subscription route.");
   };
   const guard = (ctx: ExtensionContext) => {
     assertManagedProject(store.project);
@@ -51,7 +51,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (store.task.operations.some(op => op.status === "unknown")) throw new Error("Task needs reconciliation. Inspect /task and observed effects, then use /task reconcile before continuing.");
     if (!ctx.model) throw new Error("Choose a primary worker with /switch.");
     assertRoute(ctx.model);
-    if (!billingConfirmed(ctx.model.provider as Provider)) throw new Error(`Confirm extra usage is disabled in your account, then run: lemmaduck billing confirm ${ctx.model.provider} --extra-usage-off`);
+    if (!billingConfirmed(ctx.model.provider as Provider)) throw new Error(`Confirm extra usage is disabled in your account, then run: duck billing confirm ${ctx.model.provider} --extra-usage-off`);
     if (selected !== `${ctx.model.provider}/${ctx.model.id}`) throw new Error("Use /switch to select the model and create a compact handoff first.");
     if (["rate_limited", "needs_reconciliation"].includes(store.task.status)) throw new Error("Task is paused. Inspect /task, then /switch to continue with the provider you choose.");
   };
@@ -108,17 +108,17 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       if (pendingCheckpoints(store.dir, store.task.id).length) { await reviewCheckpoints(ctx); if (pendingCheckpoints(store.dir, store.task.id).length) throw new Error("Review or reject pending checkpoint proposals before switching."); }
       const providers = enabledProviders();
       let provider = ALIASES[args.trim()] || (providers.includes(args.trim()) ? args.trim() : undefined);
-      if (args.trim() && !provider) throw new Error("Provider is not enabled. Use lemmaduck providers add in the shell, then restart the agent.");
+      if (args.trim() && !provider) throw new Error("Provider is not enabled. Use duck providers add in the shell, then restart the agent.");
       if (!provider) {
         const choices = providers.map(value => `${providerLabel(value)} [${value}]`);
         const choice = await ctx.ui.select("Select primary worker", choices);
         provider = choice === undefined ? undefined : providers[choices.indexOf(choice)];
       }
       if (!provider) return;
-      if (!billingConfirmed(provider)) throw new Error(`Account extra-usage setting is unconfirmed. Run: lemmaduck billing confirm ${provider} --extra-usage-off after checking your account.`);
+      if (!billingConfirmed(provider)) throw new Error(`Account extra-usage setting is unconfirmed. Run: duck billing confirm ${provider} --extra-usage-off after checking your account.`);
       verifyClaude(provider);
       const models = ctx.modelRegistry.getAll().filter(model => model.provider === provider);
-      if (!models.length) throw new Error(`No account models available yet. Run lemmaduck login ${provider}, then restart the harness.`);
+      if (!models.length) throw new Error(`No account models available yet. Run duck login ${provider}, then restart the harness.`);
       const choice = automatic ? automatic.route.model : models.length === 1 ? models[0]!.id : await ctx.ui.select("Select model (availability requires account verification)", models.map(model => model.id));
       const model = models.find(model => model.id === choice); if (!model) return;
       assertRoute(model);
@@ -157,7 +157,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       const config = readRouting();
       const classified = classifyRequest(args, config.defaultProfile);
       const profile = store.task.routingProfile || classified.profile;
-      if (profile === "coding") throw new Error("Code development uses OMP. In the host terminal run: lemmaduck code " + JSON.stringify(store.project));
+      if (profile === "coding") throw new Error("Code development uses OMP. In the host terminal run: duck code " + JSON.stringify(store.project));
       const picked = chooseRoute(profile, ctx.modelRegistry.getAvailable(), provider => billingConfirmed(provider) &&
         (provider !== "claude-bridge" || claudePlanSignedIn()) &&
         (provider !== "gemini-cli-acp" || (existsSync(googleACP) && existsSync(join(geminiHome, ".gemini/antigravity-acp/acp_token.json")))), defaultModelPerProvider, config);
@@ -202,7 +202,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     try {
       if (!ctx.isIdle()) throw new Error("Wait for the active turn to finish.");
       const key = args.trim();
-      if (!key) return notify(ctx, store.task.workflow?.name || "Choose a workflow with /workflow pstack:sharpen. List names in the terminal with lemmaduck workflow list.");
+      if (!key) return notify(ctx, store.task.workflow?.name || "Choose a workflow with /workflow pstack:sharpen. List names in the terminal with duck workflow list.");
       if (key === "clear") delete store.task.workflow;
       else {
         const result = execFileSync("python3", [join(repoRoot, "lemmaduck"), "workflow", "show", key, "--json"], { encoding: "utf8", timeout: 20000, maxBuffer: 8 * 1024 * 1024 });
@@ -223,7 +223,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       try {
         changing = true;
         const model = ctx.modelRegistry.find(intent.provider, intent.model);
-        if (!model || !(await pi.setModel(model))) throw new Error(`Authentication/model unavailable. Run lemmaduck login ${intent.provider}.`);
+        if (!model || !(await pi.setModel(model))) throw new Error(`Authentication/model unavailable. Run duck login ${intent.provider}.`);
         selected = `${intent.provider}/${intent.model}`; review = intent.review;
         if (intent.route) {
           pi.setThinkingLevel(model.reasoning ? intent.route.requestedThinking : "off");

@@ -1,12 +1,12 @@
 {
   "name": "lemmaduck",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "lockfileVersion": 3,
   "requires": true,
   "packages": {
     "": {
       "name": "lemmaduck",
-      "version": "0.5.2",
+      "version": "0.5.3",
       "dependencies": {
         "@agentclientprotocol/sdk": "1.5.0",
         "@anthropic-ai/claude-agent-sdk": "0.3.267",
@@ -26,6 +26,7 @@
         "node": ">=22.19.0"
       },
       "bin": {
+        "duck": "duck",
         "lemmaduck": "lemmaduck"
       },
       "os": [

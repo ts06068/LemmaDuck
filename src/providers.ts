@@ -26,7 +26,7 @@ export function validateProvider(value: unknown): ExtraProvider {
   if (!['api', 'local', 'subscription'].includes(p.billing)) throw new Error("billing must be api, local or subscription.");
   if (typeof p.label !== "string" || !p.label.trim() || p.label.length > 100 || /[\x00-\x1f]/.test(p.label)) throw new Error("A short provider label is required.");
   const allowed = ["id", "label", "billing", "baseUrl", "api", "apiKeyEnv", "models"];
-  if (Object.keys(p).some(key => !allowed.includes(key))) throw new Error("Unknown provider field. Keys belong in lemmaduck login or a LEMMADUCK_MODEL_* environment variable, not this file.");
+  if (Object.keys(p).some(key => !allowed.includes(key))) throw new Error("Unknown provider field. Keys belong in duck login or a LEMMADUCK_MODEL_* environment variable, not this file.");
   if (p.baseUrl !== undefined) {
     const url = new URL(p.baseUrl);
     if (url.username || url.password || url.search || url.hash || !["http:", "https:"].includes(url.protocol)) throw new Error("Use a plain HTTP(S) endpoint without embedded credentials or query parameters.");

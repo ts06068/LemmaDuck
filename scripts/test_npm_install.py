@@ -57,24 +57,29 @@ def main():
         owned_launcher.symlink_to(prefix / "bin/lemmaduck")
         run([*install, *current], env)
         for distro, version in versions.items():
-            executable = "lemmaduck" if distro == "base" else "lemmaduck-" + distro
-            assert run([prefix / "bin" / executable, "--version"], env).strip().endswith(version)
-        setup = run([prefix / "bin/lemmaduck", "setup"], env)
+            for command in ("duck", "lemmaduck"):
+                executable = command if distro == "base" else command + "-" + distro
+                assert run([prefix / "bin" / executable, "--version"], env).strip().endswith(version)
+        setup = run([prefix / "bin/duck", "setup"], env)
         assert "Using the compiled worker" in setup
         assert "npm ci" not in setup and "tsc" not in setup
-        run([prefix / "bin/lemmaduck", "routing", "show"], env)
+        assert run([prefix / "bin/duck", "routing", "show"], env) == run([prefix / "bin/lemmaduck", "routing", "show"], env)
         assert owned_launcher.resolve() == (prefix / "bin/lemmaduck").resolve()
+        assert (user / ".local/bin/duck").resolve() == (prefix / "bin/duck").resolve()
+        run([user / ".local/bin/duck", "init", directory / "new study", "--kind", "research"], env)
+        assert (directory / "new study" / "protocol.md").is_file()
+        assert (directory / "new study" / "claims.tsv").is_file()
         fake_editor = directory / "fake-editor"
         fake_editor.write_text("#!/usr/bin/env python3\nimport json,os,sys\nprint(json.dumps({'args':sys.argv[1:],'cwd':os.getcwd(),'project':os.environ['LEMMADUCK_PROJECT']}))\n")
         fake_editor.chmod(0o755)
         for distro in ("emacs", "neovim"):
             editor_env = {**env, "LEMMADUCK_EDITOR": str(fake_editor)}
-            data = json.loads(run([prefix / "bin" / ("lemmaduck-" + distro), project], editor_env))
+            data = json.loads(run([prefix / "bin" / ("duck-" + distro), project], editor_env))
             assert data["cwd"] == str(project) and data["project"] == str(project)
-            doctor = json.loads(run([prefix / "bin" / ("lemmaduck-" + distro), "--doctor"], editor_env))
+            doctor = json.loads(run([prefix / "bin" / ("duck-" + distro), "--doctor"], editor_env))
             assert Path(doctor["engine"]).resolve() == (prefix / "bin/lemmaduck").resolve()
         assert marker.read_text() == "Keep my task across package updates\n"
-    print("Verified global npm upgrade: Base 0.5.1 and editor alpha.2 to current packages; all CLIs work and task state is preserved.")
+    print("Verified global npm upgrade: duck and legacy commands work, editor arguments are preserved, and task state is unchanged.")
 
 
 if __name__ == "__main__":

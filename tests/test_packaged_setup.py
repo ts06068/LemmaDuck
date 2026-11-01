@@ -1,3 +1,4 @@
+import argparse
 import json
 from pathlib import Path
 import sys
@@ -10,6 +11,21 @@ import launcher
 
 
 class PackagedSetupTests(unittest.TestCase):
+    def test_setup_keeps_foreign_command_untouched_before_installing(self):
+        for name in ("duck", "lemmaduck"):
+            with self.subTest(command=name), tempfile.TemporaryDirectory() as temp:
+                home = Path(temp)
+                command = home / ".local/bin" / name
+                command.parent.mkdir(parents=True)
+                command.write_text("existing unrelated command\n")
+                with patch.object(launcher, "INSTALL_HOME", home), patch.object(launcher, "prepare_core") as prepare:
+                    with self.assertRaisesRegex(ValueError, "Another installation owns"):
+                        launcher.setup(argparse.Namespace(full=False, dry_run=False))
+                    prepare.assert_not_called()
+                self.assertEqual(command.read_text(), "existing unrelated command\n")
+                other = "lemmaduck" if name == "duck" else "duck"
+                self.assertFalse((command.parent / other).exists())
+
     def test_published_package_does_not_reinstall_dependencies_or_compile(self):
         with tempfile.TemporaryDirectory() as temp:
             root = Path(temp)

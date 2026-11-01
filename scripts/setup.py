@@ -21,7 +21,7 @@ if sys.version_info < (3, 12):
 if not shutil.which('git'):
     raise SystemExit('Git is required. On Ubuntu: sudo apt-get install git')
 if '_npx' in repo.parts:
-    raise SystemExit('Install the package persistently with npm install -g PACKAGE_OR_TARBALL before lemmaduck setup. An npx cache is not an installation directory.')
+    raise SystemExit('Install the package persistently with npm install -g PACKAGE_OR_TARBALL before duck setup. An npx cache is not an installation directory.')
 scripts = ['bootstrap-tools.py', 'bootstrap-editor-tools.py', 'install-ui.py', 'install-google.py', 'install-launchers.py']
 print(f'LemmaDuck setup: {DATA_ROOT}\nLaunchers: {INSTALL_HOME / ".local/bin"}', flush=True)
 if args.dry_run:
@@ -41,4 +41,4 @@ if not args.skip_editor_plugins:
             subprocess.run([str(DATA_ROOT / 'bin/lemmaduck-edit'), '--headless', command, '+qa'], check=True, env=editor_env, stdout=output, stderr=subprocess.STDOUT)
 subprocess.run([str(DATA_ROOT / 'bin/node'), str(repo / 'dist/cli.js'), 'doctor'], check=True, env=env)
 print('Editor ready. Start ' + str(INSTALL_HOME / '.local/bin/lemmaduck-edit'))
-print('Next: lemmaduck login chatgpt; lemmaduck login claude; lemmaduck login gemini. Confirm billing settings before model calls.')
+print('Next: duck login chatgpt; duck login claude; duck login gemini. Confirm billing settings before model calls.')

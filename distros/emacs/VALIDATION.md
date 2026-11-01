@@ -1,6 +1,6 @@
 # Validation
 
-This is the `emacs` distro, version `0.1.0-alpha.3`.
+This is the `emacs` distro, version `0.1.0-alpha.4`.
 
 The automated checks exercise argument handling with spaces and shell characters,
 project validation, isolated editor startup, and missing-program diagnostics.

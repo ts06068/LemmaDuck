@@ -2,7 +2,7 @@
 <h1 align="center">LemmaDuck Emacs</h1>
 <p align="center"><strong>Talk to the duck. Test your hunch.</strong></p>
 
-**Distro: `emacs` · Version: `0.1.0-alpha.3` · Preview**
+**Distro: `emacs` · Version: `0.1.0-alpha.4` · Preview**
 
 An isolated Emacs workspace for the shared [LemmaDuck engine](https://github.com/ts06068/lemmaduck).
 Code development uses OMP. Research, writing and assistant work use the managed Pi worker.
@@ -22,8 +22,8 @@ then add this editor distro:
 ```sh
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-emacs@preview
 export PATH="$HOME/.local/bin:$PATH"
-lemmaduck-emacs --doctor
-lemmaduck-emacs /path/to/project
+duck-emacs --doctor
+duck-emacs /path/to/project
 ```
 
 Repeat the install command to update to the current `preview`; update Base with
@@ -38,7 +38,7 @@ unchanged. The OS editor binary is a separate prerequisite.
 ```sh
 git clone https://github.com/ts06068/lemmaduck.git
 cd lemmaduck
-./lemmaduck setup --full
+./duck setup --full
 export PATH="$HOME/.local/bin:$PATH"
 cd distros/emacs
 ./bin/lemmaduck-emacs --doctor
@@ -47,7 +47,7 @@ cd distros/emacs
 3. Prepare the shared synthetic example, or use an existing project:
 
 ```sh
-lemmaduck init "$HOME/projects/duck-first-study" --kind demo
+duck init "$HOME/projects/duck-first-study" --kind demo
 ./bin/lemmaduck-emacs "$HOME/projects/duck-first-study"
 ```
 
@@ -90,7 +90,7 @@ The npm package is **`@ts06068/lemmaduck-emacs`**, hosted on GitHub Packages wit
 ```sh
 python3 -m unittest discover -s tests -p 'test_*.py'
 emacs -Q --batch -L lisp -l tests/test-editor.el -f ert-run-tests-batch-and-exit
-python3 ../../scripts/build_release.py --distro emacs --tag emacs-v0.1.0-alpha.3 --npm
+python3 ../../scripts/build_release.py --distro emacs --tag emacs-v0.1.0-alpha.4 --npm
 ```
 
 Release packaging uses Git-tracked files. Stage new files before a local packaging check. The release workflow builds from the tagged commit after running the editor checks. See [validation](VALIDATION.md).
