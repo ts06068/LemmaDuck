@@ -1,0 +1,158 @@
+source	kind	entry	upstream_path	canonical_host_or_route	official_claude_file	lemmaduck_target	verification_case
+pstack	agent	comment-sicko	pstack/agents/comment-sicko.md	Cursor	harness/pstack/claude-code/agents/comment-sicko.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	agent	poteto-agent	pstack/agents/poteto-agent.md	Cursor	harness/pstack/claude-code/agents/poteto-agent.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	automation	reproduce-and-fix-issues	pstack/automations/benny/skills/reproduce-and-fix-issues/SKILL.md	Cursor Automations		공식 호스트·계정 필요	해당 호스트의 입력·출력·권한 및 영수증 대조
+pstack	automation	setup-benny	pstack/automations/benny/skills/setup-benny/SKILL.md	Cursor Automations		공식 호스트·계정 필요	해당 호스트의 입력·출력·권한 및 영수증 대조
+pstack	automation	triage-issue-reports	pstack/automations/benny/skills/triage-issue-reports/SKILL.md	Cursor Automations		공식 호스트·계정 필요	해당 호스트의 입력·출력·권한 및 영수증 대조
+pstack	skill	architect	pstack/skills/architect/SKILL.md	Cursor	harness/pstack/claude-code/skills/architect/SKILL.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	skill	arena	pstack/skills/arena/SKILL.md	Cursor	harness/pstack/claude-code/skills/arena/SKILL.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	skill	automate-me	pstack/skills/automate-me/SKILL.md	Cursor	harness/pstack/claude-code/skills/automate-me/SKILL.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	skill	benchmark-checklist	pstack/skills/benchmark-checklist/SKILL.md	Cursor	harness/pstack/claude-code/skills/benchmark-checklist/SKILL.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	skill	blast-radius	pstack/skills/blast-radius/SKILL.md	Cursor	harness/pstack/claude-code/skills/blast-radius/SKILL.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	skill	bro	pstack/skills/bro/SKILL.md	Cursor	harness/pstack/claude-code/skills/bro/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	correct	pstack/skills/correct/SKILL.md	Cursor	harness/pstack/claude-code/skills/correct/SKILL.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	skill	create-formal-verification-skill	pstack/skills/create-formal-verification-skill/SKILL.md	Cursor	harness/pstack/claude-code/skills/create-formal-verification-skill/SKILL.md	Pi/OMP/Codex 어댑터 설계 · formal-verification	기계 검증 결과와 반례·도구 버전 대조
+pstack	skill	create-verification-skill	pstack/skills/create-verification-skill/SKILL.md	Cursor	harness/pstack/claude-code/skills/create-verification-skill/SKILL.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	skill	figure-it-out	pstack/skills/figure-it-out/SKILL.md	Cursor	harness/pstack/claude-code/skills/figure-it-out/SKILL.md	Pi/OMP/Codex 어댑터 설계 · discovery	원자료 접근·미접근·채택/기각 근거 대조
+pstack	skill	how	pstack/skills/how/SKILL.md	Cursor	harness/pstack/claude-code/skills/how/SKILL.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	skill	in-your-own-words	pstack/skills/in-your-own-words/SKILL.md	Cursor	harness/pstack/claude-code/skills/in-your-own-words/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	interrogate	pstack/skills/interrogate/SKILL.md	Cursor	harness/pstack/claude-code/skills/interrogate/SKILL.md	Pi/OMP/Codex 어댑터 설계 · discovery	원자료 접근·미접근·채택/기각 근거 대조
+pstack	skill	ketchup-video	pstack/skills/ketchup-video/SKILL.md	Cursor	harness/pstack/claude-code/skills/ketchup-video/SKILL.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	skill	ketchup	pstack/skills/ketchup/SKILL.md	Cursor	harness/pstack/claude-code/skills/ketchup/SKILL.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	skill	maintain-formal-verification-skill	pstack/skills/maintain-formal-verification-skill/SKILL.md	Cursor	harness/pstack/claude-code/skills/maintain-formal-verification-skill/SKILL.md	Pi/OMP/Codex 어댑터 설계 · formal-verification	기계 검증 결과와 반례·도구 버전 대조
+pstack	skill	maintain-verification-skill	pstack/skills/maintain-verification-skill/SKILL.md	Cursor	harness/pstack/claude-code/skills/maintain-verification-skill/SKILL.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	skill	make-bot-ui	pstack/skills/make-bot-ui/SKILL.md	Cursor	harness/pstack/claude-code/skills/make-bot-ui/SKILL.md	Pi/OMP/Codex 어댑터 설계 · browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+pstack	skill	no-comments	pstack/skills/no-comments/SKILL.md	Cursor	harness/pstack/claude-code/skills/no-comments/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	poteto-help	pstack/skills/poteto-help/SKILL.md	Cursor	harness/pstack/claude-code/skills/poteto-help/SKILL.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	skill	poteto-mode	pstack/skills/poteto-mode/SKILL.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/SKILL.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	authoring-a-skill	pstack/skills/poteto-mode/playbooks/authoring-a-skill.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/authoring-a-skill.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	autonomous-run	pstack/skills/poteto-mode/playbooks/autonomous-run.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/autonomous-run.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	playbook	autopilot-full	pstack/skills/poteto-mode/playbooks/autopilot-full.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/autopilot-full.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	playbook	autopilot-stack	pstack/skills/poteto-mode/playbooks/autopilot-stack.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/autopilot-stack.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	playbook	babysit	pstack/skills/poteto-mode/playbooks/babysit.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/babysit.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	playbook	bug-fix	pstack/skills/poteto-mode/playbooks/bug-fix.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/bug-fix.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	eval	pstack/skills/poteto-mode/playbooks/eval.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/eval.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	playbook	feature	pstack/skills/poteto-mode/playbooks/feature.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/feature.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	hillclimb	pstack/skills/poteto-mode/playbooks/hillclimb.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/hillclimb.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	playbook	investigation	pstack/skills/poteto-mode/playbooks/investigation.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/investigation.md	Pi/OMP/Codex 어댑터 설계 · discovery	원자료 접근·미접근·채택/기각 근거 대조
+pstack	playbook	multi-phase-plan	pstack/skills/poteto-mode/playbooks/multi-phase-plan.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/multi-phase-plan.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	playbook	opening-a-pr	pstack/skills/poteto-mode/playbooks/opening-a-pr.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/opening-a-pr.md	Pi/OMP/Codex 어댑터 설계 · release	권한·체크 결과·이중 실행/배포·복구 확인
+pstack	playbook	orchestrate	pstack/skills/poteto-mode/playbooks/orchestrate.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/orchestrate.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	playbook	pause-safely	pstack/skills/poteto-mode/playbooks/pause-safely.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/pause-safely.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	playbook	perf-issue	pstack/skills/poteto-mode/playbooks/perf-issue.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/perf-issue.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	prototype	pstack/skills/poteto-mode/playbooks/prototype.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/prototype.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	refactoring	pstack/skills/poteto-mode/playbooks/refactoring.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/refactoring.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	playbook	runtime-forensics	pstack/skills/poteto-mode/playbooks/runtime-forensics.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/runtime-forensics.md	Pi/OMP/Codex 어댑터 설계 · discovery	원자료 접근·미접근·채택/기각 근거 대조
+pstack	playbook	session-pickup	pstack/skills/poteto-mode/playbooks/session-pickup.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/session-pickup.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	playbook	shipping	pstack/skills/poteto-mode/playbooks/shipping.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/shipping.md	Pi/OMP/Codex 어댑터 설계 · release	권한·체크 결과·이중 실행/배포·복구 확인
+pstack	playbook	trace-forensics	pstack/skills/poteto-mode/playbooks/trace-forensics.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/trace-forensics.md	Pi/OMP/Codex 어댑터 설계 · discovery	원자료 접근·미접근·채택/기각 근거 대조
+pstack	playbook	visual-parity	pstack/skills/poteto-mode/playbooks/visual-parity.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/visual-parity.md	Pi/OMP/Codex 어댑터 설계 · browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+pstack	playbook	worktree-cleanup	pstack/skills/poteto-mode/playbooks/worktree-cleanup.md	Cursor	harness/pstack/claude-code/skills/poteto-mode/playbooks/worktree-cleanup.md	Pi/OMP/Codex 어댑터 설계 · release	권한·체크 결과·이중 실행/배포·복구 확인
+pstack	skill	principle-attack-the-premise	pstack/skills/principle-attack-the-premise/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-attack-the-premise/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-boundary-discipline	pstack/skills/principle-boundary-discipline/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-boundary-discipline/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-build-the-lever	pstack/skills/principle-build-the-lever/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-build-the-lever/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-encode-lessons-in-structure	pstack/skills/principle-encode-lessons-in-structure/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-encode-lessons-in-structure/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-exhaust-the-design-space	pstack/skills/principle-exhaust-the-design-space/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-exhaust-the-design-space/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-experience-first	pstack/skills/principle-experience-first/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-experience-first/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-explain-the-number	pstack/skills/principle-explain-the-number/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-explain-the-number/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-fix-root-causes	pstack/skills/principle-fix-root-causes/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-fix-root-causes/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-foundational-thinking	pstack/skills/principle-foundational-thinking/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-foundational-thinking/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-guard-the-context-window	pstack/skills/principle-guard-the-context-window/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-guard-the-context-window/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-laziness-protocol	pstack/skills/principle-laziness-protocol/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-laziness-protocol/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-make-operations-idempotent	pstack/skills/principle-make-operations-idempotent/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-make-operations-idempotent/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-migrate-callers-then-delete-legacy-apis	pstack/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-migrate-callers-then-delete-legacy-apis/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-minimize-reader-load	pstack/skills/principle-minimize-reader-load/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-minimize-reader-load/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-model-the-domain	pstack/skills/principle-model-the-domain/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-model-the-domain/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-never-block-on-the-human	pstack/skills/principle-never-block-on-the-human/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-never-block-on-the-human/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-outcome-oriented-execution	pstack/skills/principle-outcome-oriented-execution/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-outcome-oriented-execution/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-prove-it-works	pstack/skills/principle-prove-it-works/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-prove-it-works/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-redesign-from-first-principles	pstack/skills/principle-redesign-from-first-principles/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-redesign-from-first-principles/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-separate-before-serializing-shared-state	pstack/skills/principle-separate-before-serializing-shared-state/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-separate-before-serializing-shared-state/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-sequence-verifiable-units	pstack/skills/principle-sequence-verifiable-units/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-sequence-verifiable-units/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-subtract-before-you-add	pstack/skills/principle-subtract-before-you-add/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-subtract-before-you-add/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-test-behavior-not-implementation	pstack/skills/principle-test-behavior-not-implementation/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-test-behavior-not-implementation/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	principle-type-system-discipline	pstack/skills/principle-type-system-discipline/SKILL.md	Cursor	harness/pstack/claude-code/skills/principle-type-system-discipline/SKILL.md	Pi/OMP/Codex 어댑터 설계 · engineering-principle	원칙 위반/충족 쌍의 fixture와 채택한 판단 확인
+pstack	skill	recall	pstack/skills/recall/SKILL.md	Cursor	harness/pstack/claude-code/skills/recall/SKILL.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	skill	reflect	pstack/skills/reflect/SKILL.md	Cursor	harness/pstack/claude-code/skills/reflect/SKILL.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+pstack	skill	setup-pstack	pstack/skills/setup-pstack/SKILL.md	Cursor	harness/pstack/claude-code/skills/setup-pstack/SKILL.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	skill	sharpen	pstack/skills/sharpen/SKILL.md	Cursor	harness/pstack/claude-code/skills/sharpen/SKILL.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	skill	show-me-your-work	pstack/skills/show-me-your-work/SKILL.md	Cursor	harness/pstack/claude-code/skills/show-me-your-work/SKILL.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	skill	statechart	pstack/skills/statechart/SKILL.md	Cursor	harness/pstack/claude-code/skills/statechart/SKILL.md	Pi/OMP/Codex 어댑터 설계 · design	요구/설계 문서·입력 제약·종료 조건을 비교
+pstack	skill	swarm	pstack/skills/swarm/SKILL.md	Cursor	harness/pstack/claude-code/skills/swarm/SKILL.md	Pi/OMP/Codex 어댑터 설계 · orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+pstack	skill	tdd	pstack/skills/tdd/SKILL.md	Cursor	harness/pstack/claude-code/skills/tdd/SKILL.md	Pi/OMP/Codex 어댑터 설계 · verification	고정 입력/룰·독립 검증·실패 반례를 보관
+pstack	skill	teach	pstack/skills/teach/SKILL.md	Cursor	harness/pstack/claude-code/skills/teach/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	technical-writing	pstack/skills/technical-writing/SKILL.md	Cursor	harness/pstack/claude-code/skills/technical-writing/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	typescript-best-practices	pstack/skills/typescript-best-practices/SKILL.md	Cursor	harness/pstack/claude-code/skills/typescript-best-practices/SKILL.md	Pi/OMP/Codex 어댑터 설계 · development	격리 worktree 변경과 재현/회귀 증거 확인
+pstack	skill	unslop	pstack/skills/unslop/SKILL.md	Cursor	harness/pstack/claude-code/skills/unslop/SKILL.md	Pi/OMP/Codex 어댑터 설계 · writing	한·영 산출물의 출처·수치와 채택 diff 대조
+pstack	skill	why	pstack/skills/why/SKILL.md	Cursor	harness/pstack/claude-code/skills/why/SKILL.md	Pi/OMP/Codex 어댑터 설계 · session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	gstack	SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	autoplan	autoplan/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	benchmark-models	benchmark-models/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	benchmark	benchmark/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	browse	browse/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	hackernews-frontpage	browser-skills/hackernews-frontpage/SKILL.md	gstack browser		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	canary	canary/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	captain	captain/SKILL.md	gstack		orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+gstack	skill-manifest	gstack	capy/skill/gstack/SKILL.md	Capy		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	careful	careful/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	codex	codex/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	context-restore	context-restore/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	context-save	context-save/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	cso	cso/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	design-consultation	design-consultation/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	design-html	design-html/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	design-motion	design-motion/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	design-review	design-review/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	design-shotgun	design-shotgun/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	deslop-shared-libs	deslop-shared-libs/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	devex-review	devex-review/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	diagram	diagram/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	document-generate	document-generate/SKILL.md	gstack		writing	한·영 산출물의 출처·수치와 채택 diff 대조
+gstack	skill-manifest	document-release	document-release/SKILL.md	gstack		writing	한·영 산출물의 출처·수치와 채택 diff 대조
+gstack	skill-manifest	eval-plan	eval-plan/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	freeze	freeze/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	gstack-upgrade	gstack-upgrade/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	guard	guard/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	health	health/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	investigate	investigate/SKILL.md	gstack		discovery	원자료 접근·미접근·채택/기각 근거 대조
+gstack	skill-manifest	ios-clean	ios-clean/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	ios-design-review	ios-design-review/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	ios-fix	ios-fix/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	ios-qa	ios-qa/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	ios-sync	ios-sync/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	land-and-deploy	land-and-deploy/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	landing-report	landing-report/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	learn	learn/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	make-pdf	make-pdf/SKILL.md	gstack		writing	한·영 산출물의 출처·수치와 채택 diff 대조
+gstack	skill-manifest	modernize	modernize/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	office-hours	office-hours/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	open-gstack-browser	open-gstack-browser/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	gstack-openclaw-ceo-review	openclaw/skills/gstack-openclaw-ceo-review/SKILL.md	OpenClaw		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	gstack-openclaw-investigate	openclaw/skills/gstack-openclaw-investigate/SKILL.md	OpenClaw		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	gstack-openclaw-office-hours	openclaw/skills/gstack-openclaw-office-hours/SKILL.md	OpenClaw		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	gstack-openclaw-retro	openclaw/skills/gstack-openclaw-retro/SKILL.md	OpenClaw		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	pair-agent	pair-agent/SKILL.md	gstack		orchestration	분배·재개·중단·중복 동작·역할별 도구 검증
+gstack	skill-manifest	plan-ceo-review	plan-ceo-review/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	plan-design-review	plan-design-review/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	plan-devex-review	plan-devex-review/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	plan-eng-review	plan-eng-review/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	plan-tune	plan-tune/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	qa-only	qa-only/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	qa	qa/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	retro	retro/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	review	review/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	scrape	scrape/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	setup-browser-cookies	setup-browser-cookies/SKILL.md	gstack		browser	격리 브라우저의 사용자 흐름·화면·근거 대조
+gstack	skill-manifest	setup-deploy	setup-deploy/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	setup-gbrain	setup-gbrain/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	ship	ship/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	skillify	skillify/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인
+gstack	skill-manifest	spec	spec/SKILL.md	gstack		design	요구/설계 문서·입력 제약·종료 조건을 비교
+gstack	skill-manifest	sync-gbrain	sync-gbrain/SKILL.md	gstack		session	요약/인계/결정에서 원문 및 현재 task를 복구
+gstack	skill-manifest	test-audit	test-audit/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	test-fixture	alpha	test/fixtures/context-bill/tree-a/alpha/SKILL.md	test fixture		source-fixture	실행용 명령 등록 제외·원본 경로와 해시 검증
+gstack	test-fixture	beta	test/fixtures/context-bill/tree-a/beta/SKILL.md	test fixture		source-fixture	실행용 명령 등록 제외·원본 경로와 해시 검증
+gstack	skill-manifest	ubicloud	ubicloud/SKILL.md	gstack		host-integration	해당 호스트의 입력·출력·권한 및 영수증 대조
+gstack	skill-manifest	unfreeze	unfreeze/SKILL.md	gstack		release	권한·체크 결과·이중 실행/배포·복구 확인
+gstack	skill-manifest	verify	verify/SKILL.md	gstack		verification	고정 입력/룰·독립 검증·실패 반례를 보관
+gstack	skill-manifest	write-skill	write-skill/SKILL.md	gstack		development	격리 worktree 변경과 재현/회귀 증거 확인

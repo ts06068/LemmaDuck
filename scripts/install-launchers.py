@@ -1,0 +1,47 @@
+#!/usr/bin/env python3
+"""Install dedicated launchers/config. Never replace existing editor or shell config."""
+from pathlib import Path
+import datetime
+import json
+import re
+import shlex
+import shutil
+from install_paths import DATA_ROOT, STATE_ROOT, INSTALL_HOME, NVIM_APPNAME
+
+repo = Path(__file__).resolve().parents[1]
+root = DATA_ROOT
+bin_dir = root / 'bin'
+manifest_path = root / 'install-manifest.json'
+manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {'created': [], 'repo': str(repo), 'backups': []}
+manifest['repo'] = str(repo)
+def owned_write(path, text):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if path.exists() and str(path) not in manifest['created']:
+        backup = path.with_name(path.name + '.before-lemmaduck-' + datetime.datetime.now().strftime('%Y%m%d%H%M%S'))
+        shutil.copy2(path, backup)
+        manifest['backups'].append({'path': str(path), 'backup': str(backup)})
+    path.write_text(text)
+    if str(path) not in manifest['created']: manifest['created'].append(str(path))
+    manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
+
+environment = ''.join('export ' + name + '=' + shlex.quote(str(value)) + '\n' for name, value in [('LEMMADUCK_INSTALL_HOME', INSTALL_HOME), ('LEMMADUCK_DATA_DIR', DATA_ROOT), ('LEMMADUCK_STATE_DIR', STATE_ROOT)])
+editor = '#!/bin/sh\n' + environment + ''.join('export ' + name + '=' + shlex.quote(str(INSTALL_HOME / path)) + '\n' for name, path in [('XDG_DATA_HOME', '.local/share'), ('XDG_STATE_HOME', '.local/state'), ('XDG_CACHE_HOME', '.cache')]) + 'export XDG_CONFIG_HOME=' + shlex.quote(str(INSTALL_HOME / '.config')) + '\nexport NVIM_APPNAME=' + shlex.quote(NVIM_APPNAME) + '\nexport PATH=' + shlex.quote(str(bin_dir)) + ':"$PATH"\nexport CC=' + shlex.quote(str(bin_dir / 'cc')) + '\nexec ' + shlex.quote(str(bin_dir / 'nvim')) + ' "$@"\n'
+for dest in [bin_dir / 'lemmaduck-edit', INSTALL_HOME / '.local/bin/lemmaduck-edit']:
+    owned_write(dest, editor)
+    dest.chmod(0o755)
+editor_config = INSTALL_HOME / '.config' / NVIM_APPNAME
+owned_write(editor_config / 'init.lua', (repo / 'config/nvim/init.lua').read_text())
+for source in (repo / 'config/nvim/lua').rglob('*.lua'):
+    owned_write(editor_config / 'lua' / source.relative_to(repo / 'config/nvim/lua'), source.read_text())
+if (repo / 'config/nvim/lazy-lock.json').exists():
+    owned_write(editor_config / 'lazy-lock.json', (repo / 'config/nvim/lazy-lock.json').read_text())
+# Preserve key bindings in a harness-specific copy. Set this only in the file:
+# Zellij 0.45.1's CLI boolean merge uses XOR, so also passing true toggles it off.
+zellij_source = INSTALL_HOME / '.config/zellij/config.kdl'
+zellij_config = zellij_source.read_text() if zellij_source.exists() else ''
+zellij_config = re.sub(r'(?m)^\s*simplified_ui\s+(?:true|false)[^\n]*$', '', zellij_config)
+zellij_config = re.sub(r'(?m)^\s*pane_frames\s+(?:true|false)[^\n]*$', '', zellij_config)
+owned_write(root / 'config/zellij.kdl', zellij_config.rstrip() + '\n\nsimplified_ui false\npane_frames false\n')
+manifest_path.write_text(json.dumps(manifest, indent=2) + '\n')
+print('Installed the LemmaDuck editor. Launch with lemmaduck-edit.')
+print('Manifest:', manifest_path)

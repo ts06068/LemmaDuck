@@ -1,0 +1,649 @@
+{
+  "schema": "lemmaduck.design.v1",
+  "as_of": "2026-11-01",
+  "repository": "ts06068/lemmaduck",
+  "cli": "lemmaduck",
+  "status": "design_contract",
+  "modules": [
+    {
+      "id": "bootstrap",
+      "area": "공통",
+      "title": "원클릭 설치와 버전 복원",
+      "capabilities": [
+        "OS·CPU·망 탐지",
+        "고정 릴리스·체크섬",
+        "사용자 공간 설치",
+        "필수 런타임과 full 구성 등록",
+        "상태 점검·롤백",
+        "폐쇄망 번들 반입"
+      ],
+      "acceptance": "깨끗한 호스트 설치, 두 번째 실행 무변경, 실패 후 이전 버전 복귀"
+    },
+    {
+      "id": "surface",
+      "area": "공통",
+      "title": "기기별 에이전트 작업대",
+      "capabilities": [
+        "Herdr App·herdr-core·SSH",
+        "Herdr TUI",
+        "Warp·외부 에이전트 터미널",
+        "Surface ARM64 호스트 접속",
+        "Galaxy Tab 인증 브라우저·Pi RPC 게이트웨이",
+        "VS Code 프로젝트·diff",
+        "선택 Zellij·Neovim/LazyVim·VS Code Webview·cmux(macOS)"
+      ],
+      "acceptance": "동일 task_id를 기기 간 이어 열고 산출물·상태를 복원"
+    },
+    {
+      "id": "runtime",
+      "area": "공통",
+      "title": "모델과 하네스 선택",
+      "capabilities": [
+        "Pi TypeScript SDK·extensions·RPC",
+        "OMP 별도 하네스",
+        "ChatGPT/Codex 구독",
+        "Claude Code/Agent SDK 브리지",
+        "Gemini/Antigravity ACP",
+        "등록한 API·Ollama·vLLM",
+        "기능 협상·비용 경계"
+      ],
+      "acceptance": "구독 한도 도달 시 정지·보존, 명시 선택 후 인계, 미보고 사용량 null"
+    },
+    {
+      "id": "state",
+      "area": "공통",
+      "title": "세션·프로젝트 상태",
+      "capabilities": [
+        "/task new·/switch·/handoff·/review·/usage",
+        "태스크·실행·시도 ID",
+        "체크포인트·취소·재개·fork",
+        "이벤트 저널·SQLite 인덱스",
+        "원본 종료 코드·아티팩트 참조"
+      ],
+      "acceptance": "프로세스 강제 종료·클라이언트 재접속 뒤 같은 작업을 중복 실행하지 않음"
+    },
+    {
+      "id": "context",
+      "area": "공통",
+      "title": "문맥과 기억",
+      "capabilities": [
+        "AGENTS.md·호스트별 지침",
+        "작업 범위·입력 스냅샷",
+        "계층별 기억·보존기간",
+        "문맥 컴파일러·예산",
+        "FTS/BM25·임베딩·RAG·재정렬",
+        "요약·압축·원문 포인터",
+        "사실·가설·결정 분리"
+      ],
+      "acceptance": "교차 계정 검색 차단, 요약에서 원문의 문서·페이지·버전 복원"
+    },
+    {
+      "id": "tools",
+      "area": "공통",
+      "title": "도구·권한·실행 격리",
+      "capabilities": [
+        "MCP tools/resources/prompts",
+        "ACP·Pi RPC",
+        "형식 검증·구조화 출력",
+        "관리형 shell·파일·SQL·브라우저",
+        "work/review 모드",
+        "외부 텍스트 명령 격리",
+        "OS sandbox·네트워크 정책",
+        "감사기록"
+      ],
+      "acceptance": "읽기 전용 리뷰에서 변이 차단, symlink 탈출·외부 문서 내 지시 우회 방어"
+    },
+    {
+      "id": "orchestrate",
+      "area": "공통",
+      "title": "분배·검증·인계",
+      "capabilities": [
+        "planner·executor·독립 reviewer",
+        "worktree 격리",
+        "예산 내 fan-out/fan-in·swarm·arena",
+        "작업 큐·소유권·잠금",
+        "timeout·backoff·취소",
+        "전제 변경 기록"
+      ],
+      "acceptance": "동시 실행 시 한 변경의 담당자·수용 근거·충돌 복구가 식별됨"
+    },
+    {
+      "id": "pstack",
+      "area": "개발·연구",
+      "title": "pstack 전체",
+      "capabilities": [
+        "Cursor 원본 전체",
+        "공식 Claude Code 변환 전체",
+        "58개 기본 스킬·24개 원칙 포함",
+        "23개 플레이북",
+        "에이전트 2개",
+        "Benny 자동화·부속 3개 스킬",
+        "자료·스크립트·템플릿·라이선스",
+        "Pi/OMP/Codex 동작별 어댑터"
+      ],
+      "acceptance": "원본 및 공식 harness 1,133개 경로+보조 4개가 lock과 일치, 호스트별 대응표와 실행 증거"
+    },
+    {
+      "id": "gstack",
+      "area": "개발·운영",
+      "title": "gstack 전체",
+      "capabilities": [
+        "garrytan/gstack 전체 트리",
+        "제품 기획·엔지니어링·디자인 검토",
+        "브라우저 QA·visual regression",
+        "review·ship·canary·retro",
+        "모든 디렉터리·실행 도구·테스트·호스트 자료",
+        "pstack과 이름공간 분리"
+      ],
+      "acceptance": "전체 4,528개 경로의 Git 객체·모드 검증, 역할/호스트별 대표 시나리오"
+    },
+    {
+      "id": "discover",
+      "area": "연구·개발",
+      "title": "문헌·도구 탐색",
+      "capabilities": [
+        "질문에서 속성·반증 쿼리 생성",
+        "표준·신생·장기 유지·인접 분야",
+        "PubMed·OpenAlex·Crossref·arXiv",
+        "GitHub·HN·CRAN Task Views·Repology",
+        "SearXNG·Marginalia·pi-web-providers·pi-web-access",
+        "Co-STORM식 미사용 근거 질문",
+        "중복·배제·원문·날짜 기록"
+      ],
+      "acceptance": "독립 탐색과 사용자 제안 비교, 미발견/미접근 구분, 실제 설치·재현으로 채택 판정"
+    },
+    {
+      "id": "abduce",
+      "area": "연구",
+      "title": "가설 생성·기각·분기",
+      "capabilities": [
+        "관찰과 예상의 차이",
+        "선호 가설 지연 공개",
+        "기전이 다른 경쟁 가설과 대조 설명",
+        "구별 가능한 예측·최소 실험",
+        "반례 탐색·통계 또는 형식 검증",
+        "결정·실패·미결 원장"
+      ],
+      "acceptance": "서로 다른 예측·데이터·기각 조건을 적고 어느 가설도 가려지지 않은 상태를 표현"
+    },
+    {
+      "id": "evidence",
+      "area": "연구·업무",
+      "title": "주장과 근거 및 재현",
+      "capabilities": [
+        "claim_id·run_id·source_id",
+        "표·그림·셀·문장 양방향 연결",
+        "원문 위치·DOI·commit·코호트 버전",
+        "계보 그래프·무효화·재빌드",
+        "도구 표준출력·종료코드·해시",
+        "반출 기준"
+      ],
+      "acceptance": "상류 결과 변경 시 영향받는 원고 및 답신을 찾고 같은 입력에서 표를 재생성"
+    },
+    {
+      "id": "clinical",
+      "area": "연구",
+      "title": "OMOP·의료데이터 프로젝트",
+      "capabilities": [
+        "SCHERA 목표 지향 질의·검증 SQL",
+        "TabEHR/MedFM 기관·시간 외부검증",
+        "ocular GVHD 예측·보정",
+        "병원별 CDM·concept set·코호트·단위·정보누출 점검",
+        "구조·비구조 종단 표현",
+        "OHDSI HADES·R·SQL·Python"
+      ],
+      "acceptance": "승인한 합성/로컬 데이터에서 정의·시점·분모·불확실성을 추적하고 기관 단위 검증 분리"
+    },
+    {
+      "id": "federated",
+      "area": "연구·인프라",
+      "title": "분산 분석·폐쇄망",
+      "capabilities": [
+        "federated propensity score",
+        "Cyclops·FeatureExtraction·DatabaseConnector·SqlRender",
+        "공변량 균형·가중치·overlap",
+        "Windows Server 2022 네이티브 R/ODBC/JDBC별 실행 계약",
+        "승인 집계 반출·클라우드 금지"
+      ],
+      "acceptance": "현장 호스트와 드라이버로 쿼리·결과 검증, 반출 승인 없는 행·식별자·작은 셀 차단"
+    },
+    {
+      "id": "audit",
+      "area": "연구",
+      "title": "원고 검증·편집국 심사",
+      "capabilities": [
+        "RECAP claim_verification·document_audit",
+        "PDF·보충자료·표/그림 좌표·OCR 불확실성",
+        "KCJ 로컬 심사",
+        "PICO/SPIDER·보고지침·CHAMP",
+        "editor·statistical·peer reviewer 역할",
+        "2종 보고서·수신자별 권한",
+        "연구용 3단계 pragmatic RCT 설계"
+      ],
+      "acceptance": "원문 위치·근거·미결을 포함한 결과와 통계 검토 작성, 저자/논문 단위 시험 분리"
+    },
+    {
+      "id": "paper",
+      "area": "연구",
+      "title": "논문화·투고 자료",
+      "capabilities": [
+        "프로토콜·사전 명시·분석계획",
+        "uv·renv·SQL·Jupyter·Quarto·Pandoc·LaTeX/Lean(해당 시)",
+        "인용·DOI·BibTeX/CSL",
+        "표·Figure·캡션",
+        "원고·보충·rebuttal·정정",
+        "Word/PDF/TeX·저널 규격"
+      ],
+      "acceptance": "깨끗한 환경에서 원고·표·그림 재생성, 근거 없는 수치 및 깨진 참조 검출"
+    },
+    {
+      "id": "voice",
+      "area": "업무·연구",
+      "title": "한·영 문체와 퇴고",
+      "capabilities": [
+        "승인한 본인 글·교정 diff",
+        "ko/en × 메일·원고·절차·보고/공지",
+        "technical-writing·unslop",
+        "ASD-STE100 선택 적용",
+        "숫자·부정·조건·불확실성·저자 의도 보존",
+        "수정 근거 표시"
+      ],
+      "acceptance": "가려진 본인 글과 장르별 비교, 중대한 수치·인과·조건 변경은 0건"
+    },
+    {
+      "id": "assistant",
+      "area": "업무·개인",
+      "title": "Dot형 상시 비서",
+      "capabilities": [
+        "프로젝트 수신함·분류·요청 추출",
+        "회의·일정·리마인더",
+        "문체 맞춘 초안·첨부·후속조치",
+        "Linear/GitHub 이슈·파일 갱신",
+        "채널/메일 발송·일정 초대",
+        "예약·웹훅·poll·중복 제거·실행 영수증"
+      ],
+      "acceptance": "재전달 이벤트에서 같은 답신·이슈가 하나, 다른 계정으로 초안/출처가 넘어가지 않음"
+    },
+    {
+      "id": "connect",
+      "area": "업무·개인",
+      "title": "플랫폼 연결",
+      "capabilities": [
+        "Microsoft Graph Teams/Outlook/OneDrive/SharePoint/Calendar",
+        "Slack OAuth/MCP",
+        "Linear OAuth/MCP",
+        "GitHub App/MCP",
+        "Gmail/Google Drive/Docs/Calendar 계정별 OAuth",
+        "Google·Naver 공개검색",
+        "YouTube API",
+        "Naver/Daum IMAP·SMTP"
+      ],
+      "acceptance": "기능 탐지 결과와 계정/권한을 표시, 검색·초안·변경·발송을 각각 검증"
+    },
+    {
+      "id": "dev",
+      "area": "개발",
+      "title": "소프트웨어·웹·인프라 개발",
+      "capabilities": [
+        "이슈·계획·설계·diff",
+        "worktree·TDD·형/통합/계약 테스트",
+        "Playwright 브라우저·접근성·화면 회귀",
+        "CI·리뷰·릴리스·롤백",
+        "SSH·CPU/GPU job·Docker·Terraform plan",
+        "승인한 AWS/GCP/Azure 환경"
+      ],
+      "acceptance": "이슈에서 재현·수정·검증 PR까지 시연, 배포 결과와 되돌리기 경로 연결"
+    },
+    {
+      "id": "agentlab",
+      "area": "개발·연구",
+      "title": "에이전트 자체 개발",
+      "capabilities": [
+        "상태기계·필요 시 LangGraph",
+        "context compiler·동작 선택·검증·중단",
+        "typed tools/skills·MCP 서버·어댑터",
+        "단일·다중·전문화 에이전트",
+        "OpenClaw·Hermes 비교 프로필",
+        "모델 교체·trace replay"
+      ],
+      "acceptance": "동일 입력/도구 권한에서 모델·하네스·라우팅 중 하나만 바꿔 비교"
+    },
+    {
+      "id": "optimize",
+      "area": "연구·개발",
+      "title": "하네스 개선 실험",
+      "capabilities": [
+        "GEPA 프롬프트·Pareto 후보",
+        "RRSI 하네스 편집·복잡도 제어",
+        "Dream-RSI 탐색 정책 재생",
+        "OPRO·ProTeGi·Promptbreeder 등 기준선",
+        "FP/FN 분석·ablation·비용/품질",
+        "새 모델·프롬프트의 실제 재실행"
+      ],
+      "acceptance": "개발 세트에서 탐색, 봉인 평가·재실행·승격/기각 기록, 운영 반영 분리"
+    },
+    {
+      "id": "eval",
+      "area": "연구·운영",
+      "title": "평가·회귀",
+      "capabilities": [
+        "programming/research/writing 기존 조건 비교",
+        "9 task × 2 조건 × 5회",
+        "블라인드·실행 순서 분산·쌍별 분석",
+        "품질 비열등성·사용량·시간",
+        "외부 기관·시간·논문 단위 고정 holdout",
+        "회귀·오류 유형·근거 정확성"
+      ],
+      "acceptance": "전 실행 경계 기록, 미확인 토큰 비용을 0으로 간주하지 않고 이질성·반복 불확실성 보고"
+    },
+    {
+      "id": "operate",
+      "area": "공통",
+      "title": "운영·관찰·복구",
+      "capabilities": [
+        "열람/초안/행위 구분",
+        "재시도·idempotency·영수증",
+        "오류·중단·unknown 조정",
+        "비밀 저장소·scope·프로젝트별 암호화",
+        "보존기간·백업·복구·선택 telemetry",
+        "공급망 pin·checksum·SBOM"
+      ],
+      "acceptance": "응답 유실 후 실제 부작용 확인, 중복 발송·무단 외부 로그 유출·이중 과금 억제"
+    },
+    {
+      "id": "resume",
+      "area": "공통",
+      "title": "작업 재개 및 재현",
+      "capabilities": [
+        "프로젝트별 작업 ID와 실행 저널",
+        "인계 시점의 입력·결정·검사 보존",
+        "동일 호스트에서 중단 작업 재개"
+      ],
+      "acceptance": "재시작한 워커에서 같은 작업 ID·결정·산출물 해시를 확인"
+    }
+  ],
+  "surfaces": [
+    {
+      "id": "windows-x64",
+      "device": "Windows 11 x64",
+      "workbench": "Herdr App / Warp",
+      "execution": "WSL2 Ubuntu x64 또는 SSH Linux",
+      "release_test": "실제 클린 PC"
+    },
+    {
+      "id": "surface-arm64",
+      "device": "Surface Pro 11 / Windows ARM64",
+      "workbench": "Warp ARM64",
+      "execution": "SSH Linux x64",
+      "release_test": "실제 ARM 기기에서 재접속"
+    },
+    {
+      "id": "android-tablet",
+      "device": "Galaxy Tab S11 Ultra",
+      "workbench": "인증 브라우저 UI",
+      "execution": "SSH 터널 또는 사설 HTTPS 프록시 뒤 Pi RPC 호스트",
+      "release_test": "동일 task·업로드·재접속"
+    },
+    {
+      "id": "linux-remote",
+      "device": "Ubuntu x86_64 / GPU",
+      "workbench": "Herdr SSH / herdr TUI / Warp SSH",
+      "execution": "Pi/OMP와 승인한 job",
+      "release_test": "SSH 끊김·GPU job 복구"
+    },
+    {
+      "id": "restricted-windows",
+      "device": "폐쇄망 Windows Server 2022",
+      "workbench": "관리자 승인 로컬 작업 UI/Windows runner",
+      "execution": "네이티브 R/Python/SQL·로컬 모델과 캐시",
+      "release_test": "인터넷 차단 조건에서 패키지·드라이버·집계 반출 검증"
+    },
+    {
+      "id": "macos-optional",
+      "device": "macOS",
+      "workbench": "Herdr App / Warp / cmux",
+      "execution": "로컬 또는 SSH",
+      "release_test": "선택 클라이언트 수용시험"
+    }
+  ],
+  "runtimes": [
+    {
+      "id": "chatgpt",
+      "route": "Pi Codex 구독 경로·공식 로그인",
+      "class": "subscription",
+      "boundary": "사용자 선택 모델·싱글 워커 기준"
+    },
+    {
+      "id": "claude",
+      "route": "Claude Code 공식 로그인·허용되는 구독 Agent SDK 브리지",
+      "class": "subscription",
+      "boundary": "개인 플랜/실행환경/계정 조건 확인"
+    },
+    {
+      "id": "gemini",
+      "route": "Antigravity 공식 로그인·ACP",
+      "class": "subscription",
+      "boundary": "ACP 기능·쿼터 확인"
+    },
+    {
+      "id": "omp",
+      "route": "Oh My Pi 독립 실행기",
+      "class": "harness",
+      "boundary": "Pi와 개별 어댑터 호환성 검증"
+    },
+    {
+      "id": "api",
+      "route": "직접 등록한 Responses 또는 호환 endpoint",
+      "class": "opt-in",
+      "boundary": "추가 모델 과금 기본 꺼짐"
+    },
+    {
+      "id": "local",
+      "route": "Ollama/vLLM 등 등록한 로컬 엔드포인트",
+      "class": "local",
+      "boundary": "네트워크 경계·모델 해시·라이선스 확인"
+    },
+    {
+      "id": "host-native",
+      "route": "공식 Codex/Claude Code/Cursor/Warp Agent",
+      "class": "opt-in host route",
+      "boundary": "동일 작업대의 외부 에이전트 터미널과 호스트 서비스 사용을 구분"
+    },
+    {
+      "id": "research-comparators",
+      "route": "OpenClaw·Hermes·단일 상태기계·LangGraph",
+      "class": "isolated experiment",
+      "boundary": "별도 프로필·도구 권한·평가 계약"
+    }
+  ],
+  "connectors": [
+    {
+      "id": "teams",
+      "realm": "work",
+      "transport": "Microsoft Graph / 조직 delegated OAuth",
+      "read": "팀·채널·채팅·스레드",
+      "actions": "허용 채널에 답신/게시",
+      "boundary": "tenant·team/channel·consent"
+    },
+    {
+      "id": "outlook",
+      "realm": "work",
+      "transport": "Microsoft Graph",
+      "read": "메일·스레드·첨부",
+      "actions": "초안·답신·발송",
+      "boundary": "mailbox·draft/send 분리"
+    },
+    {
+      "id": "onedrive-sharepoint",
+      "realm": "work",
+      "transport": "Microsoft Graph",
+      "read": "허용된 드라이브·사이트의 파일·버전",
+      "actions": "수정·저장·공유",
+      "boundary": "사이트·폴더·ACL"
+    },
+    {
+      "id": "ms-calendar",
+      "realm": "work",
+      "transport": "Microsoft Graph",
+      "read": "일정·가용시간",
+      "actions": "일정 생성·초대·수정",
+      "boundary": "캘린더·참석자·시간대"
+    },
+    {
+      "id": "slack",
+      "realm": "work",
+      "transport": "공식 MCP 또는 Slack API / OAuth",
+      "read": "허용 채널·스레드",
+      "actions": "초안 보관·스레드 회신·게시",
+      "boundary": "workspace·channel·scope"
+    },
+    {
+      "id": "linear",
+      "realm": "work",
+      "transport": "공식 MCP 또는 API / OAuth",
+      "read": "이슈·프로젝트·변경 이력",
+      "actions": "이슈 생성·상태·댓글",
+      "boundary": "team·project"
+    },
+    {
+      "id": "github",
+      "realm": "work/personal isolated",
+      "transport": "GitHub App / 공식 MCP",
+      "read": "허용 repo·issue·PR·check",
+      "actions": "issue·PR·review·merge(개별 권한)",
+      "boundary": "owner·repo·branch"
+    },
+    {
+      "id": "gmail",
+      "realm": "work and personal separately",
+      "transport": "Gmail API / OAuth",
+      "read": "메일·스레드·첨부",
+      "actions": "초안·라벨·답신·발송",
+      "boundary": "계정·메일함·scope"
+    },
+    {
+      "id": "google-drive-docs",
+      "realm": "work and personal separately",
+      "transport": "Google Drive/Docs API / OAuth",
+      "read": "폴더·문서·버전",
+      "actions": "문서 생성·수정·공유",
+      "boundary": "계정·drive/file·ACL"
+    },
+    {
+      "id": "google-calendar",
+      "realm": "work and personal separately",
+      "transport": "Google Calendar API / OAuth",
+      "read": "캘린더·이벤트",
+      "actions": "일정·초대·리마인더",
+      "boundary": "계정·캘린더·참석자"
+    },
+    {
+      "id": "youtube",
+      "realm": "personal",
+      "transport": "YouTube Data API / OAuth",
+      "read": "구독·플레이리스트·접근 가능한 메타데이터/자막 또는 본인 제공 자료",
+      "actions": "선택한 목록에 저장(허용 시)",
+      "boundary": "채널 권한·쿼터·허용 자막"
+    },
+    {
+      "id": "google-search",
+      "realm": "public",
+      "transport": "승인한 웹검색 제공자·브라우저",
+      "read": "공개 웹 자료",
+      "actions": "출처 북마크",
+      "boundary": "개인 검색 이력은 별도 제공 자료만"
+    },
+    {
+      "id": "naver-search",
+      "realm": "public",
+      "transport": "Naver Search API",
+      "read": "공개 검색 결과",
+      "actions": "출처 북마크",
+      "boundary": "클라이언트 자격·쿼터"
+    },
+    {
+      "id": "naver-mail",
+      "realm": "personal",
+      "transport": "IMAP/SMTP·앱 비밀번호/계정 설정",
+      "read": "선택 메일함",
+      "actions": "로컬 초안·확인된 SMTP 발송",
+      "boundary": "메일함별 앱 자격"
+    },
+    {
+      "id": "daum-mail",
+      "realm": "personal",
+      "transport": "Daum/Kakao IMAP/SMTP·앱 비밀번호/계정 설정",
+      "read": "선택 메일함",
+      "actions": "로컬 초안·확인된 SMTP 발송",
+      "boundary": "메일함별 앱 자격"
+    }
+  ],
+  "profiles": [
+    "personal",
+    "work",
+    "restricted",
+    "public-research"
+  ],
+  "profile_axes": [
+    "realm / tenant & account",
+    "device & execution host",
+    "network & allowed egress",
+    "data & retention",
+    "selected provider / auth / billing",
+    "effect scope"
+  ],
+  "run_contract": {
+    "required": [
+      "task_id",
+      "run_id",
+      "attempt_id",
+      "project_id",
+      "realm",
+      "mode",
+      "source_input_ids",
+      "policy_version",
+      "code_commit",
+      "runtime_and_model",
+      "prompt_and_tool_versions",
+      "parent_run_ids",
+      "events",
+      "artifacts",
+      "validation",
+      "decision"
+    ],
+    "optional_if_unreported": [
+      "tokens_in",
+      "tokens_out",
+      "cached_tokens",
+      "billable_amount",
+      "provider_observability"
+    ],
+    "status": [
+      "planned",
+      "running",
+      "waiting",
+      "succeeded",
+      "failed",
+      "cancelled",
+      "unknown"
+    ],
+    "decision": [
+      "supported",
+      "rejected",
+      "underdetermined",
+      "superseded"
+    ],
+    "effect": [
+      "read",
+      "draft",
+      "write",
+      "send_publish",
+      "destructive"
+    ]
+  },
+  "references": {
+    "pstack-gstack-full-lock": "locks/upstreams.json",
+    "pstack-and-gstack-skills": "catalog/workflow-index.json",
+    "per_entry_routes": "catalog/workflow-routing.tsv"
+  }
+}

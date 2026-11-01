@@ -1,0 +1,16 @@
+layout {
+    default_tab_template {
+        lemmaduck_tabs size=1 borderless=true
+        children
+        lemmaduck_status size=1 borderless=true
+    }
+    tab name="edit" focus=true {
+        pane command="lemmaduck-edit"
+    }
+    tab name="agent" {
+        pane command="lemmaduck" { args "agent"; }
+    }
+    tab name="run" {
+        pane
+    }
+}

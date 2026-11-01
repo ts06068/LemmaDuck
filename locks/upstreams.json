@@ -1,0 +1,58 @@
+{
+  "schema": 1,
+  "assembled": "2026-11-01",
+  "inventory_columns": [
+    "path",
+    "mode",
+    "git_blob_sha1",
+    "bytes"
+  ],
+  "workflow_sources": {
+    "pstack": {
+      "name": "pstack",
+      "repository": "cursor/plugins",
+      "remote": "https://github.com/cursor/plugins.git",
+      "commit": "c742dd61706fbacc1b95f1a20b7b988cf096ce6c",
+      "root_tree": "dab86ab4f12c5fdc853a28045f25cd1610aa8b6b",
+      "version": "0.15.36",
+      "paths": [
+        "pstack",
+        "harness/pstack",
+        "scripts/check-pstack-docs.mjs",
+        "scripts/generate-pstack-harness-trees.mjs",
+        ".cursor-plugin/marketplace.json",
+        ".claude-plugin/marketplace.json"
+      ],
+      "inventory": "locks/pstack.tsv",
+      "entries": 1137,
+      "subtrees": {
+        "pstack": "4719e1c4b4c43bac85d4206a8b41dd2899769c1c",
+        "harness/pstack": "a38155ce0250f234b4099fbb2dee456741ea5fb1",
+        "harness/pstack/claude-code": "cdbbd4ca5dd2f4ca0eef3294e7b981c0c610d4bb"
+      }
+    },
+    "gstack": {
+      "name": "gstack",
+      "repository": "garrytan/gstack",
+      "remote": "https://github.com/garrytan/gstack.git",
+      "commit": "3f79d816730e8cd3633f31dc20351c0501ad958e",
+      "root_tree": "c3c2542afbc70edf38f68e7472d8b783957c5670",
+      "version": "1.92.10.0",
+      "paths": [
+        "."
+      ],
+      "inventory": "locks/gstack.tsv",
+      "entries": 4528
+    }
+  },
+  "baselines": {
+    "research_example": {
+      "repository": "openai/math",
+      "commit": "4eaee87548250b2682affda7d05d947c05554bae"
+    },
+    "alternate_harness": {
+      "repository": "can1357/oh-my-pi",
+      "commit": "1c291b87e4b889398cc4b8e4ccdfa650b56a0486"
+    }
+  }
+}

@@ -1,0 +1,50 @@
+# Exercises PowerShell control flow with a mocked WSL executable. No WSL is installed.
+$ErrorActionPreference = 'Stop'
+$installer = Join-Path $PSScriptRoot '../scripts/install-windows.ps1'
+$tokens = $null; $errors = $null
+[void][Management.Automation.Language.Parser]::ParseFile($installer, [ref]$tokens, [ref]$errors)
+if ($errors.Count) { throw ($errors | Out-String) }
+$preview = & $installer -DryRun
+if (($preview -join ' ') -notmatch 'WSL2') { throw 'Preview omitted WSL requirement.' }
+$invalidRejected = $false
+try { & $installer -DryRun -Distribution 'Ubuntu;echo invalid' } catch { $invalidRejected = $true }
+if (-not $invalidRejected) { throw 'Distribution input was not validated.' }
+
+$testRoot = Join-Path ([IO.Path]::GetTempPath()) ('lemmaduck-windows-test-' + [guid]::NewGuid().ToString('N'))
+$oldOS = $env:OS; $oldLocal = $env:LOCALAPPDATA
+$global:LemmaDuckInstallerTestCalls = @(); $global:LemmaDuckInstallerTestScenario = 'ready'
+function global:wsl.exe {
+    $global:LemmaDuckInstallerTestCalls += ,@($args)
+    $global:LASTEXITCODE = 0
+    if ($args[0] -eq '--list' -and $args[1] -eq '--quiet') { if ($global:LemmaDuckInstallerTestScenario -ne 'missing') { "Ubuntu-24.04`0" }; return }
+    if ($args[0] -eq '--list') { if ($global:LemmaDuckInstallerTestScenario -eq 'wsl1') { '* Ubuntu-24.04 Running 1' } else { '* Ubuntu-24.04 Running 2' }; return }
+    if ($args -contains 'id') { if ($global:LemmaDuckInstallerTestScenario -eq 'root') { '0' } else { '1000' }; return }
+    if ($args -contains 'uname') { 'x86_64'; return }
+    if ($global:LemmaDuckInstallerTestScenario -eq 'failed-setup' -and ($args -join ' ') -match 'base64 --decode') { $global:LASTEXITCODE = 1 }
+}
+try {
+    $env:OS = 'Windows_NT'; $env:LOCALAPPDATA = $testRoot
+    New-Item -ItemType Directory -Path $testRoot | Out-Null
+    $settings = Join-Path $testRoot 'settings.json'; Set-Content $settings 'EXISTING_USER_SETTINGS'
+    & $installer -SkipFonts
+    $profileFile = Join-Path $testRoot 'Microsoft/Windows Terminal/Fragments/lemmaduck/profiles.json'
+    $profile = Get-Content $profileFile -Raw | ConvertFrom-Json
+    if ($profile.profiles[0].commandline -ne 'wsl.exe --distribution Ubuntu-24.04 --cd ~') { throw 'Incorrect terminal profile command.' }
+    if (-not $profile.profiles[0].useAcrylic -or $profile.profiles[0].opacity -ne 80) { throw 'Missing acrylic settings.' }
+    if ((Get-Content $settings).Trim() -ne 'EXISTING_USER_SETTINGS') { throw 'User terminal settings were modified.' }
+    Remove-Item $profileFile
+    foreach ($case in @('wsl1', 'root', 'failed-setup')) {
+        $global:LemmaDuckInstallerTestScenario = $case; $rejected = $false
+        try { & $installer -SkipFonts } catch { $rejected = $true }
+        if (-not $rejected -or (Test-Path $profileFile)) { throw "Unsafe continuation: $case" }
+    }
+    $global:LemmaDuckInstallerTestScenario = 'missing'; & $installer -SkipFonts
+    if (Test-Path $profileFile) { throw 'Installer claimed completion before Ubuntu user setup.' }
+    if (($global:LemmaDuckInstallerTestCalls | ForEach-Object { $_ -join ' ' }) -match '--shutdown|--unregister|--set-default') { throw 'Installer changed unrelated WSL state.' }
+    Write-Output 'WINDOWS_INSTALLER_FLOW_OK (WSL mocked; no actual Windows/WSL execution)'
+} finally {
+    $env:OS = $oldOS; $env:LOCALAPPDATA = $oldLocal
+    Remove-Item Function:\wsl.exe
+    Remove-Variable LemmaDuckInstallerTestCalls, LemmaDuckInstallerTestScenario -Scope Global
+    Remove-Item $testRoot -Recurse -Force
+}
