@@ -1,5 +1,7 @@
 # LemmaDuck mascot
 
-The README uses a 480 px transparent WebP rendition of an original image generated with OpenAI ImageGen. It is displayed at 176 px. The prompt for this image is preserved below.
+The duck holds the chalk beside `P ⇒ Q`, the step it wants you to explain. The README displays the transparent 480 × 480 WebP at 176 × 176. The source image was made by editing the original LemmaDuck mascot with OpenAI ImageGen.
 
-> An original single mascot for the LemmaDuck open-source-style developer tool, presented as an isolated project mark at the top of a GitHub README. Create a classic cheerful yellow RUBBER BATH DUCK, in Minecraft-style low-resolution 3D voxel pixel art: an oversized cubical head, small shiny square dark eye, a broad flat saturated orange bill, gently stepped chubby body, chunky folded wing, raised tail tucked behind. Three-quarter isometric view facing left so its profile reads immediately. Geometry built from a small deliberate voxel grid, warm honey side planes, restrained square highlights, soft directional light. Make the silhouette bold and legible at 160 pixels, centered, fully visible, 82 percent of a square canvas. Genuine transparent background, artwork works on dark and light themes. Only the rubber duck. No lettering, numbers, logo, scenery, pedestal, props, water, border, external shadows, fine speckles or watermark.
+## Image prompt
+
+> undefined

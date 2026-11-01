@@ -1,10 +1,12 @@
 <p align="center">
-  <img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="LemmaDuck, a yellow voxel rubber duck with an orange bill">
+  <img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="A yellow voxel duck holding chalk and a slate that reads ‘LEMMA’ and ‘P ⇒ Q’">
 </p>
 
 <h1 align="center">LemmaDuck</h1>
 
-LemmaDuck gives a research or development project a persistent task and a choice of agent workers. Open a terminal in Herdr, choose a model, and give it a question. You can hand the work to another model with the inputs, decisions and checks still attached. VS Code can stay open alongside Herdr for editing and reviewing diffs.
+<p align="center"><strong>Talk to the duck. Test your hunch.</strong></p>
+
+LemmaDuck is your lab copilot. Bring it a gap in a proof, a puzzling result, or a failing test. Open a terminal in Herdr, choose a model, and work through the question together. You can hand the task to another model with the inputs, decisions and checks still attached. VS Code can stay open alongside Herdr for editing and reviewing diffs.
 
 The source distribution includes the Pi worker, ChatGPT and Claude subscription routes, Google Antigravity ACP, complete pinned pstack and gstack workflow sources, and an MCP client for accounts you configure. Version **0.4.0** installs from this repository. See [validation](VALIDATION.md) for the checks behind this version and the features that still need a live account or implementation.
 
