@@ -68,3 +68,5 @@ Thumbs.db
 # Release archives are attached to GitHub Releases, never committed
 *.tgz
 /release/
+
+build/

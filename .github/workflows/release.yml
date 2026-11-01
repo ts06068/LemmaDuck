@@ -1,0 +1,30 @@
+name: Release LemmaDuck Base
+on:
+  release:
+    types: [published]
+permissions:
+  contents: write
+jobs:
+  assets:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
+      - run: npm run check && npm run build
+      - name: Build distro-labelled assets
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: python3 scripts/build_release.py --tag "$RELEASE_TAG" --npm
+      - name: Attach verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+        run: gh release upload "$RELEASE_TAG" build/release/*

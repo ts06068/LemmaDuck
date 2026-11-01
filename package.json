@@ -69,6 +69,15 @@
     "scripts/bootstrap.sh",
     "src/",
     "tsconfig.json",
-    "VALIDATION.md"
+    "VALIDATION.md",
+    "distro.json"
+  ],
+  "lemmaduckDistro": "base",
+  "keywords": [
+    "lemmaduck",
+    "distro-base",
+    "research",
+    "agent",
+    "paseo"
   ]
 }

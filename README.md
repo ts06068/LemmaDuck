@@ -1,12 +1,42 @@
-<p align="center">
-  <img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="A yellow voxel duck holding chalk and a slate that reads ‘LEMMA’ and ‘P ⇒ Q’">
-</p>
-
 <h1 align="center">LemmaDuck</h1>
-
 <p align="center"><strong>Talk to the duck. Test your hunch.</strong></p>
 
-LemmaDuck is your lab copilot. Open the same Linux workspace from your desktop or tablet with **Paseo**. Use **Oh My Pi (OMP)** to implement and debug code. For research, manuscript writing, read-only review and assistant work, **Pi** keeps the inputs, decisions and checks together as you change models. VS Code can stay open for project navigation and editing.
+LemmaDuck is your lab copilot, available in three distros. Choose the workspace you
+want; the shared engine handles models, account sign-in, research tasks and project
+connections. Code development uses **OMP**. Research, writing, review and assistant
+work use the managed **Pi** worker.
+
+<table>
+  <tr>
+    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck#getting-started-with-paseo"><img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="LemmaDuck Base: yellow voxel duck with a proof slate"></a></td>
+    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck-emacs"><img src="assets/brand/lemmaduck-emacs.png" width="176" height="176" alt="LemmaDuck Emacs: purple lambda beret and proof slate"></a></td>
+    <td align="center" width="33%"><a href="https://github.com/ts06068/lemmaduck-neovim"><img src="assets/brand/lemmaduck-neovim.png" width="176" height="176" alt="LemmaDuck Neovim: green colon-w cap and proof slate"></a></td>
+  </tr>
+  <tr>
+    <th><a href="https://github.com/ts06068/lemmaduck">Base</a></th>
+    <th><a href="https://github.com/ts06068/lemmaduck-emacs">Emacs</a></th>
+    <th><a href="https://github.com/ts06068/lemmaduck-neovim">Neovim</a></th>
+  </tr>
+  <tr>
+    <td align="center">Paseo desktop / tablet<br>Shared engine · v0.5.0</td>
+    <td align="center">Emacs research workspace<br>Terminal integration · preview</td>
+    <td align="center">Neovim editor workspace<br>Terminal integration · preview</td>
+  </tr>
+  <tr>
+    <td align="center"><a href="#getting-started-with-paseo">Get started</a> · <a href="https://github.com/ts06068/lemmaduck/releases">Releases</a></td>
+    <td align="center"><a href="https://github.com/ts06068/lemmaduck-emacs#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck-emacs/releases">Releases</a></td>
+    <td align="center"><a href="https://github.com/ts06068/lemmaduck-neovim#getting-started">Get started</a> · <a href="https://github.com/ts06068/lemmaduck-neovim/releases">Releases</a></td>
+  </tr>
+</table>
+
+**Start with Base** if you want Paseo on desktop and tablet. VS Code can stay open
+for project navigation and editing. The editor distros connect to the same installed
+engine on the same host and account; they do not need another model subscription.
+Their first preview launches the workers in editor terminals. Native ACP/RPC chat
+buffers and attachment to an already-running Paseo conversation are separate work.
+
+Release names, tags, download filenames and manifests identify the distro.
+See [the distro and package reference](docs/DISTROS.md).
 
 ## Getting started with Paseo
 
@@ -27,7 +57,7 @@ Use **x86-64 Linux**, Git and Python 3.12 or later. Ubuntu 24.04 is a suitable h
 
 ### 2. Install once and connect the client
 
-In the **Linux host shell**, clone this private repository using a GitHub account with access. The example uses GitHub CLI. An authenticated `git clone https://github.com/ts06068/lemmaduck.git` also works. [GitHub CLI](https://cli.github.com/)
+In the **Linux host shell**, clone this repository. The example uses GitHub CLI; `git clone https://github.com/ts06068/lemmaduck.git` also works. [GitHub CLI](https://cli.github.com/)
 
 ```sh
 mkdir -p "$HOME/src"
