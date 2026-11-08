@@ -30,7 +30,7 @@ test("CLI registration requires API opt-in and keeps the three subscription rout
   cli("providers", "remove", "openrouter"); assert.doesNotMatch(cli("providers", "list"), /charges possible/);
 });
 
-test("real Pi uses a registered compatible API and pauses on a quota error without fallback", { timeout: 90000 }, async () => {
+test("real Pi uses a registered compatible API and pauses on a quota error without fallback", { timeout: 120000 }, async () => {
   const root = mkdtempSync(join(tmpdir(), "lemmaduck-provider-rpc-")); const project = join(root, "project"); mkdirSync(project);
   const env = { ...process.env, LEMMADUCK_INSTALL_HOME: root, LEMMADUCK_DATA_DIR: join(root, "data"), LEMMADUCK_STATE_DIR: join(root, "state"), LEMMADUCK_MODEL_FIXTURE_KEY: "synthetic-key", ANTHROPIC_API_KEY: "must-not-reach-subscription-runtime" };
   let count = 0; let quota = false;
@@ -51,7 +51,7 @@ test("real Pi uses a registered compatible API and pauses on a quota error witho
   writeFileSync(config, JSON.stringify({ id: "compatible-test", label: "Fixture", billing: "api", api: "openai-completions", baseUrl: `http://127.0.0.1:${address.port}/v1`, apiKeyEnv: "LEMMADUCK_MODEL_FIXTURE_KEY", models: [{ id: "fixture", contextWindow: 32000, maxTokens: 1024 }] }));
   execFileSync(process.execPath, [cliPath, "providers", "add", config, "--allow-paid-api"], { env, stdio: "pipe" });
   const child = spawn(process.execPath, [cliPath, "agent", project, "--rpc"], { env, stdio: "pipe" });
-  child.stderr.on("data", () => {});
+  let stderr = ""; child.stderr.on("data", chunk => { stderr = (stderr + chunk.toString()).slice(-8192); });
   let seq = 0; let endTurn: (() => void) | undefined;
   const pending = new Map<string, { resolve: (value: any) => void; reject: (e: Error) => void; timer: NodeJS.Timeout }>();
   const reader = createInterface({ input: child.stdout });
@@ -60,8 +60,8 @@ test("real Pi uses a registered compatible API and pauses on a quota error witho
     if (event.type === "response" && pending.has(event.id)) { const p = pending.get(event.id)!; pending.delete(event.id); clearTimeout(p.timer); event.success ? p.resolve(event.data) : p.reject(new Error(event.error)); }
     if (event.type === "agent_end") endTurn?.();
   });
-  const request = (type: string, extra = {}): Promise<any> => new Promise((resolve, reject) => {
-    const id = String(++seq); const timer = setTimeout(() => { pending.delete(id); reject(new Error(`RPC timed out: ${type}`)); }, 40000);
+  const request = (type: string, extra = {}, timeoutMs = 40000): Promise<any> => new Promise((resolve, reject) => {
+    const id = String(++seq); const timer = setTimeout(() => { pending.delete(id); reject(new Error(`RPC timed out: ${type}; ${stderr}`)); }, timeoutMs);
     pending.set(id, { resolve, reject, timer }); child.stdin.write(JSON.stringify({ id, type, ...extra }) + "\n");
   });
   const turn = async () => {
@@ -71,7 +71,8 @@ test("real Pi uses a registered compatible API and pauses on a quota error witho
     finally { clearTimeout(timer!); endTurn = undefined; }
   };
   try {
-    await request("get_commands"); await request("prompt", { message: "/switch compatible-test" });
+    // Cold worker imports use a separate readiness budget; interaction limits stay unchanged.
+    await request("get_commands", {}, 80000); await request("prompt", { message: "/switch compatible-test" });
     assert.equal((await request("get_state")).model.provider, "compatible-test");
     await turn(); assert.equal(count, 1);
     assert.match(JSON.stringify(await request("get_messages")), /COMPATIBLE_FIXTURE_OK/);

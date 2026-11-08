@@ -1,3 +1,4 @@
+import { researchToolDefinitions } from "./research-tools.js";
 import { packageVersion } from "./paths.js";
 import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
@@ -37,10 +38,11 @@ export async function startGeminiTools(store: TaskStore, options: {
   const shell = await createManagedShell(store);
   const tools = new Map([...createReadOnlyTools(store.project), ...(options.review ? [] : createCodingTools(store.project))].map(tool => [tool.name, tool]));
   for (const tool of connectionToolDefinitions(store, { review: () => options.review, approve: (detail, signal) => options.approve(detail, signal || lifecycle.signal) })) tools.set(tool.name, tool);
+  for (const tool of researchToolDefinitions(store, () => options.review)) if (!options.review || tool.name === "inspect_research") tools.set(tool.name, tool);
   tools.set("inspect_vcs", vcsTool(store.project));
   const advertised = [...taskTools, ...[...tools.values()].map(tool => ({
     name: tool.name, description: tool.name === "bash" ? shell.definition.description : tool.description, inputSchema: tool.parameters,
-    annotations: { readOnlyHint: ["read", "grep", "find", "ls", "inspect_vcs", "list_connections", "list_connection_tools"].includes(tool.name), openWorldHint: tool.name === "bash" },
+    annotations: { readOnlyHint: ["read", "grep", "find", "ls", "inspect_vcs", "list_connections", "list_connection_tools", "inspect_research"].includes(tool.name), openWorldHint: tool.name === "bash" },
   }))];
   const mcp = new Server({ name: "lemmaduck", version: packageVersion }, { capabilities: { tools: {} } });
   mcp.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: advertised }));
@@ -89,7 +91,7 @@ export async function startGeminiTools(store: TaskStore, options: {
       if (captured) return { content: captured.content, isError: captured.isError };
       const text = String(error);
       if (!store.task.operations.some(op => op.id === id)) store.beginOperation(id, name);
-      const interrupted = executing && signal.aborted && ["bash", "write", "edit"].includes(name);
+      const interrupted = executing && signal.aborted && ["bash", "write", "edit", "run_research_experiment"].includes(name);
       store.endOperation(id, { status: interrupted ? "unknown" : "failed", terminationReason: interrupted ? "cancelled" : !executing ? "not_started" : undefined }, text);
       const artifact = store.task.operations.find(op => op.id === id)!.artifactId!;
       return { isError: true, content: [{ type: "text", text: Buffer.byteLength(text) > RESULT_BYTES ? resultEnvelope(text, artifact, interrupted ? "unknown" : "failed") : text }] };

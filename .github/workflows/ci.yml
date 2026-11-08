@@ -13,6 +13,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -101,3 +102,36 @@ jobs:
       - name: Check Neovim integration
         if: matrix.distro == 'neovim'
         run: nvim --headless -u ./init.lua -c "luafile tests/editor.lua"
+
+  observational-medicine:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
+      - run: npm run build
+      - name: Install the hash-locked statistical environment
+        run: python -m pip install --require-hashes -r examples/observational-medicine/requirements.lock
+      - name: Test independent medical adapters on generated observational data
+        run: LEMMADUCK_TEST_MEDICAL_PYTHON="$(command -v python)" node --import tsx --test tests/research-medical.test.ts
+      - name: Reproduce the pinned public observational study
+        run: |
+          python duck init "$RUNNER_TEMP/medical-study" --kind observational
+          python "$RUNNER_TEMP/medical-study/prepare.py"
+          python duck research "$RUNNER_TEMP/medical-study" medical-demo > "$RUNNER_TEMP/medical-study-result.json"
+          python - "$RUNNER_TEMP/medical-study-result.json" <<'PY'
+          import json, sys
+          result = json.load(open(sys.argv[1]))
+          assert result['run']['data']['status'] == 'verified', result['run']['data']
+          assert result['run']['data']['measurement']['metrics']['complete_cases'] == 1566
+          assert result['identification'].startswith('association only')
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: observational-study-reproduction
+          path: ${{ runner.temp }}/medical-study-result.json

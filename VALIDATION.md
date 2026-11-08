@@ -1,3 +1,40 @@
+# Research inquiry implementation validation
+
+Source branch update, November 9, 2026 (Asia/Seoul). The implemented research lifecycle,
+commands, experiment/verifier contract, and limits are documented in
+[RESEARCH.md](docs/RESEARCH.md) and [the milestone map](docs/RESEARCH_MILESTONES.md).
+
+The local public-CLI inquiry exercise executed Python analysis and an independent
+Decimal verifier on frozen synthetic development and transfer inputs. Observed error
+reductions were 340 and 144 synthetic units. It recorded a bounded claim, explicitly
+synthetic feedback, a domain rule, and a reusable method. The public paired-evaluator
+exercise ran eight deterministic-control trials, all correct, with a paired difference
+of zero. This is harness validation, not measured scientific benefit.
+
+Local TypeScript compilation passed. Python launcher/package checks passed all
+12 tests; the two editor Python suites passed four tests each. The complete local Node run passed 75 of 76 tests with no skips; one provider worker
+missed its 40-second cold-start budget. After separating readiness from interaction
+timeouts, the final focused suite passed all 25 tests, including that provider check,
+quota stopping, parent provenance, scientific invariants, and deadline termination.
+The CI result for the final commit is recorded below when available. An installed ChatGPT subscription
+passed the live worker smoke checks. The medical-method comparison completed all
+24 planned live trials and did not demonstrate an inquiry advantage. A user-requested
+clinical epidemiology persona rated every answer; this is self-review, not independent
+domain or clinical validation. The source functionality has not been published as an
+updated npm release. [Full medical evidence](docs/evaluations/2026-11-09-observational-pilot/README.md).
+
+The host installation completed with checksum-verified Node 22.22.1, Python 3.14.4,
+and the locked npm tree. The medical adapters used Python 3.12.13 and hash-locked
+NumPy/Pandas/SciPy/statsmodels dependencies. For the full local Node suite an
+inherited Node-level guard denied non-loopback connections. This is an accidental
+network-access guard for trusted tests, not OS-level containment. CI retains its
+stronger loopback-only network namespace. Native editor execution, pinned Jujutsu,
+and the real OMP protocol checks run in CI.
+
+Historical results below remain attributable to their original recorded versions.
+
+---
+
 # Validation for LemmaDuck 0.5.2
 
 The npm upgrade check installs the prior public Base/editor packages in an

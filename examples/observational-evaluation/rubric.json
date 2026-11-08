@@ -1,0 +1,34 @@
+{
+  "purpose": "Owner-authored methodological component pilot; no clinical effect ground truth or expert validity claim. Fixed before live trials.",
+  "cases": {
+    "timing": {
+      "issues": [
+        "immortal_time",
+        "time_zero"
+      ],
+      "supported_claim": "association-only",
+      "next_check": "align-time-zero"
+    },
+    "overlap": {
+      "issues": [
+        "positivity",
+        "site_confounding"
+      ],
+      "supported_claim": "association-only",
+      "next_check": "check-overlap"
+    },
+    "prediction": {
+      "issues": [
+        "patient_leakage",
+        "temporal_leakage"
+      ],
+      "supported_claim": "prediction-unsupported",
+      "next_check": "rebuild-patient-time-split"
+    },
+    "aligned": {
+      "issues": [],
+      "supported_claim": "conditional-causal",
+      "next_check": "check-assumptions"
+    }
+  }
+}

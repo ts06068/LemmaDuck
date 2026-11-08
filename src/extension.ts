@@ -1,4 +1,4 @@
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { pathToFileURL } from "node:url";
 import { join } from "node:path";
@@ -18,6 +18,7 @@ import { createManagedShell } from "./shell.js";
 import { connectionToolDefinitions, connectionToolNames } from "./connection-tools.js";
 import { classifyRequest, chooseRoute, PROFILES, readRouting, routeInstructions, type Route, type Profile } from "./routing.js";
 import { vcsTool } from "./vcs-tool.js";
+import { RESEARCH_INSTRUCTIONS, researchToolDefinitions, researchToolNames } from "./research-tools.js";
 import { piRoot } from "./dependencies.js";
 
 export default async function extension(pi: ExtensionAPI): Promise<void> {
@@ -38,6 +39,22 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   pi.registerTool(shell.definition);
   pi.registerTool(vcsTool(store.project));
   for (const tool of connectionToolDefinitions(store, { review: () => review, approve: async (detail, signal) => !!current?.hasUI && current.ui.confirm("Apply connector action", detail, { signal }) })) pi.registerTool(tool);
+  const researchState = async () => new (await import("./research.js")).ResearchStore(store);
+  if (store.task.research) new (await import("./research-runner.js")).ResearchRunner(await researchState()).recoverInterrupted();
+  for (const tool of researchToolDefinitions(store, () => review)) pi.registerTool(tool);
+  pi.registerCommand("research", { description: "Show scientific state; /research approve FILE reviews an exact bounded scope", handler: async (args, ctx) => {
+    try {
+      if (!ctx.isIdle()) throw new Error("Wait for the active turn to settle.");
+      const research = await researchState();
+      if (args.trim().startsWith("approve ")) {
+        if (!ctx.hasUI) throw new Error("Scope approval requires an interactive owner review or the owner CLI.");
+        const input = JSON.parse(readFileSync(confinedPath(store.project, args.trim().slice(8).trim()), "utf8"));
+        const plans = Array.isArray(input.experiments) ? input.experiments.map((id: string) => research.get(id)) : [];
+        if (!(await ctx.ui.confirm("Approve exact research scope and frozen adapters", JSON.stringify({ scope: input, plans }, null, 2)))) return;
+        notify(ctx, JSON.stringify(new (await import("./research-runner.js")).ResearchRunner(research).approve(input), null, 2));
+      } else { research.refreshHandoff(); notify(ctx, JSON.stringify(research.summary(), null, 2)); }
+    } catch (error) { notify(ctx, String(error), true); }
+  } });
   let contextAlert = 0;
   const gemini = registerGemini(pi, store, () => current, () => review);
   const notify = (ctx: ExtensionContext, text: string, error = false) => ctx.ui.notify(text, error ? "error" : "info");
@@ -55,7 +72,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (selected !== `${ctx.model.provider}/${ctx.model.id}`) throw new Error("Use /switch to select the model and create a compact handoff first.");
     if (["rate_limited", "needs_reconciliation"].includes(store.task.status)) throw new Error("Task is paused. Inspect /task, then /switch to continue with the provider you choose.");
   };
-  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs"]);
+  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", ...researchToolNames.filter(name => !review || name === "inspect_research")]);
   pi.registerTool({ name: "read_task_artifact", label: "Task artifact", description: taskTools[0]!.description, parameters: artifactParams,
     async execute(_id, args) { return { content: [{ type: "text", text: JSON.stringify(callTaskTool(store.dir, store.task, "read_task_artifact", args)) }], details: {} }; } });
   pi.registerTool({ name: "propose_checkpoint", label: "Propose checkpoint", description: taskTools[1]!.description, parameters: checkpointParams,
@@ -241,9 +258,10 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   pi.on("model_select", async (event, ctx) => { current = ctx; if (!changing && `${event.model.provider}/${event.model.id}` !== selected) { selected = undefined; await gemini.reset(); notify(ctx, "Use /switch before sending input so the handoff starts a fresh session."); } });
   pi.on("input", (_event, ctx) => { current = ctx; try { guard(ctx); return { action: "continue" }; } catch (error) { notify(ctx, String(error), true); return { action: "handled" }; } });
   pi.on("before_provider_request", (_event, ctx) => { try { guard(ctx); verifyClaude(ctx.model?.provider); } catch (error) { ctx.abort(); notify(ctx, String(error), true); } });
-  pi.on("before_agent_start", (event, ctx) => {
+  pi.on("before_agent_start", async (event, ctx) => {
     current = ctx; store.task.status = "running"; store.save(); visual.start();
     if (!store.task.goal) store.task.goal = event.prompt;
+    if (store.task.research) { (await researchState()).refreshHandoff(); packetPending = true; }
     if (!packetPending) return;
     packetPending = false;
     // Gemini supplies this packet to its native session itself. Do not also
@@ -251,12 +269,12 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (ctx.model?.provider === "gemini-cli-acp") { gemini.updatePacket(); return; }
     // The official Claude bridge also receives custom messages. No default-prompt spoofing.
     const mode = review ? "Read-only review: report findings without editing or shell execution." : "Work only on the current task. Record uncertainty and actual validation.";
-    return { message: { customType: "lemmaduck-task", content: `${instructions.packet()}\n${routeInstructions(store.task.route?.profile)}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n${mode}`, display: false } };
+    return { message: { customType: "lemmaduck-task", content: `${instructions.packet()}\n${RESEARCH_INSTRUCTIONS}\n${routeInstructions(store.task.route?.profile)}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n${mode}`, display: false } };
   });
   pi.on("tool_call", async (event, ctx) => {
     try {
       guard(ctx);
-      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs"].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
+      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", "inspect_research"].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
       const input = event.input as Record<string, unknown>;
       if (typeof input.path === "string") input.path = confinedPath(store.project, input.path);
       if (event.toolName === "bash") {

@@ -68,13 +68,18 @@
     "assets/brand/",
     "templates/",
     "examples/first-study/",
+    "examples/inquiry/",
+    "examples/observational-medicine/",
     "scripts/bootstrap.sh",
     "src/",
     "tsconfig.json",
     "VALIDATION.md",
     "distro.json",
     "distros/",
-    "release-manifest.json"
+    "release-manifest.json",
+    "examples/observational-evaluation/",
+    "scripts/evaluate-medical.mjs",
+    "scripts/export-research-review.mjs"
   ],
   "lemmaduckDistro": "base",
   "keywords": [

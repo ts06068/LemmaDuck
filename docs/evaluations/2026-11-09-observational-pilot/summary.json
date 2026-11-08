@@ -1,0 +1,125 @@
+{
+  "date": "2026-11-09",
+  "purpose": "Constructed observational-method review component pilot; not end-to-end discovery or domain validation",
+  "evaluationId": "6da823c2-a6b1-4706-8761-48986efc1598",
+  "reportHash": "64507b092ac6425a57aad2860b1b317d4ef0fd5d45aa3714af1042244420ebb5",
+  "configHash": "595457361ca99428bf9d577288d0530fd96de2b60c65e8d993fa07dd07c3fc0a",
+  "identity": {
+    "provider": "openai-codex",
+    "model": "gpt-6-sol",
+    "tools": [
+      "inspect_research",
+      "record_research",
+      "run_research_experiment",
+      "read_case_material"
+    ]
+  },
+  "budget": {
+    "timeoutMs": 180000,
+    "attemptsPerMethodTask": 1,
+    "tokenUsage": "reported",
+    "live": {
+      "maxCalls": 3,
+      "maxToolCalls": 8,
+      "maxOutputTokens": 4096,
+      "maxReportedTokens": 24000,
+      "reasoning": "low"
+    }
+  },
+  "methods": {
+    "baseline": {
+      "trials": 12,
+      "successful": 12,
+      "metrics": {
+        "issue_f1": 0.9500000000000001,
+        "critical_recall": 1.0,
+        "claim_restraint": 1.0,
+        "next_check": 1.0
+      },
+      "calls": 20,
+      "toolCalls": 8,
+      "reportedTokens": 15514,
+      "elapsedMs": 82249,
+      "personaRatings": {
+        "validity": 4.75,
+        "importance": 3.0,
+        "utility": 3.5
+      }
+    },
+    "candidate": {
+      "trials": 12,
+      "successful": 12,
+      "metrics": {
+        "issue_f1": 0.9333333333333332,
+        "critical_recall": 1.0,
+        "claim_restraint": 1.0,
+        "next_check": 1.0
+      },
+      "calls": 26,
+      "toolCalls": 15,
+      "reportedTokens": 25980,
+      "elapsedMs": 93679,
+      "personaRatings": {
+        "validity": 4.5,
+        "importance": 3.0,
+        "utility": 3.25
+      }
+    }
+  },
+  "paired": {
+    "issue_f1": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": -0.01666666666666669,
+      "perTask": {
+        "timing": 0,
+        "overlap": 0,
+        "prediction": -0.06666666666666676,
+        "aligned": 0
+      }
+    },
+    "critical_recall": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "timing": 0,
+        "overlap": 0,
+        "prediction": 0,
+        "aligned": 0
+      }
+    },
+    "claim_restraint": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "timing": 0,
+        "overlap": 0,
+        "prediction": 0,
+        "aligned": 0
+      }
+    },
+    "next_check": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "timing": 0,
+        "overlap": 0,
+        "prediction": 0,
+        "aligned": 0
+      }
+    }
+  },
+  "reviewDisclosure": "User-requested AI role-based methods review by the same implementation agent; no human medical credentials. Reviewer saw aggregate results and condition labels for seven overflagged outputs before rating. This is post hoc self-review, not independent or blinded domain validation.",
+  "limitations": [
+    "Four constructed public cases, authored with the implementation; no external domain benchmark or novel scientific findings.",
+    "Three repeats per case remain grouped as four independent cases; no significance or general superiority claim.",
+    "Raw report is retained unchanged. Parent modules were captured during, rather than committed before, this first live pilot; future protocols freeze their hashes and instructions before dispatch.",
+    "The installed Codex transport does not forward maxTokens. Output/token ceilings are audited after responses; an already dispatched response can overrun. No observed output ceiling overruns.",
+    "Same-user adapter processes are not isolated by an OS sandbox. Rubric answers were withheld from method payloads.",
+    "Persona ratings are post hoc self-review, with aggregate and partial condition-label exposure. They are not independent human domain review.",
+    "No retry, fallback, prompt tuning, or rubric rescore was used to improve these observed results."
+  ]
+}

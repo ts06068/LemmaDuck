@@ -1,0 +1,29 @@
+{
+  "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+  "output_schema": {
+    "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+    "issues": "unique array of applicable issue codes; omit none if other issues apply",
+    "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+    "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "time_zero",
+    "positivity",
+    "site_confounding",
+    "patient_leakage",
+    "temporal_leakage",
+    "unmeasured_confounding",
+    "missingness",
+    "contradicted_hypothesis",
+    "none"
+  ],
+  "case_id": "aligned",
+  "facts": {
+    "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+    "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+    "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+    "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+    "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+  }
+}

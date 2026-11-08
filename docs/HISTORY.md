@@ -21,3 +21,11 @@ rebuild or validate those assets. Existing clones must fetch and reconcile the r
 | `3f73286bafa5131e3f9e5ffccf7a0d563d272348` | `b7a58e2ea54ef87bc15f2e73658d6f8545ca6280` | docs: simplify README and move walkthrough into documentation |
 | `8d360334c73549aa01217111b2696d56fd33d593` | `dc55c90f45ba57e47cef02d483f0576954e8270b` | feat(cli): add short duck commands and compatible launchers |
 | `a311b58c809f7bf25aa3a6a552762d6973c5b048` | `aed1ef251d8be5e33bb7b8839e5b9331ada2ef41` | docs(install): add remote-host and AI-agent setup guidance |
+
+Two later README-only commits arrived during implementation and were migrated with
+their file contents, authors, dates and message bodies preserved:
+
+| Original commit | Conventional commit | Subject |
+| --- | --- | --- |
+| `ab162b7c993c26fbd01747476613b12cd1520a6e` | `cef96f5a1b0f2d6e3c0bf4f5e2615d0e875196c0` | docs(readme): emphasize LemmaDuck in the introduction |
+| `c53cd6963b954da1d1fa2c16bafcb62171e72a21` | `1d21c10db931ecad804c0dd2af75552cff306ea8` | docs(readme): remove the command compatibility note |

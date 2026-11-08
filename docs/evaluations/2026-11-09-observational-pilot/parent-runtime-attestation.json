@@ -1,0 +1,9 @@
+{
+  "timing": "Captured during the first live pilot, after protocol freeze; not represented as a pre-run parent-runtime commitment. The running parent loaded these built modules; source edits have not rebuilt them during this run.",
+  "files": {
+    "dist/research-model.js": "684c3e1a50b2f1ae7044795b797e8f31e337fe8f9605a501b09df066b44a56ba",
+    "dist/research-tools.js": "2b09a9717c9855cab444d1185a27a9d91327c7a0a640cbeaded500837e47ec88",
+    "dist/research-evaluation.js": "4013119fcfacd86ec2481e444dc888ac89b3d517036ae2ba1df1204fc7321cf9",
+    "npm-shrinkwrap.json": "65b409b8f9f76e55d47fffdb273481490f6c51277c9f523a8331584a3fcfc42b"
+  }
+}

@@ -70,3 +70,6 @@ Thumbs.db
 /release/
 
 build/
+
+# Owner-side evaluation review packets and private ratings
+/review/

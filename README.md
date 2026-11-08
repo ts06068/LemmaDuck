@@ -22,11 +22,13 @@ Talk to the duck. Test your hunch. **LemmaDuck** brings your model accounts, pro
 
 Research runs across conversations, code, data, and manuscripts. LemmaDuck keeps a task's selected inputs, decisions, execution records, and handoffs together so you can return to the work and inspect its evidence.
 
-- **Research and writing:** Pi runs the managed worker, with checkpoints, explicit model switches, and read-only review.
+- **Research and writing:** Pi runs the managed worker, with checkpoints, explicit model switches, and read-only review. The source checkout adds versioned scientific records, independently verified experiments, and bounded research batches.
 - **Code:** OMP runs development sessions with the project's tools and instructions.
 - **Models:** choose ChatGPT, Claude, Gemini, or an explicitly configured API or local provider. Set provider, model, and reasoning preferences by task.
 - **Connected projects:** allow specific MCP tools for named accounts, including GitHub, Linear, and Jira. Modifying actions have approval and receipt records.
 - **Workspaces:** Base uses Paseo. The Emacs and Neovim previews run the shared workers in editor terminals.
+
+The source checkout includes an [observational-medicine reproduction](examples/observational-medicine/README.md) and a [controlled live review pilot](examples/observational-evaluation/README.md). They exercise the scientific workflow; they do not establish clinical validity or scientific benefit.
 
 A saved execution record establishes what ran. Scientific conclusions still require appropriate methods, evidence, and review. See [validation coverage](VALIDATION.md) for what has been exercised.
 
@@ -111,6 +113,18 @@ python3 reproduce.py --check
 
 The synthetic draft claims a mean of 25. The three observations yield 20. The script writes the discrepancy and a manifest that detects changed inputs or outputs.
 
+### Scientific inquiry
+
+From a built source checkout, run the complete inquiry exercise:
+
+```sh
+./duck init /absolute/path/to/new-study --kind inquiry
+./duck research /absolute/path/to/new-study demo
+./duck research /absolute/path/to/new-study status
+```
+
+It registers competing explanations, freezes predictions, runs an independent verifier, and tests a reusable method on a different dataset. The results are synthetic. These inquiry commands are available on the source branch and have not been published in Base 0.5.3. See [scientific inquiry](docs/RESEARCH.md) for custom experiments, bounded approval, domain feedback, and paired evaluation.
+
 ## Documentation
 
 | Guide | Contents |
@@ -121,6 +135,7 @@ The synthetic draft claims a mean of 25. The three observations yield 20. The sc
 | [Distros](docs/DISTROS.md) | Base, Emacs, and Neovim |
 | [Connectors](docs/CONNECTORS.md) · [Version control](docs/VCS.md) | Scoped MCP tools, Git, and Jujutsu |
 | [Operations](docs/OPERATIONS.md) | Checkpoints, handoffs, and interruption recovery |
+| [Scientific inquiry](docs/RESEARCH.md) · [Milestones](docs/RESEARCH_MILESTONES.md) | Experiment plans, verification, corrections, reuse, and paired evaluation |
 | [Writing](docs/WRITING.md) | Author intent, evidence, and editing rules |
 | [Validation](VALIDATION.md) | Recorded checks and their limits |
 

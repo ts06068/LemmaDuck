@@ -1,0 +1,28 @@
+{
+  "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+  "output_schema": {
+    "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+    "issues": "unique array of applicable issue codes; omit none if other issues apply",
+    "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+    "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "time_zero",
+    "positivity",
+    "site_confounding",
+    "patient_leakage",
+    "temporal_leakage",
+    "unmeasured_confounding",
+    "missingness",
+    "contradicted_hypothesis",
+    "none"
+  ],
+  "case_id": "overlap",
+  "facts": {
+    "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+    "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+    "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+    "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "reviewer": "Skeptical clinical epidemiology reviewer persona (AI)",
+  "qualification": "User-requested AI role-based methods review by the same implementation agent; no human medical credentials. Reviewer saw aggregate results and condition labels for seven overflagged outputs before rating. This is post hoc self-review, not independent or blinded domain validation.",
+  "reportHash": "64507b092ac6425a57aad2860b1b317d4ef0fd5d45aa3714af1042244420ebb5",
+  "ratings": [
+    {
+      "blindId": "45590759-cfaa-4a09-b6d3-79bab4a80ab8",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correctly identifies survival until first fill and misaligned assignment/follow-up. The unmeasured-confounding label is a plausible concern, not established by these facts; absence of randomization alone does not demonstrate confounding. A precise grace-period strategy remains unspecified."
+    },
+    {
+      "blindId": "4fc168fb-22e5-4870-850c-d9bf51f80765",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correct timing diagnosis and appropriate statement that age/sex adjustment does not establish exchangeability. Treat the unmeasured-confounding code as an unverified concern rather than a demonstrated bias. The next step uses the available dates but leaves the target strategy unspecified."
+    },
+    {
+      "blindId": "544ca5cd-b6a5-4639-aa6a-b55da6c5821a",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly identifies perfect treatment/site separation and the inability of greater model depth alone to supply missing comparisons. Checking overlap confirms information already supplied; the answer does not propose a new feasible discriminating observation."
+    },
+    {
+      "blindId": "9605dcda-6e18-40a4-8ba1-f8c969706244",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly separates a precise fitted coefficient from identification under complete site/treatment separation. The overlap check is already decided by the case facts, so practical research progress is limited."
+    },
+    {
+      "blindId": "37dc30da-4f67-440b-be60-64187df536d2",
+      "validity": 3,
+      "importance": 3,
+      "utility": 2,
+      "notes": "Correctly detects both post-outcome features and repeated-patient leakage. However, the instruction to keep patients across splits is ambiguous and, read literally, preserves the leakage. It should require patient-disjoint partitions, with features available by discharge."
+    },
+    {
+      "blindId": "76669b3c-3c79-4696-ad9d-75eb39f8d14c",
+      "validity": 5,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correctly rejects prospective validation from day-90 features and overlapping patient groups. It gives an actionable patient-separated, time-ordered rebuild with discharge-available features and acknowledges the unavailable external cohort."
+    },
+    {
+      "blindId": "c91b37a3-a323-4be7-9edf-31f8b5dd592b",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correct conditional identification under the stipulated assumptions; avoids treating full follow-up or correct standardization as empirical proof of exchangeability. Checking plausibility is appropriate but lacks a concrete measurement or sensitivity plan."
+    },
+    {
+      "blindId": "bef788fc-e963-449c-a783-0a85072e8b06",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly permits the conditional causal risk difference instead of mechanically refusing all observational causal claims. Distinguishes stipulated assumptions from empirical evidence; the next check remains generic."
+    },
+    {
+      "blindId": "6eaff45c-58a7-4731-976b-447d181f048c",
+      "validity": 4,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correct immortal-time mechanism and caution about exchangeability. Unmeasured confounding is not shown to exist, and no executable target-trial specification is given. The inspection tool failed; the visible answer relies on supplied facts rather than claiming tool verification."
+    },
+    {
+      "blindId": "c10ca8e3-3b26-44d3-9be7-8fcadae91b02",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correctly identifies exposure defined using future survival and recommends aligning eligibility, assignment and follow-up. Additional confounding remains possible rather than established; do not equate observational assignment with certain confounding."
+    },
+    {
+      "blindId": "d396d61d-a9b5-410a-9ef4-91a73fe73e97",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correct diagnosis of absent within-site overlap and site confounding; preserves the inability to separate the effects from these data. Rechecking the already specified overlap is documentation, not new information."
+    },
+    {
+      "blindId": "4c2e6d27-c6a9-469c-b745-bb812d0d6f21",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly refuses an identified causal drug effect from complete treatment/site separation and rejects model depth as a substitute for design support. The offered check is already determined by the case."
+    },
+    {
+      "blindId": "d2619854-79da-4efc-a3ab-57469bcfe4cc",
+      "validity": 5,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correct diagnosis and useful repair: remove post-discharge information and evaluate on patient-disjoint, time-ordered partitions. Appropriately avoids claiming an external or prospective validation that was not performed."
+    },
+    {
+      "blindId": "c4bea915-7485-42e3-909e-b3c162634aa7",
+      "validity": 5,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Both leakage mechanisms are correctly identified and tied to the intended discharge-time prediction. The proposed feature cutoff and patient-disjoint time split are actionable; they require a fresh evaluation rather than reinterpretation of AUROC 0.97."
+    },
+    {
+      "blindId": "04098db6-ea77-4206-8b61-57893f556c35",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly identifies the causal risk difference conditionally on the explicitly granted assumptions. Does not mistake their stipulation for external validation. A specific way to probe those assumptions is not supplied."
+    },
+    {
+      "blindId": "d2fd8039-27e7-4790-8430-22a66dccc644",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Sound conditional causal interpretation and distinction between computation and empirical assumption validity. Useful conceptual review, but generic assumption checking does not yet specify a new informative test."
+    },
+    {
+      "blindId": "54502368-76aa-4232-b2bd-3c6d62d7a705",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correct immortal-time explanation and next step based on the available dates. Age/sex adjustment cannot rule out other confounding, but the extra issue code should remain qualified. Intervention strategy and grace-period handling need explicit definition."
+    },
+    {
+      "blindId": "075fdc25-4bd0-4858-81f9-fd6b16cbe43e",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correctly identifies use of future fill status with deaths counted from baseline. Caution about other confounders is reasonable; the code does not prove unmeasured confounding. Aligning dates is necessary but not a complete emulation design."
+    },
+    {
+      "blindId": "b0400eaa-a9fa-47f3-87ce-18df7eba48e6",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly explains why treatment and site effects cannot be separated using these data without additional substantive restrictions or information. The overlap check documents a known failure; no new feasible measurement is identified."
+    },
+    {
+      "blindId": "b1c05fbc-6362-4e35-bc26-9e33790424dd",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly separates computational precision from identification in the stipulated site-separated cohort. It does not claim all possible causal inference is impossible under every additional assumption. Practical next action is limited by the forced check menu."
+    },
+    {
+      "blindId": "44ec4ce6-78df-4a7b-91e5-d0b93872c2ff",
+      "validity": 4,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correctly identifies both leakage mechanisms and gives a sound patient-disjoint, time-appropriate rebuild. The extra time_zero label is redundant with temporal leakage rather than evidence of an additional independent defect; this is a precision issue, not a failed substantive recommendation."
+    },
+    {
+      "blindId": "87eebb9e-3fa4-47e8-b837-eb7de183ea25",
+      "validity": 5,
+      "importance": 3,
+      "utility": 4,
+      "notes": "Correct diagnosis, clear discharge-time feature restriction, and patient-separated time-ordered evaluation. Does not infer valid prospective performance from the contaminated episode AUROC."
+    },
+    {
+      "blindId": "9fdb6070-dc6b-4297-8d47-6e73a551860c",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correctly allows a causal risk difference under the specified identifying assumptions and distinguishes these assumptions from successful calculation. The proposed assumption check lacks a concrete design or observable discriminator."
+    },
+    {
+      "blindId": "897b9ee3-ba8b-4761-a3fe-acae0ea86115",
+      "validity": 5,
+      "importance": 3,
+      "utility": 3,
+      "notes": "Correct conditional identification and appropriate restraint about empirical validity. It offers a general next step, not a detailed experiment; the established methodological point is useful but not a novel scientific result."
+    }
+  ]
+}

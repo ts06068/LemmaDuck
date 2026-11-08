@@ -35,6 +35,7 @@ export interface Task {
   validations: string[];
   references?: { state: string; warnings: string };
   workflow?: { name: string; commit: string; path: string; artifactId: string };
+  research?: { artifact: string; count: number; stale: number; anomalies: number };
   observedModel?: string;
   contextGauge?: { used: number; size: number };
 }
@@ -178,6 +179,7 @@ export function renderHandoff(task: Task): string {
     `Unresolved operations: ${pending.length}; open warning signals: ${warningCount} across ${warnings.length} operations (heuristic).`,
     section("Unresolved operations", pending.map(op => `${op.id}: ${op.tool} [${op.status}]`).join("\n"), 900),
     section("Open warnings, including older operations", warnings.map(op => `${op.id} (${op.artifactId || "original unavailable"}):\n${op.warnings!.join("\n")}`).join("\n"), 3000),
+    ...(task.research ? [`Research: ${task.research.count} records; ${task.research.stale} stale; ${task.research.anomalies} open anomalies. Read full scientific state with read_task_artifact(artifact_id="${task.research.artifact}"). Preserve negative and inconclusive evidence.`] : []),
     section("Goal", task.goal || "Awaiting user request.", 1300),
     section(`Approved decisions (${task.decisions.length})`, task.decisions.join("\n"), 1800),
     section("Next steps", task.nextSteps.join("\n"), 1000),

@@ -38,6 +38,14 @@ class DistroReleaseTests(unittest.TestCase):
                     self.assertEqual(package["name"], f"@ts06068/lemmaduck-{distro}")
                     self.assertEqual(package["version"], meta["version"])
                     self.assertIn("package/release-manifest.json", archive.getnames())
+                    if distro == "base":
+                        names = set(archive.getnames())
+                        self.assertIn("package/examples/observational-medicine/analysis.py", names)
+                        self.assertIn("package/examples/observational-medicine/requirements.lock", names)
+                        self.assertIn("package/examples/observational-evaluation/driver.mjs", names)
+                        self.assertIn("package/scripts/evaluate-medical.mjs", names)
+                        self.assertNotIn("package/examples/observational-medicine/nhefs.csv", names)
+                        self.assertNotIn("package/examples/observational-medicine/runtime.json", names)
                     if distro != "base":
                         self.assertEqual(package["repository"]["directory"], f"distros/{distro}")
                 with zipfile.ZipFile(output / (stem + ".zip")) as archive:

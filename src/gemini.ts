@@ -8,6 +8,7 @@ import { googleACP, geminiHome, harnessEnv } from "./config.js";
 import { assertManagedProject } from "./security.js";
 import { TaskStore } from "./state.js";
 import type { SessionNotification } from "@agentclientprotocol/sdk";
+import { RESEARCH_INSTRUCTIONS } from "./research-tools.js";
 import { routeInstructions } from "./routing.js";
 import { Instructions } from "./workflow.js";
 import { excerpt, HANDOFF_BYTES, resultEnvelope } from "./artifacts.js";
@@ -51,7 +52,7 @@ export function registerGemini(pi: ExtensionAPI, store: TaskStore, getContext: (
           instructions.assertCurrent();
           const { hashes, text } = incrementalUserInput(context, cursor);
           if (!text) throw new Error("No new user input; use /switch to start a fresh Gemini segment.");
-          const payload = { text: packetPending ? `${instructions.packet()}\n${routeInstructions(store.task.route?.profile)}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n\nProject tools are rooted at ${store.project}. Use relative paths with the lemmaduck MCP tools. The native session directory stores metadata only.\n${isReview() ? "Review only. Do not change project files or run commands. You may propose a checkpoint for user review." : "Continue the task within the selected project."}\n\nUser request:\n${text}` : text };
+          const payload = { text: packetPending ? `${instructions.packet()}\n${RESEARCH_INSTRUCTIONS}\n${routeInstructions(store.task.route?.profile)}\n${excerpt(store.checkpoint(), HANDOFF_BYTES - 256)}\n\nProject tools are rooted at ${store.project}. Use relative paths with the lemmaduck MCP tools. The native session directory stores metadata only.\n${isReview() ? "Review only. Do not change project files or run commands. You may propose a checkpoint for user review." : "Continue the task within the selected project."}\n\nUser request:\n${text}` : text };
           const replacement = await options?.onPayload?.(payload, model);
           const prompt = replacement === undefined ? payload : replacement as typeof payload;
           if (!prompt || typeof prompt.text !== "string") throw new Error("Invalid ACP prompt payload.");

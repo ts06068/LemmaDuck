@@ -1,0 +1,29 @@
+{
+  "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+  "output_schema": {
+    "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+    "issues": "unique array of applicable issue codes; omit none if other issues apply",
+    "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+    "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "time_zero",
+    "positivity",
+    "site_confounding",
+    "patient_leakage",
+    "temporal_leakage",
+    "unmeasured_confounding",
+    "missingness",
+    "contradicted_hypothesis",
+    "none"
+  ],
+  "case_id": "prediction",
+  "facts": {
+    "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+    "features": "Include laboratory tests measured on day 90 after discharge.",
+    "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+    "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+    "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+  }
+}

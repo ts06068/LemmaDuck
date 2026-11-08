@@ -28,7 +28,7 @@ JJ = next(tool for tool in json.loads((ROOT / "locks/tools.json").read_text())["
 PASEO_LOCK = ROOT / "locks/paseo"
 PASEO_RUNTIME = DATA_ROOT / "tools" / ("paseo-" + hashlib.sha256((PASEO_LOCK / "package-lock.json").read_bytes()).hexdigest()[:16])
 PASEO = PASEO_RUNTIME / "node_modules/.bin/paseo"
-CORE_COMMANDS = {"agent", "code", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector", "routing", "vcs"}
+CORE_COMMANDS = {"research", "agent", "code", "login", "billing", "providers", "status", "context", "reconcile", "open", "ui", "connector", "routing", "vcs"}
 DESCRIPTION = """Use Paseo to open your Linux host. Run 'agent PROJECT' for a project or
 'code PROJECT' for an OMP coding session. 'agent PROJECT --pi' opens the research worker.
 Other commands: login PROVIDER, billing confirm PROVIDER --extra-usage-off,
@@ -218,7 +218,7 @@ def doctor(args):
 
 def init_project(args):
     dest = args.directory.expanduser().absolute()
-    src = ROOT / ("examples/first-study" if args.kind == "demo" else "templates/" + args.kind)
+    src = ROOT / ("examples/first-study" if args.kind == "demo" else "examples/inquiry" if args.kind == "inquiry" else "examples/observational-medicine" if args.kind == "observational" else "templates/" + args.kind)
     if dest.exists() or dest.is_symlink():
         raise ValueError("Choose a new directory. Existing projects can be opened directly with 'duck agent PATH'.")
     dest.parent.mkdir(parents=True, exist_ok=True)
@@ -263,7 +263,7 @@ def main():
         p.set_defaults(handler=workflow)
         p = sub.add_parser("init", help="Create a new starter project")
         p.add_argument("directory", type=Path)
-        p.add_argument("--kind", choices=("demo", "research", "development", "writing", "assistant"), default="research")
+        p.add_argument("--kind", choices=("demo", "inquiry", "observational", "research", "development", "writing", "assistant"), default="research")
         p.set_defaults(handler=init_project)
         args = parser.parse_args(argv)
         return args.handler(args) or 0

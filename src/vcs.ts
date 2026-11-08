@@ -4,10 +4,20 @@ import { dirname, join } from "node:path";
 
 export type Vcs = { backend: "git" | "jj" | "none"; root: string };
 export function detectVcs(project: string): Vcs {
-  let root = realpathSync(project);
+  const selected = realpathSync(project);
+  let root = selected;
   while (true) {
     if (existsSync(join(root, ".jj"))) return { backend: "jj", root };
-    if (existsSync(join(root, ".git"))) return { backend: "git", root };
+    if (existsSync(join(root, ".git"))) {
+      try {
+        // A stray ancestor marker is not a repository. Preserve error reporting
+        // for a broken marker in the selected project itself.
+        const detected = execFileSync("git", ["--no-pager", "-c", "core.fsmonitor=false", "-C", root, "rev-parse", "--show-toplevel"], {
+          encoding: "utf8", timeout: 5000, stdio: ["ignore", "pipe", "pipe"], env: { ...process.env, GIT_OPTIONAL_LOCKS: "0" },
+        }).trim();
+        if (realpathSync(detected) === root) return { backend: "git", root };
+      } catch { if (root === selected) return { backend: "git", root }; }
+    }
     if (dirname(root) === root) return { backend: "none", root: project };
     root = dirname(root);
   }

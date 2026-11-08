@@ -1,0 +1,40 @@
+{
+  "purpose": "Public observational-data reproduction, not an AI-performance or causal-effect validation",
+  "sourceSha256": "6726827bfcebf7324d786211a517d0515532c2405cc71c5a1fab68d7116ea16c",
+  "study": "02365c49-6928-435b-918b-4f3439882ec0",
+  "experiment": "40394797-ac13-4d4c-99f1-b455a2ebb488",
+  "run": "0ee5d5e0-2beb-43f9-b650-e36a7e842aa4",
+  "runHash": "5b24842ee4e419980e4fd5c5520420b40a1eb0648f52119b9b1efd61ed2e659c",
+  "status": "verified",
+  "identification": "association only; no causal ground truth or domain-expert endorsement",
+  "metrics": {
+    "source_rows": 1629,
+    "complete_cases": 1566,
+    "treated": 403,
+    "control": 1163,
+    "missing_outcomes": 63,
+    "missing_outcomes_treated": 25,
+    "missing_outcomes_control": 38,
+    "missing_covariate_records": 0,
+    "excluded_records": 63,
+    "crude_difference_kg": 2.540581454955888,
+    "ipw_difference_kg": 3.44053542964918,
+    "adjustment_shift_kg": 0.8999539746932919,
+    "ci_lower_kg": 2.5572173134937097,
+    "ci_upper_kg": 4.540254645685429,
+    "ps_min": 0.051000763947143854,
+    "ps_max": 0.7768887018792433,
+    "ess_treated": 325.97472895716743,
+    "ess_control": 1128.6098631331315,
+    "max_smd_before": 0.2819809099448618,
+    "max_smd_after": 0.03678075819040625,
+    "bootstrap_successful": 200
+  },
+  "assessment": {
+    "20fdca02-458d-438e-8829-5c95d834345f": "contradicted",
+    "55f105e8-e07e-4078-a6a0-e75932555dc3": "contradicted"
+  },
+  "openAnomalies": [
+    "fbf71b4a-4960-4819-bab5-4b78cc554a4b"
+  ]
+}

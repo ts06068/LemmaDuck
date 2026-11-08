@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "question": "How does adjustment for measured baseline covariates change the observed smoking-cessation/weight-change contrast in the public NHEFS teaching cohort?",
+  "objective": "description",
+  "claim_policy": "associational",
+  "population": "The 1,629 records in the author's public teaching release, restricted for this analysis to complete outcome and prespecified baseline covariates",
+  "unit_of_analysis": "one seqn per participant",
+  "time_zero": "NHANES I baseline examination, 1971-1975; cessation status is only known over the interval to 1982",
+  "exposure": "qsmk = 1, reported cessation between baseline and 1982",
+  "comparator": "qsmk = 0, reported continued smoking over that interval",
+  "outcome": "wt82_71, body-weight change from baseline to 1982, kg",
+  "temporal_alignment": "ambiguous",
+  "estimand": "Difference in normalized IP-weighted mean observed weight change between qsmk groups in the complete-case teaching sample",
+  "covariates": ["sex", "race", "age", "education", "smokeintensity", "smokeyrs", "exercise", "active", "wt71"],
+  "propensity_formula": "qsmk ~ sex + race + age + I(age ** 2) + C(education) + smokeintensity + I(smokeintensity ** 2) + smokeyrs + I(smokeyrs ** 2) + C(exercise) + C(active) + wt71 + I(wt71 ** 2)",
+  "weights": "1/p for qsmk=1; 1/(1-p) for qsmk=0; normalize within exposure group for mean contrasts",
+  "missing_data": "Complete-case illustration. Report every exclusion and group-specific missing outcome counts; do not equate missing follow-up with absence of an outcome.",
+  "identification_limits": ["Exact cessation time is not observed", "Exposure and outcome windows overlap", "Exchangeability given measured covariates is unverified", "Complete-case selection may be informative", "No causal effect is known from these observed data"],
+  "diagnostics": ["unique participant IDs", "denominator and missing outcome counts", "propensity range", "effective sample size", "standardized baseline differences before and after weighting"],
+  "uncertainty": {"method": "paired participant bootstrap, refitting the propensity model in every replicate", "replicates": 200, "seed": 1729, "interval": "2.5th and 97.5th empirical percentiles", "allowed_failed_replicates": 0},
+  "sensitivity_plan": "Compare crude and weighted contrasts and balance. Revisit missing-outcome selection and alternative exposure timing before any causal interpretation. Within-sample bootstrap is not external validation.",
+  "sources": ["https://miguelhernan.org/s/nhefs.csv", "https://miguelhernan.org/s/hernanrobins_WhatIf_2jan25.pdf"]
+}

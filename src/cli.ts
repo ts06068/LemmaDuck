@@ -58,6 +58,7 @@ async function main(): Promise<number> {
     if (!["status", "diff", "log"].includes(view) || rest.length > 1) throw new Error("Use: duck vcs PATH status|diff|log");
     console.log(JSON.stringify((await import("./vcs.js")).vcsRead(projectPath(arg || process.cwd()), view as "status" | "diff" | "log"), null, 2)); return 0;
   }
+  if (command === "research") { await (await import("./research-command.js")).researchCommand(argv); return 0; }
   configure();
   if (command === "ui" && arg === "reload") throw new Error("Live layout replacement is unavailable: Zellij cannot reliably preserve running pane commands. New workspaces use the new bars; keep existing sessions until their work is saved and finished.");
   if (command === "doctor") {
@@ -129,7 +130,7 @@ async function main(): Promise<number> {
       return await run(process.execPath, args, project, harnessEnv(), release.track);
     } finally { release(); }
   }
-  console.log(`LemmaDuck — code, research, writing, and personal projects\n  duck setup [--dry-run]     Install workspace tools and settings\n  duck doctor\n  duck providers list|catalog|add|remove\n  duck login chatgpt|claude|gemini|REGISTERED_ID\n  duck billing confirm chatgpt|claude|gemini --extra-usage-off\n  duck open PROJECT          Zellij + LazyVim + agent\n  duck paseo [COMMAND]       Open or manage the Paseo host\n  duck agent [PROJECT]       Project worker (development: OMP; otherwise Pi)\n  duck code [PROJECT]        OMP coding in any project\n  duck agent PROJECT --pi    Managed research, writing or assistant worker\n  duck status PROJECT        Task and handoff\n  duck reconcile PROJECT ID completed|failed 'observed result'\n  duck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
+  console.log(`LemmaDuck — code, research, writing, and personal projects\n  duck setup [--dry-run]     Install workspace tools and settings\n  duck doctor\n  duck providers list|catalog|add|remove\n  duck login chatgpt|claude|gemini|REGISTERED_ID\n  duck billing confirm chatgpt|claude|gemini --extra-usage-off\n  duck open PROJECT          Zellij + LazyVim + agent\n  duck paseo [COMMAND]       Open or manage the Paseo host\n  duck agent [PROJECT]       Project worker (development: OMP; otherwise Pi)\n  duck code [PROJECT]        OMP coding in any project\n  duck agent PROJECT --pi    Managed research, writing or assistant worker\n  duck research PROJECT      Scientific records and approved experiments\n  duck status PROJECT        Task and handoff\n  duck reconcile PROJECT ID completed|failed 'observed result'\n  duck context PROJECT FILE  Select input before starting an agent\n\nIn Pi: /switch, /review, /task, /handoff, /usage, /instructions, /checkpoint, /ui motion full|reduced|off. No automatic fallback. Additional API routes require explicit registration.`);
   return 0;
 }
 main().then(code => { process.exitCode = code; }).catch(error => { console.error(String(error)); process.exitCode = 1; });

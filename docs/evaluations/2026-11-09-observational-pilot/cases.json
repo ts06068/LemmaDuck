@@ -1,0 +1,1208 @@
+{
+  "reportHash": "64507b092ac6425a57aad2860b1b317d4ef0fd5d45aa3714af1042244420ebb5",
+  "cases": [
+    {
+      "label": "R01",
+      "blindId": "45590759-cfaa-4a09-b6d3-79bab4a80ab8",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The adjusted hazard ratio of 0.60 is a computed association, not an identified causal benefit. Patients classified as exposed had to survive from diagnosis until their first fill, while deaths before filling were classified as unexposed. This creates immortal time and misaligns exposure assignment with day-0 outcome follow-up. Use the available diagnosis, fill, and death dates to align eligibility, exposure assignment, and follow-up; age-and-sex adjustment and the absence of randomization also leave confounding unaddressed."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R02",
+      "blindId": "4fc168fb-22e5-4870-850c-d9bf51f80765",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The adjusted hazard ratio of 0.60 is a computed association, not an identified causal benefit. Exposure is defined by a fill up to day 90, but deaths are counted from diagnosis at day 0; patients who die before filling are assigned to the unexposed group. This creates immortal-time bias and misaligns exposure classification with follow-up. Adjustment for baseline age and sex does not establish exchangeability in this nonrandomized study. Exact diagnosis, fill, and death dates permit the next check: align time zero and assign exposure using information available at each time."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          },
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R03",
+      "blindId": "544ca5cd-b6a5-4639-aa6a-b55da6c5821a",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "Site A prescribes only X and site B only Y, so treatment has no within-site overlap. Site also affects outcomes through staffing and treatment access. The precise model coefficient is a successful computation, not an identified drug effect; increasing model depth cannot recover the missing comparisons."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R04",
+      "blindId": "9605dcda-6e18-40a4-8ba1-f8c969706244",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "Treatment is perfectly determined by site: A has only X recipients and B only Y recipients. Site also affects outcomes through staffing and treatment access. The precise model coefficient shows a computation succeeded, not that an X-versus-Y causal effect is identified. Check treatment overlap by site; increasing model depth cannot create the missing comparisons."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R05",
+      "blindId": "37dc30da-4f67-440b-be60-64187df536d2",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "temporal_leakage",
+            "patient_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "Day-90 laboratory tests are unavailable at discharge and occur after the 30-day outcome window. The episode-level split also puts episodes from the same patients in training and test sets. The reported held-out episode AUROC of 0.97 shows a successful computation, not validated prospective prediction. Rebuild the evaluation using available patient IDs and feature timestamps: keep patients across splits and restrict features to those available at discharge."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R06",
+      "blindId": "76669b3c-3c79-4696-ad9d-75eb39f8d14c",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "patient_leakage",
+            "temporal_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "Day-90 laboratory results occur after the discharge-time prediction and the 30-day outcome window. Repeated patients appear in both training and test episodes. Thus the held-out episode AUROC of 0.97 is a successful computation, not evidence of prospective predictive validity. Use the available patient IDs and timestamps to rebuild the evaluation with discharge-available features and a patient-separated, time-ordered split; no external cohort is available."
+        },
+        "toolReceipts": []
+      }
+    },
+    {
+      "label": "R07",
+      "blindId": "c91b37a3-a323-4be7-9edf-31f8b5dd592b",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [
+            "none"
+          ],
+          "next_check": "check-assumptions",
+          "rationale": "Eligibility, treatment assignment, and follow-up share time zero; 180-day outcomes are fully ascertained. Given the stipulated exchangeability, consistency, and positivity assumptions, standardizing both conditional outcome models identifies the causal risk difference. Correct computation does not establish that those assumptions hold empirically; checking their plausibility is the next step."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R08",
+      "blindId": "bef788fc-e963-449c-a783-0a85072e8b06",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [
+            "none"
+          ],
+          "next_check": "check-assumptions",
+          "rationale": "In the supplied aligned case, eligibility, assignment, and follow-up share time zero; outcomes are fully ascertained; and standardization correctly integrates both treatment-specific outcome models. Under the explicitly stipulated exchangeability, positivity, and consistency assumptions, this identifies the 180-day causal risk difference. A successful computation does not establish that those assumptions hold in practice; checking their plausibility is the next informative step."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": false
+          },
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R09",
+      "blindId": "6eaff45c-58a7-4731-976b-447d181f048c",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The reported adjusted hazard ratio of 0.60 is a completed analysis, not identification of a causal benefit. Follow-up starts at diagnosis, but patients classified as exposed must survive until their first fill; deaths before filling are classified unexposed, creating immortal-time bias. Age and sex adjustment does not establish exchangeability without random assignment. Use the available diagnosis, first-fill, and death dates to align exposure and follow-up time before interpreting the association."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": true
+          }
+        ]
+      }
+    },
+    {
+      "label": "R10",
+      "blindId": "c10ca8e3-3b26-44d3-9be7-8fcadae91b02",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The adjusted HR of 0.60 is a computed association, not an identified causal benefit. Patients classified as exposed had to survive from diagnosis until their first fill, while deaths before filling were assigned to the unexposed group. Thus exposure classification uses future information despite follow-up starting at day 0. Align eligibility, treatment assignment, and follow-up using the available diagnosis, fill, and death dates; age and sex adjustment alone cannot rule out confounding without random assignment."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R11",
+      "blindId": "d396d61d-a9b5-410a-9ef4-91a73fe73e97",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "Site A gives only X and site B only Y, while site also affects outcomes through staffing and treatment access. There is no within-site treatment overlap, so the precise model coefficient is a successful computation, not an identified causal effect. Increasing model depth cannot recover the missing comparisons; the overlap check will document this limitation."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R12",
+      "blindId": "4c2e6d27-c6a9-469c-b745-bb812d0d6f21",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "The supplied facts show complete separation: site A prescribes only X and site B only Y, while site also affects outcomes. Thus there is no within-site treatment comparison. A precise coefficient from a completed model computation does not identify a causal X-versus-Y effect; increasing model depth cannot restore overlap. Check and document overlap before making any causal claim."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R13",
+      "blindId": "d2619854-79da-4efc-a3ab-57469bcfe4cc",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "temporal_leakage",
+            "patient_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "The reported held-out episode AUROC of 0.97 is a completed evaluation, not validation of prediction at discharge: day-90 laboratory results occur after both discharge and the 30-day outcome window, and episodes from the same patients appear in training and test sets. Use the available timestamps to exclude post-discharge features, then use patient IDs for a patient-disjoint, time-ordered evaluation. No external cohort is available to establish prospective performance."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R14",
+      "blindId": "c4bea915-7485-42e3-909e-b3c162634aa7",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "patient_leakage",
+            "temporal_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "Day-90 laboratory results occur after discharge and after the 30-day outcome window, so they cannot support prediction at discharge. A random episode split places some patients in both training and test sets. The 0.97 held-out episode AUROC shows that this computation succeeded, not that prospective predictive performance was identified. Use the available patient IDs and timestamps to rebuild the evaluation with only discharge-available features and a patient-disjoint, time-ordered split."
+        },
+        "toolReceipts": []
+      }
+    },
+    {
+      "label": "R15",
+      "blindId": "04098db6-ea77-4206-8b61-57893f556c35",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [],
+          "next_check": "check-assumptions",
+          "rationale": "The supplied facts align eligibility, assignment, and follow-up at time zero, fully ascertain 180-day outcomes, and specify correct standardization. Together with the stipulated exchangeability, positivity, consistency, and treatment assumptions, this identifies a causal risk difference conditionally—not an empirical guarantee that those assumptions hold. Check their plausibility next; successful computation alone does not establish identification."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R16",
+      "blindId": "d2fd8039-27e7-4790-8430-22a66dccc644",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [],
+          "next_check": "check-assumptions",
+          "rationale": "Eligibility, assignment, and follow-up share a time zero; outcomes are fully ascertained; and standardization integrates both outcome models over the target population. Under the stipulated exchangeability, positivity, consistency, and treatment-version assumptions, this identifies a causal 180-day risk difference. A successful computation does not establish that those assumptions hold empirically; checking them is the next informative step."
+        },
+        "toolReceipts": []
+      }
+    },
+    {
+      "label": "R17",
+      "blindId": "54502368-76aa-4232-b2bd-3c6d62d7a705",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The adjusted hazard ratio of 0.60 is a computed association, not an identified causal benefit. Patients classified as exposed had to survive until their first fill, while deaths before filling were classified as unexposed; follow-up nevertheless began at diagnosis for both groups. Aligning exposure assignment and follow-up using the available diagnosis, fill, and death dates is the next check. Adjustment for age and sex alone cannot rule out other confounding in this nonrandomized study."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R18",
+      "blindId": "075fdc25-4bd0-4858-81f9-fd6b16cbe43e",
+      "task": "timing",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "timing",
+        "facts": {
+          "population": "Newly eligible patients observed from diagnosis at day 0.",
+          "exposure": "Ever filled the drug between day 0 and day 90. Patients who die before filling are classified unexposed.",
+          "outcome": "All-cause death from day 0 through day 365.",
+          "result": "Adjusted hazard ratio 0.60 after controlling baseline age and sex; analyst claims a causal survival benefit.",
+          "available": "Exact diagnosis, first-fill and death dates are available. No randomized assignment."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "immortal_time",
+            "time_zero",
+            "unmeasured_confounding"
+          ],
+          "next_check": "align-time-zero",
+          "rationale": "The adjusted hazard ratio of 0.60 is a computed association, not an identified causal benefit. Exposure is defined by a fill up to day 90, but deaths are counted from day 0; patients who die before filling are assigned unexposed, creating immortal time and misaligned time zero. Adjustment for age and sex does not establish control of other confounders. Exact diagnosis, fill, and death dates permit a check that aligns exposure and follow-up in time."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          },
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R19",
+      "blindId": "b0400eaa-a9fa-47f3-87ce-18df7eba48e6",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "The supplied facts show that site A prescribes only X and site B only Y, while site affects outcomes. Thus treatment and site have no overlap, so the precise model coefficient cannot separate a drug effect from a site effect. A successful computation—even with greater model depth—does not identify a causal effect. Check overlap explicitly; without additional sites or overlapping patients, this comparison remains association-only."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R20",
+      "blindId": "b1c05fbc-6362-4e35-bc26-9e33790424dd",
+      "task": "overlap",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "overlap",
+        "facts": {
+          "population": "Two hospitals: site A only prescribes drug X; site B only prescribes drug Y.",
+          "assignment": "No X recipients at B and no Y recipients at A. Site affects outcomes through staffing and treatment access.",
+          "result": "A flexible outcome model with site and baseline covariates returns a precise X-versus-Y coefficient.",
+          "proposal": "Claim an identified causal effect by increasing model depth. No additional sites or overlapping patients are available."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "association-only",
+          "issues": [
+            "positivity",
+            "site_confounding"
+          ],
+          "next_check": "check-overlap",
+          "rationale": "Site A prescribes only X and site B only Y, while site affects outcomes through staffing and treatment access. There is no within-site treatment overlap, so treatment and site effects cannot be separated. The precise model coefficient shows a successful computation, not an identified causal effect; increasing model depth cannot restore overlap."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R21",
+      "blindId": "44ec4ce6-78df-4a7b-91e5-d0b93872c2ff",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "time_zero",
+            "patient_leakage",
+            "temporal_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "The reported AUROC of 0.97 shows a successful held-out episode computation, not validated prediction at discharge. Day-90 laboratory results occur after both discharge and the 30-day outcome window, while the episode split places some patients in both training and test sets. Use the available timestamps to exclude post-discharge features and patient IDs to rebuild a patient-disjoint, time-appropriate split; no external validation cohort is available."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R22",
+      "blindId": "87eebb9e-3fa4-47e8-b837-eb7de183ea25",
+      "task": "prediction",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "prediction",
+        "facts": {
+          "goal": "Predict 30-day readmission at discharge from the index hospitalization.",
+          "features": "Include laboratory tests measured on day 90 after discharge.",
+          "split": "Random split by hospital episode. Many patients have several episodes appearing in both training and test sets.",
+          "result": "Held-out episode AUROC is 0.97, promoted as validated prospective prediction.",
+          "available": "Patient IDs and feature timestamps are available; no external validation cohort."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "prediction-unsupported",
+          "issues": [
+            "temporal_leakage",
+            "patient_leakage"
+          ],
+          "next_check": "rebuild-patient-time-split",
+          "rationale": "Day-90 labs are unavailable at discharge and occur after the 30-day outcome window. An episode-level random split also puts episodes from the same patients in training and test sets. The 0.97 AUROC is a successful computation on that split, not evidence of valid prospective prediction. Use the available timestamps and patient IDs to restrict features to discharge-time data and rebuild a patient-separated, time-ordered evaluation."
+        },
+        "toolReceipts": [
+          {
+            "name": "read_case_material",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R23",
+      "blindId": "9fdb6070-dc6b-4297-8d47-6e73a551860c",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [],
+          "next_check": "check-assumptions",
+          "rationale": "Eligibility, treatment assignment, and follow-up share time zero; outcomes are fully ascertained; and standardization correctly averages both conditional outcome models over the target population. Under the stipulated exchangeability, positivity, consistency, and other design assumptions, this identifies a causal 180-day risk difference. A successful computation does not establish that those assumptions hold empirically; checking them is the next informative step."
+        },
+        "toolReceipts": [
+          {
+            "name": "inspect_research",
+            "isError": false
+          }
+        ]
+      }
+    },
+    {
+      "label": "R24",
+      "blindId": "897b9ee3-ba8b-4761-a3fe-acae0ea86115",
+      "task": "aligned",
+      "input": {
+        "question": "Review the study. State what is supported, identify the decisive validity problems, and choose the next informative check. Do not invent unavailable data or execute a new clinical study. Return one JSON object only.",
+        "output_schema": {
+          "supported_claim": "one of association-only, prediction-unsupported, conditional-causal",
+          "issues": "unique array of applicable issue codes; omit none if other issues apply",
+          "next_check": "one of align-time-zero, check-overlap, rebuild-patient-time-split, sensitivity-negative-control, check-assumptions",
+          "rationale": "brief evidence-based explanation; cite the supplied facts and distinguish a successful computation from identification"
+        },
+        "allowed_issue_codes": [
+          "immortal_time",
+          "time_zero",
+          "positivity",
+          "site_confounding",
+          "patient_leakage",
+          "temporal_leakage",
+          "unmeasured_confounding",
+          "missingness",
+          "contradicted_hypothesis",
+          "none"
+        ],
+        "case_id": "aligned",
+        "facts": {
+          "study": "New-user active-comparator cohort; eligibility, assignment and follow-up all start on the same date.",
+          "outcome": "180-day risk, fully ascertained for every participant; one participant per record.",
+          "assumptions": "For this formal design exercise, explicitly assume conditional exchangeability given the measured baseline confounders, well-defined treatment versions, no interference, consistent outcome measurement, and positive probability of either treatment in every covariate stratum. These assumptions are stipulated, not established by balance diagnostics.",
+          "analysis": "Standardization correctly integrates both conditional outcome models over the target population. No reported contrary observations or leakage.",
+          "question_detail": "Does this design identify a causal risk difference under the stated assumptions? Distinguish conditional identification from an empirical guarantee that those assumptions hold."
+        }
+      },
+      "answer": {
+        "answer": {
+          "supported_claim": "conditional-causal",
+          "issues": [],
+          "next_check": "check-assumptions",
+          "rationale": "Eligibility, treatment assignment, and follow-up share a time zero. Under the stipulated exchangeability, positivity, consistency, and related assumptions, standardization identifies the 180-day causal risk difference. Correct computation establishes the standardization calculation, not that the identifying assumptions hold empirically; checking their plausibility is the next step."
+        },
+        "toolReceipts": []
+      }
+    }
+  ]
+}
