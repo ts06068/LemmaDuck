@@ -1,0 +1,48 @@
+{
+  "case_id": "complete-case-population",
+  "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+  "facts": {
+    "F1": "The original cohort has 1,000 participants; 400 are excluded for missing outcomes (350 controls and 50 treated).",
+    "F2": "The reported contrast describes the remaining 600 complete cases. The manuscript labels it an estimate for every original participant without stating a missingness model.",
+    "F3": "Treatment is observational. The missingness mechanism and sufficient confounder set are unknown; bias direction is not established.",
+    "F4": "Baseline covariates and reasons for missing outcomes can be retrieved for excluded and included participants but have not been compared."
+  },
+  "actions": {
+    "audit_missingness": "Compare the available missingness reasons and baseline covariates by inclusion and exposure to inform selection assumptions before a cohort-wide estimate.",
+    "recount_complete_cases": "Recompute the already supplied 600-person denominator.",
+    "impute_without_assumptions": "Replace all missing outcomes and assert unbiasedness without any selection or missingness assumptions."
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "temporal_leakage",
+    "patient_leakage",
+    "preprocessing_leakage",
+    "positivity",
+    "site_confounding",
+    "unmeasured_confounding",
+    "population_change",
+    "selection_bias",
+    "competing_risk_estimand",
+    "unit_mismatch",
+    "biological_inconsistency",
+    "verification_scope"
+  ],
+  "output_schema": {
+    "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+    "findings": [
+      {
+        "issue": "an allowed issue code",
+        "status": "established, possible, or not_supported",
+        "evidence": [
+          "fact IDs that support this finding"
+        ]
+      }
+    ],
+    "next_action": {
+      "id": "one of the supplied action IDs",
+      "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+      "reason": "specific reason and what the result changes"
+    },
+    "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+  }
+}

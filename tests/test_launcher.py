@@ -31,6 +31,21 @@ class LauncherTest(unittest.TestCase):
             f.write_text(f.read_text().replace("D-03,30", "D-03,24"))
             self.assertNotEqual(subprocess.run(command + ["--check"], capture_output=True).returncode, 0)
 
+    def test_observational_starter_excludes_cached_data_runtime_and_local_environment(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            source = root / "source" / "examples" / "observational-medicine"
+            source.mkdir(parents=True)
+            for name in ["protocol.json", "requirements.lock", "prepare.py", ".gitignore", "nhefs.csv", "runtime.json", ".env", "auth.json"]:
+                (source / name).write_text("fixture")
+            (source / ".venv").mkdir()
+            (source / ".venv" / "python").write_text("host-specific runtime")
+            dest = root / "new-study"
+            with patch.object(launcher, "ROOT", root / "source"), redirect_stdout(io.StringIO()):
+                launcher.init_project(argparse.Namespace(kind="observational", directory=dest))
+            self.assertEqual({p.name for p in dest.iterdir()}, {"protocol.json", "requirements.lock", "prepare.py", ".gitignore"})
+            self.assertTrue((source / "nhefs.csv").exists())
+
     def test_full_inventory_counts_and_discovery(self):
         for name, count in (("pstack", 1137), ("gstack", 4528)):
             self.assertEqual(len(launcher.workflow_sources.inventory(launcher.SOURCES[name])), count)

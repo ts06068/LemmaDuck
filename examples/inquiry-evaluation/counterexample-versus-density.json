@@ -1,0 +1,37 @@
+{
+  "case_id": "counterexample-versus-density",
+  "question": "Judge each explicitly scoped proposition separately. Retain directly supplied or calculated sample facts while distinguishing a contradiction from lack of evidence for a stronger claim. Return only the requested JSON object; use the supplied evidence and do not invent measurements.",
+  "facts": {
+    "F1": "For f(n)=n*n+n+41, exact integer checks show prime values for n from 0 through 39.",
+    "F2": "For n=40, the exact value is 1681, equal to 41*41, and therefore composite.",
+    "F3": "No claim about the frequency of prime values beyond the checked range has been analyzed."
+  },
+  "propositions": {
+    "C1": "The supplied exact counterexample value f(40) is composite. Return f(40) as value.",
+    "C2": "The supplied evidence supports the claim that f(n) is prime for every nonnegative integer n.",
+    "C3": "The proportion of prime f(n) values for n greater than 10000 has been established."
+  },
+  "actions": {
+    "revise_universal": "Retain the exact counterexample, reject the universal claim and define a new question about prime occurrence if that remains important.",
+    "repeat_first40": "Repeat the same first 40 prime checks to rescue the universal claim.",
+    "accept_universal": "Declare a universal theorem from the first 40 examples."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "null except when the case requests a prediction plan, then assignment, feature_cutoff, validation, and preprocessing_fit as in the supplied requirements"
+  }
+}

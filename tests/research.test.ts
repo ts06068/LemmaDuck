@@ -212,3 +212,9 @@ test("a future dispatch deadline bounds a running adapter before its longer time
   assert.equal(result.interrupted, true); assert.equal(result.reason, "timeout");
   assert.ok(Date.now() - started < 7000, "the shorter approved deadline must terminate the adapter");
 });
+
+
+test("verified arithmetic cannot be relabelled as a formal proof", async t => {
+ const f=researchFixture(t); const run=await f.runner.run(f.experiment.id,f.approve().id);assert.equal(run.data.status,"verified");
+ assert.throws(()=>f.research.record("claim",{statement:"A universal identity is proved",claimType:"formal",scope:"All possible inputs",runs:[run.id],limitations:[]}),/formal proof|formal claim/i);
+});

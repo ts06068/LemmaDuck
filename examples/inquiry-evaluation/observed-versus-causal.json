@@ -1,0 +1,37 @@
+{
+  "case_id": "observed-versus-causal",
+  "question": "Judge each explicitly scoped proposition separately. Retain directly supplied or calculated sample facts while distinguishing a contradiction from lack of evidence for a stronger claim. Return only the requested JSON object; use the supplied evidence and do not invent measurements.",
+  "facts": {
+    "F1": "The recorded groups contain 60 outcomes among 300 exposed and 45 outcomes among 300 unexposed participants. These are complete counts for the displayed sample.",
+    "F2": "Exposure is defined using treatment fills after cohort eligibility; follow-up starts at eligibility. Assignment is observational, and baseline confounding has not been addressed.",
+    "F3": "Exact eligibility, fill and outcome dates and recorded baseline covariates are accessible; no aligned analysis has been performed."
+  },
+  "propositions": {
+    "C1": "The exposed-minus-unexposed difference in the displayed sample outcome fractions is 60/300 minus 45/300. Return that difference as value.",
+    "C2": "These displayed counts establish that assigning treatment would prevent outcomes.",
+    "C3": "Treatment assignment was aligned with eligibility and follow-up using only baseline information."
+  },
+  "actions": {
+    "audit_design": "Use the accessible dates and covariates to specify aligned treatment strategies and assess confounding before a causal analysis.",
+    "reread_counts": "Read these same recorded group counts again.",
+    "claim_prevention": "Promote the displayed fractions to a causal prevention claim."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "null except when the case requests a prediction plan, then assignment, feature_cutoff, validation, and preprocessing_fit as in the supplied requirements"
+  }
+}

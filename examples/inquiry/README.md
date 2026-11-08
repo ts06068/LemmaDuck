@@ -12,3 +12,9 @@ synthetic feedback, a domain rule and a method with transfer evidence. No model
 account, patient data, or real-world scientific claim is involved.
 
 Run `duck research PROJECT evaluation-demo` for an eight-trial paired evaluation of identical deterministic adapters. Both should be correct; the expected difference is zero. It tests the evaluator contract and establishes no AI performance advantage.
+
+Use `duck research PROJECT compare actions.json` to compare declared next tests
+without a model account or saved task. It excludes an already known answer and an
+unavailable independent measurement, and retains the feasible unit-normalization
+check. Learning and replication are ranked separately. Availability, independence,
+and predicted compatibility are explicit assumptions, not facts verified by the tool.

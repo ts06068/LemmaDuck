@@ -44,6 +44,11 @@ class DistroReleaseTests(unittest.TestCase):
                         self.assertIn("package/examples/observational-medicine/requirements.lock", names)
                         self.assertIn("package/examples/observational-evaluation/driver.mjs", names)
                         self.assertIn("package/scripts/evaluate-medical.mjs", names)
+                        self.assertIn("package/dist/research-actions.js", names)
+                        self.assertIn("package/examples/inquiry/actions.json", names)
+                        self.assertIn("package/examples/inquiry-evaluation/patients-versus-visits.json", names)
+                        self.assertIn("package/examples/inquiry-evaluation/score-propositions.py", names)
+                        self.assertIn("package/scripts/evaluate-inquiry.mjs", names)
                         self.assertNotIn("package/examples/observational-medicine/nhefs.csv", names)
                         self.assertNotIn("package/examples/observational-medicine/runtime.json", names)
                     if distro != "base":

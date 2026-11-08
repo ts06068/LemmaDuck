@@ -310,3 +310,44 @@ requires an identifier, qualifications, three ratings per answer, and notes. Kee
 personal reviewer information in owner-controlled storage. A reviewer persona or
 another model is an automated review perspective; record that identity and any
 exposure to conditions/results rather than labelling it independent human review.
+
+## Choose the next research action
+
+For a supplied explanation or review, use its evidence directly. Research records
+and tools are useful when they advance a question, resolve missing information, or
+verify a consequential result. A verified local result can remain known while a
+broader scientific claim remains uncertain.
+
+`compare_research_actions` is available in Pi and Gemini, including read-only review.
+It compares declared possible outcomes for competing explanations, rejects unavailable
+resources and already known answers, and distinguishes independent replication from
+rerunning the same result. It leaves scientific records unchanged. Learning and
+replication have separate rankings because their scores have different meanings.
+These are declared outcome distinctions per cost, not measured information gain.
+
+Owners can use it without a model profile or task-state initialization:
+
+```sh
+duck research PROJECT compare actions.json
+```
+
+The inquiry starter includes an example `actions.json`. Describe the question,
+alternative hypotheses, and each action's availability, known-answer status,
+independence, cost and possible outcomes. Each outcome names compatible alternatives.
+The engine exposes missing alternatives and nondiscriminating proposals; domain
+judgment must still assess whether those predictions and independence assumptions
+are credible.
+
+Formal-proof claims are refused: the current verifier contract checks bounded
+measurements and does not implement a proof-system adapter. Historical records are
+preserved, and historical formal claims appear in `unsupportedClaims`. An arithmetic
+check cannot be relabelled as a universal proof. A causal claim still requires the
+owner-reviewed identification protocol as well as verified measurements.
+
+Unknown nested experiment outcomes now interrupt both workers. The live gateway also
+refuses new calls while reconciliation is required, serializes model/tool actions,
+and prevents method transcripts from replacing the owner-frozen system policy.
+Live comparisons may name owner-supplied `policies.baseline` and `policies.candidate`
+(each with `name` and `text`); exact instructions and parent sources are frozen before
+dispatch and withheld from method payloads. Provenance digests and archived executable
+modules support review of the actual implementation, not just a version label.

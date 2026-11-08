@@ -53,3 +53,10 @@ test("evaluation rejects exposed truth, a shared verifier, and unbounded failure
   await assert.rejects(f.evaluation.evaluate({ ...f.config, evaluator: f.config.baseline }), /independent/);
   await assert.rejects(f.evaluation.evaluate({ ...f.config, outcomes: { error: { direction: "lower", minimum: 0, maximum: 100, failureScore: 0 } } }), /worst-case/);
 });
+
+
+test("caller mutations cannot rewrite a protocol after dispatch", async t=>{
+ const f=fixture(t);const config={...f.config,repeats:1};const pending=f.evaluation.evaluate(config);
+ config.repeats=2;config.identity.model="mutated after freeze";
+ const report=await pending;assert.equal(report.trials.length,4);assert.equal(report.identity.model,"deterministic arithmetic fixture");
+});

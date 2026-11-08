@@ -1,0 +1,37 @@
+{
+  "case_id": "patients-versus-visits",
+  "question": "Judge each scoped proposition separately and choose the warranted next action. Retain known sample results and distinguish a contradicted assertion from one that lacks evidence. This is a review only; do not execute a study. Return JSON in the supplied schema and set split_plan to null.",
+  "facts": {
+    "F1": "The file contains 496 visits from 248 distinct patients; 31 distinct patients have the outcome. The target descriptive unit is the patient.",
+    "F2": "The draft denominator is 496 and the evaluation uses random visits; records from the same patients appear in both partitions.",
+    "F3": "Patient IDs and dates are available to rebuild the cohort. These observational records do not establish a causal treatment contrast."
+  },
+  "propositions": {
+    "C1": "The observed patient-level outcome fraction is 31/248. Return that fraction as value.",
+    "C2": "The evaluation partitions are patient-disjoint.",
+    "C3": "These visit records establish a causal treatment benefit."
+  },
+  "actions": {
+    "rebuild_patients": "Rebuild the patient-level cohort and patient-disjoint evaluation using the available IDs and dates.",
+    "rename_visits": "Rename visit IDs while retaining the same partitions.",
+    "repeat_denominator": "Read the already supplied visit count again."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+  }
+}

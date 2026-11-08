@@ -32,7 +32,7 @@ export const researchSchemas = {
   anomaly: Type.Object({ expected: text(), observed: text(), hypotheses: ids(), runs: Type.Array(id(), { maxItems: 100 }),
     measurement: Type.Union([Type.Literal("unchecked"), Type.Literal("valid"), Type.Literal("invalid")]), nextTest: text(),
     status: Type.Union([Type.Literal("open"), Type.Literal("resolved")]), resolution: Type.Optional(text()) }, { additionalProperties: false }),
-  claim: Type.Object({ statement: text(), claimType: Type.Union([Type.Literal("descriptive"), Type.Literal("predictive"), Type.Literal("causal"), Type.Literal("formal")]),
+  claim: Type.Object({ statement: text(), claimType: Type.Union([Type.Literal("descriptive"), Type.Literal("predictive"), Type.Literal("causal")]),
     scope: text(), runs: ids(), limitations: texts(), study: Type.Optional(id()), identification: Type.Optional(text()) }, { additionalProperties: false }),
   feedback: Type.Object({ source: text(), correction: text(), rationale: text(), affected: ids() }, { additionalProperties: false }),
   rule: Type.Object({ feedback: id(), description: text(), requiredParameters: texts(), allowedClaimTypes: texts(), regressionRuns: ids(), transferRuns: ids(), status: Type.Optional(Type.Union([Type.Literal("active"), Type.Literal("retired")])), retirementReason: Type.Optional(text()) }, { additionalProperties: false }),
@@ -155,6 +155,7 @@ export class ResearchStore {
     return rules;
   }
   record(kind: ResearchKind, value: unknown, authority: "agent-proposal" | "owner" | "runner" = "agent-proposal", replace?: string): ResearchRecord {
+    if (kind === "claim" && value && typeof value === "object" && "claimType" in value && value.claimType === "formal") throw new Error("A numerical verifier cannot establish a formal proof. Formal claims require a proof-checking adapter, which is not implemented.");
     if (!Object.hasOwn(researchSchemas, kind) || !Value.Check(researchSchemas[kind], value)) throw new Error(`Invalid ${kind} record. Inspect duck research PROJECT schema ${kind}.`);
     const data = JSON.parse(JSON.stringify(value)) as Record<string, any>;
     const previous = replace ? this.get(replace) : undefined;
@@ -256,7 +257,7 @@ export class ResearchStore {
           const experiment = this.get((record.data as Run).experiment.id).data as Experiment;
           if ((data.requiredParameters as string[]).some(key => !Object.hasOwn(experiment.parameters, key))) throw new Error("Regression and transfer plans must satisfy the proposed rule.");
         }
-        if ((data.allowedClaimTypes as string[]).some(type => !["descriptive", "predictive", "causal", "formal"].includes(type))) throw new Error("Invalid rule claim type.");
+        if ((data.allowedClaimTypes as string[]).some(type => !["descriptive", "predictive", "causal"].includes(type))) throw new Error("Invalid rule claim type.");
       } else {
         const methods = (data.files as string[]).map(path => this.source(path));
         for (const record of [...original, ...later]) {
@@ -290,7 +291,7 @@ export class ResearchStore {
     const assessments: Record<string, { run: string; assessment: string }[]> = {};
     for (const record of runs) for (const [hypothesis, assessment] of Object.entries((record.data as Run).assessment || {})) (assessments[hypothesis] ||= []).push({ run: record.id, assessment: stale(record) ? "stale evidence" : assessment });
     return { taskId: this.task.task.id, records: records.map(record => ({ id: record.id, hash: record.hash, kind: record.kind, revision: record.revision, authority: record.authority, stale: stale(record), data: record.data })),
-      assessments, candidates: this.candidates(cache, files), openAnomalies: records.filter(record => record.kind === "anomaly" && record.data.status === "open").map(record => record.id),
+      assessments, unsupportedClaims: records.filter(record => record.kind === "claim" && record.data.claimType === "formal").map(record => record.id), candidates: this.candidates(cache, files), openAnomalies: records.filter(record => record.kind === "anomaly" && record.data.status === "open").map(record => record.id),
       caution: "Compatibility is bounded evidence, not proof of a hypothesis or causal identification. Owner approval is not independent scientific validation." };
   }
   refreshHandoff(): void {

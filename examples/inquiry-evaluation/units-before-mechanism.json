@@ -1,0 +1,86 @@
+{
+  "initial_prompt": {
+    "case_id": "units-before-mechanism",
+    "question": "Review the frozen case using read_case_material; its scientific facts and action options have not yet been supplied. Return the specified JSON object once you have the evidence.",
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  },
+  "tool_material": {
+    "case_id": "units-before-mechanism",
+    "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+    "facts": {
+      "F1": "The first frozen analysis reports a +2.0 kg sample contrast. The second independent calculation reports +2,000 grams.",
+      "F2": "They use the same participants, exposure contrast and outcome period; the only reported presentation difference is the mass unit.",
+      "F3": "The draft treats the two numbers as contradictory biology. No observation of a biological disagreement beyond these two displayed values is supplied."
+    },
+    "actions": {
+      "resolve_units": "Convert the supplied quantities to a common unit, explain their equality, and revise the draft claim; do not invent a new biological experiment.",
+      "new_trial": "Launch a new trial to explain the apparent 1,998-unit disagreement.",
+      "reread_same_output": "Call a tool only to reread these same two displayed numbers."
+    },
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  }
+}

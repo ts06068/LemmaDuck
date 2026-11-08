@@ -1,0 +1,1140 @@
+{
+  "version": 1,
+  "id": "8f71a759-d3da-4d5d-baf3-60703cea1b7b",
+  "at": "2026-11-08T18:19:56.144Z",
+  "taskId": "3d0f25c2-9b60-4efe-81c9-c51d30c4f5c8",
+  "purpose": "research-evaluation",
+  "configHash": "2414a73be1f210bddeee7913e099703b939663ff734e2efbbf9a1fa813d44a2f",
+  "identity": {
+    "provider": "openai-codex",
+    "model": "gpt-6-sol",
+    "tools": [
+      "inspect_research",
+      "compare_research_actions",
+      "record_research",
+      "run_research_experiment",
+      "read_case_material"
+    ]
+  },
+  "conditions": {
+    "baseline": "Previous production inquiry policy at 7c9b135",
+    "candidate": "Compact inquiry policy"
+  },
+  "liveRuntime": {
+    "gateway": "3d319dbdb75a6f6b76fd2b042d7debe96babab80dd5775e13d850ea4cc138499",
+    "tools": "8e3a258cfc4c897a3ba7dcbaeec91e0eb50e88b461bb3837e86c31cd872e277e",
+    "actions": "8f38c8395c1a1e37a7b2751d718dfe7339ffb761a96fd94573be143073c75769",
+    "dependencyLock": "65b409b8f9f76e55d47fffdb273481490f6c51277c9f523a8331584a3fcfc42b",
+    "instructions": {
+      "baseline": "Use inspect_research to recover scientific state and schemas. Record sourced observations, an important question, competing hypotheses, then experiment plans with distinct predicted measurement ranges before executing. Include measurement/selection artifacts where plausible. Compare candidate tests by importance, discrimination, feasibility, and cost; scores are ordinal judgments, not measured information gain. Only the owner can approve an exact bounded scope in the CLI. run_research_experiment executes approved frozen adapters and their independent verifier; it cannot approve or expand scope. Preserve negative and inconclusive results and open anomalies. Distinguish a completed process, a verified measurement, compatibility with a hypothesis, and causal identification. Claims must link current verified runs. Observational studies register population, time zero, exposure/comparator, outcome window, confounders, missingness, estimand, and identification assumptions; ambiguous temporal alignment permits association only. Domain feedback is a proposal until the owner records it; rule/capability promotion requires reviewed regression and distinct transfer evidence. Cite artifact IDs and do not replace contradictions with a confident summary.",
+      "candidate": "Use supplied evidence; call tools only to resolve consequential uncertainty. Avoid empty-state inspection, rereading complete cases, and unnecessary records.\nName the supported proposition. Preserve established local facts while qualifying stronger claims. Separate established defects, plausible concerns and contradictions; missing evidence is not a demonstrated violation. Explicitly granted assumptions permit conditional conclusions.\nChoose feasible tests by what distinct outcomes would change. Known answers add no evidence; independent replication may test measurement reliability. Use compare_research_actions when useful; name unavailable evidence.\nBefore execution inspect needed schemas/state, record sources and competing hypotheses, freeze predictions, and use owner-approved scope. Claims need current verified runs. Preserve anomalies, negative/inconclusive results and original predictions.\nDistinguish execution, verification, compatibility and causal identification. Check observational population, time zero, exposure/outcome windows, missingness and confounding; ambiguous timing permits association only.\nPrediction requires features available at prediction time, patient-disjoint partitions for new patients, and training-only preprocessing. Check instructions for contradictions.\nPromote rules/capabilities only after owner feedback, regression and distinct transfer checks."
+    },
+    "comparison": "Instructions differ; model, declared tools, inputs, adapter and ceilings are shared."
+  },
+  "runtimeFiles": {
+    "dist/acp.js": "d5faad9b6323f19c206fbd0c0c3ba3deb4801aa136c46750bcc6efa0bdcac313",
+    "dist/artifacts.js": "e687cf33374815cc35e84ddd7dc49fa6231ec6055e383d834c397d072ad467df",
+    "dist/cli.js": "c983eb7de756f9daba555c5ec9837c66676bddd17b19e81df5794c995339bba4",
+    "dist/coding.js": "c3c37d27e5905e0a39414f26aaf70637c9f83e58806ed1e35f4b3c9357cefa3f",
+    "dist/config.js": "bf10c62707a477408a4ca291a5210b49f18400dcc67ca9771bba84db67c18849",
+    "dist/connection-tools.js": "08949c537798066a894a8fa5dfaf8b9083e57c56b5330608d17e744043fc1c88",
+    "dist/connectors.js": "f156fbccacd28a1fe866df43d15a4f5b54235f9e1ecb9aadda6566260288fcd8",
+    "dist/dependencies.js": "6001dd89ce85e4d20df2bab66298ffd4db9a1e899952aad739a83ab96d60d837",
+    "dist/extension.js": "be2efe42b2610d2532670d3488de8b52b80794efb1e3da4ece69a9fc61235d42",
+    "dist/gemini-tools.js": "03a7dc02ac0f403ae5f1952b705bdc23062e92f288b05bad3904cc1b5b694798",
+    "dist/gemini.js": "963cdf2576b3be8ab4fb891937db3be61e0878e98e5b0026e033f6f492bf9cc3",
+    "dist/google-login.js": "7a9e5d26197c6fd9dd7cfcce1b004e1a38c63e32bc83dc2f9ccb5412031947b5",
+    "dist/google-profile.js": "4ee02bb44b80e584c2cda5a85fd6bac0b5bc1969d4742c58799157d7c96264e4",
+    "dist/paths.js": "6b7c8d0d9a2ef6ade0c9263234a9c41aa40ecfa04f57a0fe4b3c380b6b6c5c43",
+    "dist/provider-command.js": "88ce45449237298a2df6e7adb2c289784514ff975af77319d557f274bd615677",
+    "dist/providers.js": "53451b071dadd427fbf690511696973667ee4e7f58cb1c7d5aba184058ac44ce",
+    "dist/research-actions.js": "8f38c8395c1a1e37a7b2751d718dfe7339ffb761a96fd94573be143073c75769",
+    "dist/research-command.js": "c0a00c74a650284d7271ae0d4c284692333751b869e219fc6df6d7af96dcad97",
+    "dist/research-demo.js": "e3596dcd937b88fbb54ca33dd248070c0313423707ca272d9b60aa5e90c64381",
+    "dist/research-evaluation.js": "a685bdd37b2c17d9d6f2ad1a427780e538c6a1a3012b9f2f4c58ab825f221825",
+    "dist/research-medical.js": "5501cc2e07f3147d6f3053409bea87bc25b2ca191b3c4c6ccaf64f4ed0aef910",
+    "dist/research-model.js": "3d319dbdb75a6f6b76fd2b042d7debe96babab80dd5775e13d850ea4cc138499",
+    "dist/research-runner.js": "516b6c61e4a6d1b25cf96223883053b01407949f3061b236137645e0231a1fff",
+    "dist/research-tools.js": "8e3a258cfc4c897a3ba7dcbaeec91e0eb50e88b461bb3837e86c31cd872e277e",
+    "dist/research.js": "039bf574b32dae8550ed73aca0f7dd33bd8d354d003522393215aafa9c497b25",
+    "dist/routing.js": "6b8fe548002680f6b717222bb96697b0ad940133f02e5a3363e0a2732fc54ffe",
+    "dist/security.js": "b3b98ae4e2c0e455222cad41431cda7b1b65dc23931923ac6fa11d493cc0e9ce",
+    "dist/shell.js": "ad157aca49baf914b2c284e861dff6fd04e5e107785a4a7c2c7a6d7e8a5cd3e6",
+    "dist/state.js": "09f7000655775888c62dfed76a0a4da8eff5b1f05e71a36f6da8620db7437bbf",
+    "dist/task-tools.js": "c0e22a81c10ff66a203c4e548f55d132dc412e59722d106d83bacfab6adfb50f",
+    "dist/ui.js": "a5afe4538cac7c6a26124e954ac1d1c728a2b04398e2346f2a519be753b76de9",
+    "dist/vcs-tool.js": "531103adef639ce63d4af4bb4859d5c29633dbbd0d49fad1fd8638adffdb0beb",
+    "dist/vcs.js": "60412197bc2cfca5280af8bcde1f54955b400b0ca02a1070bcf493e9d4d49357",
+    "dist/workflow.js": "a13f1d7d65999b540fef4ffd15c2d321d5617722f0c9f921838076ce737fcc5e",
+    "dist/workspace-ui.js": "39e8231e235a456f1483ac61b3c03fdf70c539e1a3904feaab5a6cd4d89c52c6",
+    "package.json": "e71ea595de226fa18708110eb4068dafb7d190b7fe98e664aaf304c550fdce9b",
+    "npm-shrinkwrap.json": "65b409b8f9f76e55d47fffdb273481490f6c51277c9f523a8331584a3fcfc42b",
+    "tsconfig.json": "fa52bb58c59d769d75f3189cc90c688b2950ce9870beabb33af9ecd6ba87d9df"
+  },
+  "budget": {
+    "timeoutMs": 180000,
+    "attemptsPerMethodTask": 1,
+    "tokenUsage": "reported",
+    "live": {
+      "maxCalls": 3,
+      "maxToolCalls": 8,
+      "maxOutputTokens": 4096,
+      "maxReportedTokens": 24000,
+      "reasoning": "low"
+    }
+  },
+  "trials": [
+    {
+      "blindId": "8f9cd413-2594-4bb8-a9d5-710eba81a54d",
+      "task": "patients-versus-visits",
+      "context": "inquiry-confirmation-patients-versus-visits",
+      "repeat": 0,
+      "order": 0,
+      "inputHash": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "elapsedMs": 5471,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "3c3bffa3bd71d0cdc5b130236912221a6736d44190f9ebfa73eca25582d759ee",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1254,
+        "receipts": [
+          {
+            "requestHash": "df07b94a884815caba627445d2b534913f73b6b59b48862bf3ce1100c92dc67a",
+            "responseId": "resp_09d974421bb621fb016af0bd50fae487d095c8a46f104ee952",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1111,
+            "output": 143,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1254
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "e4fad864-ba07-4360-adcc-43c314f9e7d4",
+      "task": "patients-versus-visits",
+      "context": "inquiry-confirmation-patients-versus-visits",
+      "repeat": 0,
+      "order": 1,
+      "inputHash": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "elapsedMs": 5078,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "08fc961f93d1ec3d16829de5daa251b1045c1f6d14609d901a8020c51ef65ab3",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1264,
+        "receipts": [
+          {
+            "requestHash": "1839fd3815dcdc0f554a5ada3e9e0e22e076cbc8bd3a67fcd8acbda48ed5fa8b",
+            "responseId": "resp_0d79c1f2025092e0016af0bd56036087d09c255fd6ab9a9214",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1121,
+            "output": 143,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1264
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "f625b914-4f37-47bc-ae47-f86139365be3",
+      "task": "randomization-versus-precision",
+      "context": "inquiry-confirmation-randomization-versus-precision",
+      "repeat": 0,
+      "order": 0,
+      "inputHash": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "elapsedMs": 5163,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "db2411642285170c08eb2584853b6b2defc0a3387f6dae445faf53cb465e6848",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1283,
+        "receipts": [
+          {
+            "requestHash": "f59ca1b42e799ef4296dc378cb6f3d8a2a2717d22e5bd18c965c2b2665eccc83",
+            "responseId": "resp_0fbbca6000431ee9016af0bd5b32dc87d0b50b7bb9538f6a0d",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1144,
+            "output": 139,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1283
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "bf1f6f0f-bed9-46d9-8dc1-66b0e52119e7",
+      "task": "randomization-versus-precision",
+      "context": "inquiry-confirmation-randomization-versus-precision",
+      "repeat": 0,
+      "order": 1,
+      "inputHash": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "elapsedMs": 4927,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "49cad791e461b818251df8244d9890f23201d2c10b865e30a6ea512a6d6f15eb",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1280,
+        "receipts": [
+          {
+            "requestHash": "9c6f716cc4bb333be10d75078f3067ae8177c894ac9342e9c308b8f8d749d665",
+            "responseId": "resp_0b3d8cc012cd6fdb016af0bd60487c87d098947d72f4bfd1be",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1154,
+            "output": 126,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1280
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "46436d7a-a0f8-4ccd-937a-41715656364d",
+      "task": "computation-versus-acquisition",
+      "context": "inquiry-confirmation-computation-versus-acquisition",
+      "repeat": 0,
+      "order": 0,
+      "inputHash": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "elapsedMs": 6330,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "a4eee44db12afa37526aa0701a74fbf2e351b2fe81adc4e0e905f6b99945f930",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2344,
+        "receipts": [
+          {
+            "requestHash": "4e79b4e575638210b05dc094aab2eca6a0ad11cf563a8c4c55e52f9cd3d11464",
+            "responseId": "resp_0e9875f0300001ae016af0bd654b5887d09f657eb3e0bfd9d5",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 909,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 924
+          },
+          {
+            "requestHash": "ab059a069a9e8846c85a7f1d5edbe87acacdab8b92d87816e0bd9a1e31e8c256",
+            "responseId": "resp_0e9875f0300001ae016af0bd66c0f087d08e5c1ec42ce5aea3",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1295,
+            "output": 125,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1420
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "d2ad5a48-4228-443a-ab5a-44f2c369aaa5",
+      "task": "computation-versus-acquisition",
+      "context": "inquiry-confirmation-computation-versus-acquisition",
+      "repeat": 0,
+      "order": 1,
+      "inputHash": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "elapsedMs": 31510,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "f4c2f3156254bb541131a871f57c5316434e3d6f5b1cd49c7ea1d1f0241af9be",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2363,
+        "receipts": [
+          {
+            "requestHash": "fc3e6fcc6038fa80430bd1b04342a03a3e3336572cf0bc9b0dd7c0ccd1cab385",
+            "responseId": "resp_036efda56c2933d4016af0bd6b92b487d08850c88f11b2df58",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 919,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 934
+          },
+          {
+            "requestHash": "4f9816d54cf5e14fb8644cc11636521d6d4ece7a53140e99d729a5f0cabf9fe0",
+            "responseId": "resp_036efda56c2933d4016af0bd835d2c87d09c7acdf5fee55458",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1305,
+            "output": 124,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1429
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "cca325de-bcae-4f8f-b4db-d9fc2d085bd4",
+      "task": "ranking-versus-calibration",
+      "context": "inquiry-confirmation-ranking-versus-calibration",
+      "repeat": 0,
+      "order": 0,
+      "inputHash": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "elapsedMs": 7132,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "dd15cfe4326180341598ae1408b3b69c8d25486cb1c5e11e3f6da44a76512d98",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2413,
+        "receipts": [
+          {
+            "requestHash": "33a7a4af2b956c7ce27768f565b458a5d605a858e1e2c9a18b7b661088aa0e4d",
+            "responseId": "resp_093e8c2154ce3fcd016af0bd88846087d0bf8686cd95951144",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 908,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 923
+          },
+          {
+            "requestHash": "ddf4711f6d561232dc684eab4c27f3dff8b15169b6c5a65bd70157127507fd1e",
+            "responseId": "resp_093e8c2154ce3fcd016af0bd8a1d7487d0addf0e86cbc3e086",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1312,
+            "output": 178,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1490
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "0b8cb757-ff67-41a3-93a1-63c7ec42ffc5",
+      "task": "ranking-versus-calibration",
+      "context": "inquiry-confirmation-ranking-versus-calibration",
+      "repeat": 0,
+      "order": 1,
+      "inputHash": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "elapsedMs": 6832,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "f2ebb938f53baa4951cdca33e13bf5698a315c6b178d0c688b8b2394bab04dc7",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2407,
+        "receipts": [
+          {
+            "requestHash": "bf4e2222d0eb61445099422f8cb88da9f5c4ae94effc0a7b2a8278fa84f9f24d",
+            "responseId": "resp_030cc27299e5543b016af0bd8ffc3087d099ae6d01edc4670a",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 918,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 933
+          },
+          {
+            "requestHash": "73bc5034a2554bd95e7c8000a463f2259866d9907d04bac17a86860f174b5a68",
+            "responseId": "resp_030cc27299e5543b016af0bd91769487d0bce0b1be4d860337",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1322,
+            "output": 152,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1474
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "6289b06c-53aa-43ff-8388-a175805edb55",
+      "task": "patients-versus-visits",
+      "context": "inquiry-confirmation-patients-versus-visits",
+      "repeat": 1,
+      "order": 0,
+      "inputHash": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "elapsedMs": 5207,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "14bff83ce55887fb7a0cbe9ccd32656067d0e5ebc8f4c92a6a8ce45d0e250cad",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1270,
+        "receipts": [
+          {
+            "requestHash": "76ec2add25527211edfc8817aa59206d43dcac06a4858129f708b40a50591cb4",
+            "responseId": "resp_0cbd934467e8af8b016af0bd96c39087d08c9737852ab91dbe",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1121,
+            "output": 149,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1270
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "766011a3-8944-4816-b075-ca8001e4db00",
+      "task": "patients-versus-visits",
+      "context": "inquiry-confirmation-patients-versus-visits",
+      "repeat": 1,
+      "order": 1,
+      "inputHash": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "elapsedMs": 4657,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5a05a3350eb2452f299ba94b9b68bb33c8eca3d400c3a64d100f43ee7e8dcdd8",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "b39e71057c824cc5c19a52c6c8fd17ec4d9b7a7d5e7caddc8ceb49d73b0aa878",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1262,
+        "receipts": [
+          {
+            "requestHash": "aff0dd1e584cd7c10e620533c4ec60c95e9c7fc17140cb3141d301c3816c868e",
+            "responseId": "resp_08c66e0d59700705016af0bd9c512487d08efb460a98e8cb45",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 87,
+            "output": 151,
+            "cacheRead": 1024,
+            "cacheWrite": 0,
+            "total": 1262
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "f933483b-b18f-494d-b3d4-552ee7c9370c",
+      "task": "randomization-versus-precision",
+      "context": "inquiry-confirmation-randomization-versus-precision",
+      "repeat": 1,
+      "order": 0,
+      "inputHash": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "elapsedMs": 4493,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "3dbb5ed7377f1d7fffb841714c8b44ae72b7a8de7f469e36e7ef69a6eb82a915",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1290,
+        "receipts": [
+          {
+            "requestHash": "fa815f57b96cd56a4c926fb39fc1f2a47261281f6270467ce24ca8e96c4a61ef",
+            "responseId": "resp_0abaebc937fe54ce016af0bda16ab487d095f272b3417b7220",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1154,
+            "output": 136,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1290
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "d85fcb4d-9a8a-4c84-adae-163acf6e1ed5",
+      "task": "randomization-versus-precision",
+      "context": "inquiry-confirmation-randomization-versus-precision",
+      "repeat": 1,
+      "order": 1,
+      "inputHash": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "elapsedMs": 5012,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "b40dae8aa225d62fd55a70faad2a1bec233cb50a977ac743942899768a8f27d4",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "2023d0162a415bfa978fa0b3ce242037aec30435a8211c29c6b47dd9d164dd75",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 1,
+        "toolCalls": 0,
+        "reportedTokens": 1287,
+        "receipts": [
+          {
+            "requestHash": "d6b2ea77f9501f1d227feec4d9383e2ac5624b719d7588376499fb59c418d9bf",
+            "responseId": "resp_0bd626d6b037df8c016af0bda6595887d09a5224f3b2c241c6",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1144,
+            "output": 143,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1287
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "19b7ef30-3bc0-4c51-abff-12bf362504ff",
+      "task": "computation-versus-acquisition",
+      "context": "inquiry-confirmation-computation-versus-acquisition",
+      "repeat": 1,
+      "order": 0,
+      "inputHash": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "elapsedMs": 6350,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "87a1cb1449de44114db054ac6464b973ba0c3d0a30055cad6fa758b0486ab5ba",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2362,
+        "receipts": [
+          {
+            "requestHash": "bbb982ed3ca93aa5f939db5d9d09f4bd2bf5d4df23bb17e3868ccc63618d1e2e",
+            "responseId": "resp_069a95a74b007b76016af0bdabd66887d0bee24e7a7b777b00",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 909,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 924
+          },
+          {
+            "requestHash": "f783682fa7540e935b99a81a68136bc7c51155dcb6b7b08b216334213f5331d7",
+            "responseId": "resp_069a95a74b007b76016af0bdad9ad887d0a192b16796917d06",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1295,
+            "output": 143,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1438
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "cf9730df-62c4-40d0-bb4b-674813634401",
+      "task": "computation-versus-acquisition",
+      "context": "inquiry-confirmation-computation-versus-acquisition",
+      "repeat": 1,
+      "order": 1,
+      "inputHash": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "elapsedMs": 6677,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "5e7b36523e1ba43580154c1cfaa2c702595a647676c52cb9f38be25b485887e3",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "2259ab2c143dd94766f4128417c530bd80cde67fa3faf65cfad149517fa30db7",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2382,
+        "receipts": [
+          {
+            "requestHash": "280d70b80a85f0bde2aae42bf955f8d19f5d43690edc6d5f2703119324c98f23",
+            "responseId": "resp_091c2c670434d830016af0bdb2f29087d08a2fd31a8cab75dc",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 919,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 934
+          },
+          {
+            "requestHash": "cae0d2c05ae7c4508c327cf6a06dc672b1bf3caae35278f5f02a597b0101f320",
+            "responseId": "resp_091c2c670434d830016af0bdb4f94487d09a2cde3ca4be662e",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1305,
+            "output": 143,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1448
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "136cd3c4-da42-44e5-ad8b-97aa6efefd7c",
+      "task": "ranking-versus-calibration",
+      "context": "inquiry-confirmation-ranking-versus-calibration",
+      "repeat": 1,
+      "order": 0,
+      "inputHash": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "elapsedMs": 6987,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "3ce360b84c45debe8e31af0547ad5724e4aac6a861e18c7491950ac862148525",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2412,
+        "receipts": [
+          {
+            "requestHash": "854f40ea8add3c0d48485cfd59f1a01c41e80806b62c00f0cca92b9d0a2e36ae",
+            "responseId": "resp_0bde077d4d370e52016af0bdb9f58487d0a27a9bd42c7a30af",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 918,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 933
+          },
+          {
+            "requestHash": "c420c81414ff661cc11bc86b3e542ffb07344992c7e217c9644e9397c96610ae",
+            "responseId": "resp_0bde077d4d370e52016af0bdbb8a1c87d0bd9f266b90b26099",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 1322,
+            "output": 157,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 1479
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    },
+    {
+      "blindId": "1b016e04-8367-409a-bc7b-c24c771331e0",
+      "task": "ranking-versus-calibration",
+      "context": "inquiry-confirmation-ranking-versus-calibration",
+      "repeat": 1,
+      "order": 1,
+      "inputHash": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "elapsedMs": 7011,
+      "success": true,
+      "metrics": {
+        "critical_recall": 1,
+        "evidence_precision": 1,
+        "claim_scope": 1,
+        "next_information": 1,
+        "operational_plan": 1,
+        "joint_validity": 1
+      },
+      "tokenUsage": "reported",
+      "inputArtifact": "fa7f46cd5291d66c8eb55027f97f5a007e755bafb7365c52e03154a37aa025fc",
+      "logArtifact": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "outputArtifact": "21ef2f55896d5fe59c8d7335cd0a82bf7178a1667eb47a006e5f14317d988d81",
+      "modelUsage": {
+        "provider": "openai-codex",
+        "model": "gpt-6-sol",
+        "tools": [
+          "inspect_research",
+          "compare_research_actions",
+          "record_research",
+          "run_research_experiment",
+          "read_case_material"
+        ],
+        "requestedReasoning": "low",
+        "calls": 2,
+        "toolCalls": 1,
+        "reportedTokens": 2388,
+        "receipts": [
+          {
+            "requestHash": "cf5ee858f2a69321ee82dd3f975dd1c51b675e75ad25f83316c61fc37e121155",
+            "responseId": "resp_0cc64830782f851a016af0bdc1049887d0a5404ccfbdf54ef8",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "toolUse",
+            "input": 908,
+            "output": 15,
+            "cacheRead": 0,
+            "cacheWrite": 0,
+            "total": 923
+          },
+          {
+            "requestHash": "2624d590d00d3851c00ebf85c1856a88b241632cb441fe649444831a07404c95",
+            "responseId": "resp_0cc64830782f851a016af0bdc2894887d0882f680c0417ceac",
+            "provider": "openai-codex",
+            "model": "gpt-6-sol",
+            "stopReason": "stop",
+            "input": 160,
+            "output": 153,
+            "cacheRead": 1152,
+            "cacheWrite": 0,
+            "total": 1465
+          }
+        ],
+        "errors": [],
+        "limitExceeded": false,
+        "outputLimit": "Same maxTokens request sent for both conditions. The installed Codex transport does not forward an output-token cap; post-response ceilings are audited and violations fail the trial. A dispatched response can overrun the ceiling.",
+        "billing": "Subscription route; monetary charges and remaining account quota are not inferred."
+      }
+    }
+  ],
+  "paired": {
+    "critical_recall": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    },
+    "evidence_precision": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    },
+    "claim_scope": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    },
+    "next_information": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    },
+    "operational_plan": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    },
+    "joint_validity": {
+      "direction": "higher",
+      "distinctTasks": 4,
+      "meanDifference": 0,
+      "perTask": {
+        "patients-versus-visits": 0,
+        "randomization-versus-precision": 0,
+        "computation-versus-acquisition": 0,
+        "ranking-versus-calibration": 0
+      }
+    }
+  },
+  "limitations": [
+    "Synthetic fixture results establish harness mechanics only when purpose is fixture-contract.",
+    "Pinned model identity, call counts, tool calls, and provider-reported token usage are recorded by the parent gateway.",
+    "Identical call/tool/token ceilings apply to both conditions. Monetary charges and remaining subscription quota are unknown; token accounting is provider-reported.",
+    "Truth is withheld from method payloads; same-user processes are not isolated by an OS sandbox.",
+    "Repeated runs are grouped by task; these descriptive differences do not establish statistical significance, novelty, or scientific benefit."
+  ],
+  "hash": "aba9a4e432111a0b4e8a32d42c46dc078a89217116daca54bd31d2ee5bbb69b9"
+}

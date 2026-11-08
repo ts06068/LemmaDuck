@@ -8,7 +8,7 @@ import { privateDir } from "./paths.js";
 import type { TaskStore } from "./state.js";
 import { atomicJson } from "./state.js";
 import { ResearchStore, fileDigest, hash, validateMeasurement, type FrozenAdapter } from "./research.js";
-import { ModelGateway, liveModel, modelBudgetSchema, type ModelUsage } from "./research-model.js";
+import { ModelGateway, liveModel, modelBudgetSchema, modelPoliciesSchema, liveResearchToolNames, type ModelUsage } from "./research-model.js";
 import { TaskStore as TrialTaskStore } from "./state.js";
 import { executeAdapter, readAdapterResult } from "./research-runner.js";
 
@@ -18,7 +18,7 @@ const schema = Type.Object({
   identity: Type.Object({ provider: Type.String(), model: Type.String(), tools: Type.Array(Type.String()) }, { additionalProperties: false }),
   baseline: adapter, candidate: adapter, evaluator: adapter,
   tasks: Type.Array(Type.Object({ id: Type.String({ minLength: 1 }), input: Type.String(), truth: Type.String(), context: Type.String({ minLength: 1 }) }, { additionalProperties: false }), { minItems: 2, maxItems: 100 }),
-  live: Type.Optional(modelBudgetSchema),
+  live: Type.Optional(modelBudgetSchema), policies: Type.Optional(modelPoliciesSchema),
   outcomes: Type.Record(Type.String(), Type.Object({ direction: Type.Union([Type.Literal("higher"), Type.Literal("lower")]), minimum: Type.Number(), maximum: Type.Number(), failureScore: Type.Number() }, { additionalProperties: false })),
   repeats: Type.Integer({ minimum: 1, maximum: 20 }), seed: Type.Integer({ minimum: 1, maximum: 2147483647 }),
   timeoutMs: Type.Integer({ minimum: 10, maximum: 300000 }),
@@ -27,7 +27,7 @@ export type EvaluationConfig = Static<typeof schema>;
 type Trial = { blindId: string; task: string; context: string; repeat: number; order: number; inputHash: string; outputArtifact?: string;
   logArtifact?: string; inputArtifact?: string; elapsedMs: number; success: boolean; metrics: Record<string, number>; error?: string; tokenUsage: "unknown" | "reported"; modelUsage?: ModelUsage };
 type Report = { version: 1; id: string; hash?: string; at: string; taskId: string; purpose: EvaluationConfig["purpose"]; configHash: string;
-  identity: EvaluationConfig["identity"]; liveRuntime?: ReturnType<ModelGateway["provenance"]>; budget: { timeoutMs: number; attemptsPerMethodTask: 1; tokenUsage: "unknown" | "reported"; live?: EvaluationConfig["live"] }; trials: Trial[];
+  identity: EvaluationConfig["identity"]; conditions?: { baseline: string; candidate: string }; liveRuntime?: ReturnType<ModelGateway["provenance"]>; runtimeFiles?: Record<string, string>; budget: { timeoutMs: number; attemptsPerMethodTask: 1; tokenUsage: "unknown" | "reported"; live?: EvaluationConfig["live"] }; trials: Trial[];
   paired: Record<string, { direction: string; distinctTasks: number; meanDifference: number; perTask: Record<string, number> }>; limitations: string[] };
 const ratingsSchema = Type.Object({ reviewer: Type.String({ minLength: 1 }), qualification: Type.String({ minLength: 1 }),
   reportHash: Type.String({ pattern: "^[a-f0-9]{64}$" }), ratings: Type.Array(Type.Object({ blindId: Type.String(), validity: Type.Integer({ minimum: 1, maximum: 5 }),
@@ -53,7 +53,7 @@ export class ResearchEvaluation {
   }
   async evaluate(value: unknown, signal?: AbortSignal): Promise<Report> {
     if (!Value.Check(schema, value)) throw new Error("Invalid paired evaluation configuration.");
-    const config = value;
+    const config = JSON.parse(JSON.stringify(value)) as EvaluationConfig;
     if (this.task.unresolved().length) throw new Error("Resolve interrupted operations before evaluation.");
     if (!Object.keys(config.outcomes).length || Object.values(config.outcomes).some(metric => metric.minimum > metric.maximum || metric.failureScore !== (metric.direction === "higher" ? metric.minimum : metric.maximum))) throw new Error("Declare bounded outcomes and a worst-case failure score before evaluation.");
     if (new Set(config.tasks.map(task => task.id)).size !== config.tasks.length) throw new Error("Evaluation task IDs must be unique.");
@@ -68,16 +68,19 @@ export class ResearchEvaluation {
       if (withinRoot(this.task.project, truth)) throw new Error("Keep evaluator truth outside the agent project.");
       return { ...task, truth, inputHash: input.sha256, truthHash, input: confinedPath(this.task.project, task.input) };
     });
-    if (config.live && JSON.stringify([...config.identity.tools].sort()) !== JSON.stringify(["inspect_research", "record_research", "run_research_experiment", "read_case_material"].sort())) throw new Error("Live tool identity must match the shared gateway toolset.");
-    const gateway = config.live ? new ModelGateway(config.identity, config.live, await liveModel(config.identity.provider, config.identity.model)) : undefined;
+    if (config.live && JSON.stringify([...config.identity.tools].sort()) !== JSON.stringify([...liveResearchToolNames].sort())) throw new Error("Live tool identity must match the shared gateway toolset.");
+    if (config.policies && !config.live) throw new Error("Policy comparisons require the instrumented live gateway.");
+    const gateway = config.live ? new ModelGateway(config.identity, config.live, await liveModel(config.identity.provider, config.identity.model), config.policies) : undefined;
+    const liveRuntime = gateway?.provenance();
     const id = randomUUID(), directory = privateDir(this.path(id)); const rng = random(config.seed);
-    const report: Report = { version: 1, id, at: new Date().toISOString(), taskId: this.task.task.id, purpose: config.purpose, configHash: hash({ config, methods, evaluator, tasks, ...(gateway ? { liveRuntime: gateway.provenance() } : {}) }),
-      identity: config.identity, ...(gateway ? { liveRuntime: gateway.provenance() } : {}), budget: { timeoutMs: config.timeoutMs, attemptsPerMethodTask: 1, tokenUsage: config.live ? "reported" : "unknown", ...(config.live ? { live: config.live } : {}) }, trials: [], paired: {},
+    const runtimeFiles = gateway ? gateway.snapshot(join(directory, "runtime"), liveRuntime) : undefined;
+    const report: Report = { version: 1, id, at: new Date().toISOString(), taskId: this.task.task.id, purpose: config.purpose, configHash: hash({ config, methods, evaluator, tasks, ...(liveRuntime ? { liveRuntime, runtimeFiles } : {}) }),
+      identity: config.identity, ...(config.policies ? { conditions: { baseline: config.policies.baseline.name, candidate: config.policies.candidate.name } } : {}), ...(liveRuntime ? { liveRuntime, runtimeFiles } : {}), budget: { timeoutMs: config.timeoutMs, attemptsPerMethodTask: 1, tokenUsage: config.live ? "reported" : "unknown", ...(config.live ? { live: config.live } : {}) }, trials: [], paired: {},
       limitations: ["Synthetic fixture results establish harness mechanics only when purpose is fixture-contract.", config.live ? "Pinned model identity, call counts, tool calls, and provider-reported token usage are recorded by the parent gateway." : "Model identity and toolset are owner-declared; adapters must independently attest actual usage for a live comparison.",
         config.live ? "Identical call/tool/token ceilings apply to both conditions. Monetary charges and remaining subscription quota are unknown; token accounting is provider-reported." : "Wall time, process attempts, source hashes, and bounded output are enforced; internal model calls, tokens, and charges are unknown.", "Truth is withheld from method payloads; same-user processes are not isolated by an OS sandbox.",
         "Repeated runs are grouped by task; these descriptive differences do not establish statistical significance, novelty, or scientific benefit."] };
     const mapping: Record<string, "baseline" | "candidate"> = {};
-    atomicJson(join(directory, "protocol.json"), { config, methods, evaluator, tasks, ...(gateway ? { liveRuntime: gateway.provenance() } : {}) });
+    atomicJson(join(directory, "protocol.json"), { config, methods, evaluator, tasks, ...(liveRuntime ? { liveRuntime, runtimeFiles } : {}) });
     const op = "research-evaluation:" + id; this.task.beginOperation(op, "research_evaluation", report.configHash);
     let interrupted = false;
     try {
@@ -96,7 +99,7 @@ export class ResearchEvaluation {
             const taskInput = readFileSync(task.input); const truth = JSON.parse(readFileSync(task.truth, "utf8"));
             const trialInput = JSON.parse(taskInput.toString());
             if (gateway) modelControl = await gateway.trial(new TrialTaskStore(methodDir, join(directory, "trial-state")), methodName, trialInput);
-            const request = { ...(modelControl ? { modelControl: modelControl.control } : {}), version: 1, task: task.id, context: task.context, input: JSON.parse(taskInput.toString()), identity: config.identity, ...(gateway ? { liveRuntime: gateway.provenance() } : {}), budget: report.budget, repeat, seed: config.seed + repeat };
+            const request = { ...(modelControl ? { modelControl: modelControl.control } : {}), version: 1, task: task.id, context: task.context, input: JSON.parse(taskInput.toString()), identity: config.identity, budget: report.budget, repeat, seed: config.seed + repeat };
             const execution = await executeAdapter(methods[methodName], methodDir, request, config.timeoutMs, signal);
             trial.inputArtifact = this.task.artifact(taskInput.toString());
             trial.logArtifact = this.task.artifact(readFileSync(join(methodDir, ".execution.log"), "utf8"));

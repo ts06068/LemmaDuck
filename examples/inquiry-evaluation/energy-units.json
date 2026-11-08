@@ -1,0 +1,47 @@
+{
+  "case_id": "energy-units",
+  "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+  "facts": {
+    "F1": "An experiment reports 4.184 kJ of input energy, while an independent calculation reports 1,000 thermochemical calories.",
+    "F2": "The stated exact conversion is 1 thermochemical calorie = 4.184 joules. Both values concern the same run and system boundary.",
+    "F3": "A report calls this a violation of energy conservation. No additional measurement disagreement has been observed."
+  },
+  "actions": {
+    "normalize_and_revise": "Normalize the supplied values and correct the unsupported discrepancy claim.",
+    "new_instrument": "Buy a new instrument to explain the apparent numerical difference.",
+    "repeat_numbers": "Reread the same displayed values with a tool."
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "temporal_leakage",
+    "patient_leakage",
+    "preprocessing_leakage",
+    "positivity",
+    "site_confounding",
+    "unmeasured_confounding",
+    "population_change",
+    "selection_bias",
+    "competing_risk_estimand",
+    "unit_mismatch",
+    "biological_inconsistency",
+    "verification_scope"
+  ],
+  "output_schema": {
+    "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+    "findings": [
+      {
+        "issue": "an allowed issue code",
+        "status": "established, possible, or not_supported",
+        "evidence": [
+          "fact IDs that support this finding"
+        ]
+      }
+    ],
+    "next_action": {
+      "id": "one of the supplied action IDs",
+      "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+      "reason": "specific reason and what the result changes"
+    },
+    "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+  }
+}

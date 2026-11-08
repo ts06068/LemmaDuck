@@ -18,7 +18,7 @@ import { createManagedShell } from "./shell.js";
 import { connectionToolDefinitions, connectionToolNames } from "./connection-tools.js";
 import { classifyRequest, chooseRoute, PROFILES, readRouting, routeInstructions, type Route, type Profile } from "./routing.js";
 import { vcsTool } from "./vcs-tool.js";
-import { RESEARCH_INSTRUCTIONS, researchToolDefinitions, researchToolNames } from "./research-tools.js";
+import { RESEARCH_INSTRUCTIONS, researchToolDefinitions, researchToolNames, researchReadTools } from "./research-tools.js";
 import { piRoot } from "./dependencies.js";
 
 export default async function extension(pi: ExtensionAPI): Promise<void> {
@@ -72,7 +72,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
     if (selected !== `${ctx.model.provider}/${ctx.model.id}`) throw new Error("Use /switch to select the model and create a compact handoff first.");
     if (["rate_limited", "needs_reconciliation"].includes(store.task.status)) throw new Error("Task is paused. Inspect /task, then /switch to continue with the provider you choose.");
   };
-  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", ...researchToolNames.filter(name => !review || name === "inspect_research")]);
+  const tools = () => pi.setActiveTools([...(review ? ["read", "grep", "find", "ls"] : ["read", "bash", "edit", "write", "grep", "find", "ls"]), "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", ...researchToolNames.filter(name => !review || researchReadTools.includes(name))]);
   pi.registerTool({ name: "read_task_artifact", label: "Task artifact", description: taskTools[0]!.description, parameters: artifactParams,
     async execute(_id, args) { return { content: [{ type: "text", text: JSON.stringify(callTaskTool(store.dir, store.task, "read_task_artifact", args)) }], details: {} }; } });
   pi.registerTool({ name: "propose_checkpoint", label: "Propose checkpoint", description: taskTools[1]!.description, parameters: checkpointParams,
@@ -274,7 +274,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
   pi.on("tool_call", async (event, ctx) => {
     try {
       guard(ctx);
-      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", "inspect_research"].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
+      if (review && !["read", "grep", "find", "ls", "read_task_artifact", "propose_checkpoint", ...connectionToolNames, "inspect_vcs", ...researchReadTools].includes(event.toolName)) throw new Error("Read-only review blocks this tool.");
       const input = event.input as Record<string, unknown>;
       if (typeof input.path === "string") input.path = confinedPath(store.project, input.path);
       if (event.toolName === "bash") {
@@ -304,6 +304,7 @@ export default async function extension(pi: ExtensionAPI): Promise<void> {
       terminationReason: interrupted ? "cancelled" : event.toolName === "bash" ? "not_started" : undefined,
     }, results.get(event.toolCallId) ?? JSON.stringify(event.result));
     shell.forget(event.toolCallId); results.delete(event.toolCallId); approvedTools.delete(event.toolCallId);
+    if (store.task.operations.some(op => op.status === "unknown")) ctx.abort();
   });
   pi.on("message_end", event => {
     const message = event.message;

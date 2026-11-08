@@ -1,0 +1,86 @@
+{
+  "initial_prompt": {
+    "case_id": "competing-events",
+    "question": "Review the frozen case using read_case_material; its scientific facts and action options have not yet been supplied. Return the specified JSON object once you have the evidence.",
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  },
+  "tool_material": {
+    "case_id": "competing-events",
+    "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+    "facts": {
+      "F1": "The requested estimand is actual 180-day probability of graft failure in the presence of death.",
+      "F2": "The draft reports 1 minus Kaplan\u2013Meier, censoring deaths as if they were ordinary censoring; 20% of participants die before graft failure.",
+      "F3": "Complete graft-failure and death times are available, with no other losses. An estimator of the cumulative incidence in the presence of death has not been computed."
+    },
+    "actions": {
+      "cumulative_incidence": "Use the event times and types to estimate actual graft-failure cumulative incidence with death as a competing event.",
+      "count_deaths": "Check whether there are competing deaths, whose presence and count are already supplied.",
+      "report_km_as_risk": "Publish the existing curve as the requested actual risk."
+    },
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  }
+}

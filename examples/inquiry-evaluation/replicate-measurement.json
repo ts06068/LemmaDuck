@@ -1,0 +1,86 @@
+{
+  "initial_prompt": {
+    "case_id": "replicate-measurement",
+    "question": "Review the frozen case using read_case_material; its scientific facts and action options have not yet been supplied. Return the specified JSON object once you have the evidence.",
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  },
+  "tool_material": {
+    "case_id": "replicate-measurement",
+    "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+    "facts": {
+      "F1": "An unexplained sensor shift could reflect a real signal or instrument drift. Repeated analysis of the same raw file reproduces the same shift.",
+      "F2": "A calibrated independent instrument can acquire new measurements of the same preparation now; those measurements do not yet exist.",
+      "F3": "No evidence currently identifies either explanation. The next step must distinguish a real signal from a measurement artifact, not merely reproduce software execution."
+    },
+    "actions": {
+      "independent_measurement": "Acquire the available calibrated independent measurement and compare whether the shift persists under a separate measurement process.",
+      "same_file_again": "Rerun the same analysis on the same frozen file as if it were independent replication.",
+      "declare_discovery": "Declare a new phenomenon from repeated computations alone."
+    },
+    "allowed_issue_codes": [
+      "immortal_time",
+      "temporal_leakage",
+      "patient_leakage",
+      "preprocessing_leakage",
+      "positivity",
+      "site_confounding",
+      "unmeasured_confounding",
+      "population_change",
+      "selection_bias",
+      "competing_risk_estimand",
+      "unit_mismatch",
+      "biological_inconsistency",
+      "verification_scope"
+    ],
+    "output_schema": {
+      "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+      "findings": [
+        {
+          "issue": "an allowed issue code",
+          "status": "established, possible, or not_supported",
+          "evidence": [
+            "fact IDs that support this finding"
+          ]
+        }
+      ],
+      "next_action": {
+        "id": "one of the supplied action IDs",
+        "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+        "reason": "specific reason and what the result changes"
+      },
+      "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+    }
+  }
+}

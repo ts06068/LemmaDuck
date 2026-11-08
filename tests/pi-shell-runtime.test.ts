@@ -7,6 +7,9 @@ import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
+import { TaskStore } from "../src/state.js";
+import { ResearchRunner } from "../src/research-runner.js";
+import { seedExperiment } from "./fixtures/research-plan.js";
 import { piCLIPath } from "../src/dependencies.js";
 
 test("real Pi event pipeline preserves failed shell results and enforces interruption recovery without inference", { timeout: 90000 }, async () => {
@@ -36,7 +39,7 @@ export default function(pi) {
       const command = input && JSON.parse(input.slice('FIXTURE_CMD:'.length));
       const call = command && last?.role !== 'toolResult';
       const message = { role: 'assistant', api: model.api, provider: model.provider, model: model.id, timestamp: Date.now(), stopReason: call ? 'toolUse' : 'stop',
-        content: call ? [{ type: 'toolCall', id: crypto.randomUUID(), name: 'bash', arguments: command }] : [{ type: 'text', text: 'Fixture complete' }],
+        content: call ? [{ type: 'toolCall', id: crypto.randomUUID(), name: command.fixtureTool || 'bash', arguments: command.fixtureTool ? command.input : command }] : [{ type: 'text', text: 'Fixture complete' }],
         usage: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, totalTokens: 0, cost: { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, total: 0 } } };
       stream.push({ type: 'done', reason: message.stopReason, message }); stream.end(); return stream;
     }
@@ -44,6 +47,8 @@ export default function(pi) {
 }
 `);
   const state = join(root, "state");
+  const owner = new TaskStore(project, state); const seeded = seedExperiment(owner, "timeout");
+  const scope = new ResearchRunner(seeded.research).approve({ description: "Controlled nested timeout", experiments: [seeded.plan.id], maxRuns: 1, timeoutMs: 200, maxTotalMs: 30000, maxCostUnits: 1, expiresAt: new Date(Date.now() + 300000).toISOString(), stopOnAnomaly: true }); owner.checkpoint();
   const taskFile = join(state, "projects", createHash("sha256").update(project).digest("hex").slice(0, 16), "task.json");
   const child = spawn(process.execPath, [piCLIPath, "--mode", "rpc", "--no-extensions", "--no-skills", "--no-prompt-templates", "--no-context-files", "--no-approve", "--extension", resolve("dist/extension.js"), "--extension", fakeProvider, "--provider", "openai-codex", "--model", "fixture", "--session-dir", join(root, "sessions")], {
     cwd: project, env: { ...process.env, LEMMADUCK_LAUNCHED: "1", LEMMADUCK_DATA_DIR: data, LEMMADUCK_STATE_DIR: state, PI_CODING_AGENT_DIR: profile }, stdio: "pipe",
@@ -123,6 +128,13 @@ export default function(pi) {
     await prompt("/review chatgpt"); assert.notEqual((await request("get_state")).sessionId, before.sessionId);
     await prompt('FIXTURE_CMD:{"command":"touch forbidden"}'); await idle();
     assert.equal(existsSync(join(project, "forbidden")), false); assert.deepEqual(errors, []);
+    await prompt("/switch chatgpt");
+    const callsBeforeNested = readFileSync(callsFile, "utf8").trim().split("\n").length;
+    await prompt("FIXTURE_CMD:" + JSON.stringify({ fixtureTool: "run_research_experiment", input: { scope: scope.id, experiment: seeded.plan.id } })); await idle();
+    const nested = task().operations.findLast((op: any) => op.tool === "research_experiment");
+    assert.equal(nested.status, "unknown"); assert.equal(task().status, "needs_reconciliation");
+    assert.equal(readFileSync(callsFile, "utf8").trim().split("\n").length, callsBeforeNested + 1, "no model continuation after a nested unknown outcome");
+    assert.deepEqual(errors, []);
   } finally {
     await request("abort").catch(() => {}); child.kill("SIGTERM"); reader.close();
     await new Promise<void>(resolve => { if (child.exitCode !== null || child.signalCode) resolve(); else child.once("exit", () => resolve()); });

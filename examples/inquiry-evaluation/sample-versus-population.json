@@ -1,0 +1,37 @@
+{
+  "case_id": "sample-versus-population",
+  "question": "Judge each explicitly scoped proposition separately. Retain directly supplied or calculated sample facts while distinguishing a contradiction from lack of evidence for a stronger claim. Return only the requested JSON object; use the supplied evidence and do not invent measurements.",
+  "facts": {
+    "F1": "A convenience sample from a referral clinic contains 400 participants, 80 of whom carry the measured variant.",
+    "F2": "The sample was not selected by a probability-sampling design from the national population. Catchment and referral selection probabilities are unknown.",
+    "F3": "Clinic referral logs and the catchment sampling frame are available but have not been audited."
+  },
+  "propositions": {
+    "C1": "The observed participant carrier fraction in this file is 80/400. Return that fraction as value.",
+    "C2": "The national population carrier fraction has been established to equal the observed clinic fraction.",
+    "C3": "The file documents a national probability sample."
+  },
+  "actions": {
+    "audit_sampling": "Audit the accessible referral and sampling information before any population extrapolation.",
+    "bigger_model": "Fit a larger model to declare the sample nationally representative.",
+    "reread_count": "Reread the already supplied 80-of-400 count."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "null except when the case requests a prediction plan, then assignment, feature_cutoff, validation, and preprocessing_fit as in the supplied requirements"
+  }
+}

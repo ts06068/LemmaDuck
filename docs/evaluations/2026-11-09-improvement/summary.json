@@ -1,0 +1,757 @@
+{
+  "date": "2026-11-09",
+  "purpose": "Iterative engineering and same-author component evaluation; no general scientific-benefit or independent-domain-validation claim",
+  "stages": [
+    {
+      "stage": "development",
+      "id": "a68037e2-c9d5-46f8-9bd1-12c4ea1594b6",
+      "reportHash": "f6e54db4951447e69ee5f928f6ab33403dc49e1bcb103b78294fbcd015db298c",
+      "configHash": "3c500145fec194a7c144a1157f978e22757d4ebcce58a04d9d755331789f8894",
+      "conditions": {
+        "baseline": "Previous production inquiry policy at 7c9b135",
+        "candidate": "Stage-aware inquiry policy"
+      },
+      "methods": {
+        "baseline": {
+          "trials": 16,
+          "completed": 16,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 0.8291666666666666,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 0.8291666666666666
+          },
+          "calls": 27,
+          "toolCalls": 12,
+          "reportedTokens": 38628
+        },
+        "candidate": {
+          "trials": 16,
+          "completed": 16,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 0.8854166666666666,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 0.8854166666666666
+          },
+          "calls": 20,
+          "toolCalls": 4,
+          "reportedTokens": 30736
+        }
+      },
+      "trials": [
+        {
+          "blindId": "2b0dd719-7a70-470f-8c41-cf3b6f22efa4",
+          "method": "baseline",
+          "task": "late-exposure",
+          "repeat": 0,
+          "outputArtifact": "fd98cb92b19347b3055e7d8bc2b95ffba9d6c7637aa5642b251e8adb92956477"
+        },
+        {
+          "blindId": "63288205-adec-452a-a019-cd968859d5ae",
+          "method": "candidate",
+          "task": "late-exposure",
+          "repeat": 0,
+          "outputArtifact": "5c86e93daae1150d48bcdb9f9f0befa36cc38aef944e638e87495c8088ae5b54"
+        },
+        {
+          "blindId": "14948181-e795-438d-b0a5-4b8d400f6afa",
+          "method": "baseline",
+          "task": "clean-prediction",
+          "repeat": 0,
+          "outputArtifact": "5e9a2b3c326dbd790842de6fc46cf6b918b13b74d11645ad350db393ea921463"
+        },
+        {
+          "blindId": "826a7c12-5715-40f4-9e88-3c0891574227",
+          "method": "candidate",
+          "task": "clean-prediction",
+          "repeat": 0,
+          "outputArtifact": "16b93b69f7b7f81ffc0ae82f655c779023b9bfe6fe2693c68fb3b706d2c4c338"
+        },
+        {
+          "blindId": "88b00520-3fbd-45f6-a092-09e5671521f2",
+          "method": "baseline",
+          "task": "aligned-comparator",
+          "repeat": 0,
+          "outputArtifact": "9e90671f4a17ee62683aefd563c3091ac834637d2fedad85b6f504b71dc62e61"
+        },
+        {
+          "blindId": "8e5704d1-58e0-4916-8f44-6a2ebe6aa09c",
+          "method": "candidate",
+          "task": "aligned-comparator",
+          "repeat": 0,
+          "outputArtifact": "f5b75bec0f1aff63225433900cf9e0e728b4211a513398068573b59530414e5f"
+        },
+        {
+          "blindId": "725a71a1-9544-4fce-a49f-8f78f0b403ac",
+          "method": "baseline",
+          "task": "competing-events",
+          "repeat": 0,
+          "outputArtifact": "fe5177fc2c17842176831e1845f4f47ce4895db34f2fc6696734bbb0c4c6e247"
+        },
+        {
+          "blindId": "a31637f8-b634-497a-a151-d4812d411ff2",
+          "method": "candidate",
+          "task": "competing-events",
+          "repeat": 0,
+          "outputArtifact": "4b0a4a95b944fa77796ff289ae3c3f27393084e1876a67123acbda9e8184f24d"
+        },
+        {
+          "blindId": "7e18e54a-1889-4e52-b956-dfa423dddd9b",
+          "method": "candidate",
+          "task": "complete-case-population",
+          "repeat": 0,
+          "outputArtifact": "5a9453a20bed18fd49a5dd49f9f7209195ee539df708c534145dee7cf7d64e15"
+        },
+        {
+          "blindId": "aa6ebf88-3c03-4a70-af8c-979270c07466",
+          "method": "baseline",
+          "task": "complete-case-population",
+          "repeat": 0,
+          "outputArtifact": "b67f97699c10625fc9761e5f8e8e2a75ce5108808551d182b3c226f06417065a"
+        },
+        {
+          "blindId": "052c03f7-b270-4786-a28c-ffade1f506b7",
+          "method": "candidate",
+          "task": "units-before-mechanism",
+          "repeat": 0,
+          "outputArtifact": "7a435c2f0f1d317f29a066dc3389d1bf637e930f55d34e2df832ef4c8462c2c3"
+        },
+        {
+          "blindId": "3f24b654-fa42-42c5-95d5-3148a6996e83",
+          "method": "baseline",
+          "task": "units-before-mechanism",
+          "repeat": 0,
+          "outputArtifact": "e554e828a8921e472ca598f1c0d241d1d7f5f70176241f83d260e2440521ff5c"
+        },
+        {
+          "blindId": "e9662277-d0bf-4b5b-8e28-7ab45a5eab80",
+          "method": "baseline",
+          "task": "unknown-overlap",
+          "repeat": 0,
+          "outputArtifact": "1168165ba83bcf7fb9ff26018dd7687c6072527fdec48a05dc70a35d0e0794a1"
+        },
+        {
+          "blindId": "7e51f07a-6458-41c8-9df8-655574346ddc",
+          "method": "candidate",
+          "task": "unknown-overlap",
+          "repeat": 0,
+          "outputArtifact": "9d503c82fd3b9d62de40db033e5a5e7c144ae0fa8c87238e8601d63ac8c7d620"
+        },
+        {
+          "blindId": "3ce1c06c-0247-4560-b7b4-a62e93aaa817",
+          "method": "candidate",
+          "task": "preprocessing-before-split",
+          "repeat": 0,
+          "outputArtifact": "9e49245f1272b158d45de32a1ac1883f26b228cef516c184ff04c47b17d789c2"
+        },
+        {
+          "blindId": "0be09e74-410b-46b3-9bdb-5484d3957d2c",
+          "method": "baseline",
+          "task": "preprocessing-before-split",
+          "repeat": 0,
+          "outputArtifact": "a43887b550dfca256cbd87635cb125aa4cbee54946002ff7cc8ba159eb25c8e3"
+        },
+        {
+          "blindId": "8677d589-5ec6-4c97-abee-67d4b8800096",
+          "method": "candidate",
+          "task": "late-exposure",
+          "repeat": 1,
+          "outputArtifact": "3cada20e9ce55cbbbbe166cac3ae93696299e7b99097584c5b78be5a91754c05"
+        },
+        {
+          "blindId": "ec07e0d1-1848-4e21-befc-874ce0aa6231",
+          "method": "baseline",
+          "task": "late-exposure",
+          "repeat": 1,
+          "outputArtifact": "c75324a2bd23bdc8f10bd521468a72de4a21a503cab2b8bb5c4d47033cb71ea2"
+        },
+        {
+          "blindId": "e9ee11e4-00fd-4759-b0e9-a3c004fb4b2e",
+          "method": "candidate",
+          "task": "clean-prediction",
+          "repeat": 1,
+          "outputArtifact": "1fa4fd70967f54c9dcec3d6ca8de524d9a506ca95a524b8c7e30284df327d166"
+        },
+        {
+          "blindId": "42a2b1c1-199d-4fea-98d3-be3ddbf9faed",
+          "method": "baseline",
+          "task": "clean-prediction",
+          "repeat": 1,
+          "outputArtifact": "c7d15d097924fd290dfe6819cf0b937d0a4b9bffd475e9fa48557f15adc05162"
+        },
+        {
+          "blindId": "4c5dde4a-1456-4bb4-ac39-344f6f931500",
+          "method": "baseline",
+          "task": "aligned-comparator",
+          "repeat": 1,
+          "outputArtifact": "091db118b83b167d2c39fec77c8adba141e59c29075ea25dd62fe429a62a8eb0"
+        },
+        {
+          "blindId": "72990423-b539-4ebc-8f40-b11e1f3a5282",
+          "method": "candidate",
+          "task": "aligned-comparator",
+          "repeat": 1,
+          "outputArtifact": "201c88ef05a80a7bfd658ffc60280472a3309a6626a4b4bd21a49b69288e6078"
+        },
+        {
+          "blindId": "c0e9f60b-c2a7-40df-8a56-c67c064baeea",
+          "method": "baseline",
+          "task": "competing-events",
+          "repeat": 1,
+          "outputArtifact": "04ae88b9f13c2c0b701f2d59710be7a93506c4064f454b5340c29b44c4de9527"
+        },
+        {
+          "blindId": "a969f914-fa5e-480c-af48-8b2cb6bf2813",
+          "method": "candidate",
+          "task": "competing-events",
+          "repeat": 1,
+          "outputArtifact": "3b45acea855f46c443770257b1c672a2c18252bf5e32a8ca21da0bb5860171a4"
+        },
+        {
+          "blindId": "73736932-6bb5-4aba-96a3-79c001f9bdce",
+          "method": "candidate",
+          "task": "complete-case-population",
+          "repeat": 1,
+          "outputArtifact": "11b2623568af9a0d93e2810f71359d5fee14858c3192de1bb612ea6039525155"
+        },
+        {
+          "blindId": "c937b99d-5fd1-4372-abe0-94160593b616",
+          "method": "baseline",
+          "task": "complete-case-population",
+          "repeat": 1,
+          "outputArtifact": "5290148c9002f5c9c9b1c2520405a5fe15d0f16073bd1365201cee71b083367d"
+        },
+        {
+          "blindId": "c0ee5a99-038d-4510-b78f-93a301982d7f",
+          "method": "baseline",
+          "task": "units-before-mechanism",
+          "repeat": 1,
+          "outputArtifact": "71b179a8a433998b654038ad473413e8e27f673d0ed55038656f4071eb1c3224"
+        },
+        {
+          "blindId": "05ec049a-b80c-4a1e-86f5-60ddcf5f98cf",
+          "method": "candidate",
+          "task": "units-before-mechanism",
+          "repeat": 1,
+          "outputArtifact": "2cd929da653ac37a0c62090c6dcff811ab18cac0854729a1f188bad4cd246428"
+        },
+        {
+          "blindId": "5aaa1319-42ea-4c6a-aa8d-0136cf58ad8e",
+          "method": "candidate",
+          "task": "unknown-overlap",
+          "repeat": 1,
+          "outputArtifact": "114e2e6711103e43d2c615e1b35f6f1984c399ae8699c11228d5604d6043d095"
+        },
+        {
+          "blindId": "b470bd74-ff95-4432-b2dd-3b14e691751b",
+          "method": "baseline",
+          "task": "unknown-overlap",
+          "repeat": 1,
+          "outputArtifact": "64842320c92fa1dc29cf2f990d43e7c6eaf96536da0aeccae01bf09cd5abe485"
+        },
+        {
+          "blindId": "3b1cc79c-78c6-4864-9c35-39b6c39bd166",
+          "method": "baseline",
+          "task": "preprocessing-before-split",
+          "repeat": 1,
+          "outputArtifact": "d99d370aa7d96e2a41993b2ac4741f2860312d84fec6453b72b5ab101f722f87"
+        },
+        {
+          "blindId": "576c0fe4-2ddb-409c-9783-683dbf9054b8",
+          "method": "candidate",
+          "task": "preprocessing-before-split",
+          "repeat": 1,
+          "outputArtifact": "480fa49b4c21d03eb96707e709a1c9eb65a8d7f9a032df0a266b6e4f64a48eba"
+        }
+      ],
+      "runtimeArchiveAvailable": false
+    },
+    {
+      "stage": "transfer",
+      "id": "a3f6933b-eacb-4901-8115-04a1eb51b9aa",
+      "reportHash": "55777aa9bb430cc80169b29bd39129e6b78b4185ed7f0b8b16a80b334e848f3d",
+      "configHash": "2110673c3168cbee9aaf19bed67c5fc6e925f9820ca69a9d205c7cbe1d63db6f",
+      "conditions": {
+        "baseline": "Previous production inquiry policy at 7c9b135",
+        "candidate": "Stage-aware inquiry policy"
+      },
+      "methods": {
+        "baseline": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 0.9583333333333334,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 0.9583333333333334
+          },
+          "calls": 18,
+          "toolCalls": 11,
+          "reportedTokens": 27066
+        },
+        "candidate": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 0.975,
+            "claim_scope": 0.875,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 0.85
+          },
+          "calls": 10,
+          "toolCalls": 2,
+          "reportedTokens": 15271
+        }
+      },
+      "trials": [
+        {
+          "blindId": "ce91d1d9-24ad-4535-beda-c3803175a993",
+          "method": "baseline",
+          "task": "energy-units",
+          "repeat": 0,
+          "outputArtifact": "95e96a1a78dd56b3e526b7ead06226f24fbb6b9e26cd1637571f6116864c5b84"
+        },
+        {
+          "blindId": "f444f165-5601-45d9-be29-4d6dba87f677",
+          "method": "candidate",
+          "task": "energy-units",
+          "repeat": 0,
+          "outputArtifact": "761b8bd880bad095913b3e814c786800f21c7e8a857ef656449be4e08f41bf97"
+        },
+        {
+          "blindId": "ddf86d44-fdbf-49ed-b6e0-72a04961ad16",
+          "method": "baseline",
+          "task": "test-is-not-proof",
+          "repeat": 0,
+          "outputArtifact": "1ee828e517bb1e79a2f8439ca9298ba98bf60195868f906c605a53803c6b9939"
+        },
+        {
+          "blindId": "cfd90c78-259d-4cb2-b4ec-ccb0f00d059e",
+          "method": "candidate",
+          "task": "test-is-not-proof",
+          "repeat": 0,
+          "outputArtifact": "414491bd209b5beaa4c2b4e5525a09dfc9d9e5c7be8dd632b8883a9aa39ea1d7"
+        },
+        {
+          "blindId": "e15bd96a-4f41-42dd-803c-1c7687ff6a52",
+          "method": "baseline",
+          "task": "landmark-prediction",
+          "repeat": 0,
+          "outputArtifact": "adda36df1f2540ee4a8633dc014df0795316dd5849712b83aa295805a03a5fe4"
+        },
+        {
+          "blindId": "ce8a70f2-9ec2-4012-9e04-b8410a03291d",
+          "method": "candidate",
+          "task": "landmark-prediction",
+          "repeat": 0,
+          "outputArtifact": "bc82cf8f53872112b35a5d3b0cf8998b34c4671b72672e86d58be491e3d1ed4b"
+        },
+        {
+          "blindId": "578be812-8bc2-42c2-bce1-af4d03754ece",
+          "method": "baseline",
+          "task": "replicate-measurement",
+          "repeat": 0,
+          "outputArtifact": "1addced0367fabd06edb6a4e31969e78f8479506243c7a3689aeb58d28beba4f"
+        },
+        {
+          "blindId": "d7d03b02-c71b-476a-b28e-6a0a607f4748",
+          "method": "candidate",
+          "task": "replicate-measurement",
+          "repeat": 0,
+          "outputArtifact": "fbc1a47de3bae978e4d6a12d17b927ccee744d41d9eab7240e47071fa634dc45"
+        },
+        {
+          "blindId": "312c58ce-46c3-4b33-b7f2-fde6c674f41f",
+          "method": "candidate",
+          "task": "energy-units",
+          "repeat": 1,
+          "outputArtifact": "6530887a8e3c51f51c5a34c5d3d4d73fc547ae3aa83019531e42e49512da249e"
+        },
+        {
+          "blindId": "48ceb1df-fec7-4060-9048-85fac8430235",
+          "method": "baseline",
+          "task": "energy-units",
+          "repeat": 1,
+          "outputArtifact": "614c202e7f2a1ad3baeacd05f2da86304d090d3aca4515371f33094cb4e9b35e"
+        },
+        {
+          "blindId": "473c8b80-aa92-4213-8cea-bbece9227a78",
+          "method": "candidate",
+          "task": "test-is-not-proof",
+          "repeat": 1,
+          "outputArtifact": "1362ceeca2ccefc2c20c3e0d3df7bd97b641aad69e46ded7f6bbbf940da32d4c"
+        },
+        {
+          "blindId": "b9a912bc-b25e-4a53-8dfb-d32c1197dd77",
+          "method": "baseline",
+          "task": "test-is-not-proof",
+          "repeat": 1,
+          "outputArtifact": "d32c37221e718530d6d768f04347d40817bf1583a629c1b2139009ae81870c4a"
+        },
+        {
+          "blindId": "d120c0c6-2319-4c76-91b1-7e61063fd71c",
+          "method": "baseline",
+          "task": "landmark-prediction",
+          "repeat": 1,
+          "outputArtifact": "3ac6b56322bfaf48ddb2a7acb86cdc8b143da136780ec92cfbb5a4511b6ab52e"
+        },
+        {
+          "blindId": "49f6ad8e-53c8-4bb5-b3a9-4797c7b6bcf8",
+          "method": "candidate",
+          "task": "landmark-prediction",
+          "repeat": 1,
+          "outputArtifact": "cbb83894878712da221d5574b5529ea84badee50350caeac4807314c44cb4870"
+        },
+        {
+          "blindId": "274b6d77-7379-4357-9ef7-d05ab1dd60fa",
+          "method": "candidate",
+          "task": "replicate-measurement",
+          "repeat": 1,
+          "outputArtifact": "8efac6fdfefe3cb1ba3377fd927d43cc9c6c7a2a03365af32e617ef6290a5a73"
+        },
+        {
+          "blindId": "17cf0d0f-9d39-4df2-9d05-9ab7573dfa72",
+          "method": "baseline",
+          "task": "replicate-measurement",
+          "repeat": 1,
+          "outputArtifact": "6a88b7b92cea6bdf89903cece2f0c5713c23400a7cc69b77349e8956a304e4ca"
+        }
+      ],
+      "runtimeArchiveAvailable": false
+    },
+    {
+      "stage": "calibration",
+      "id": "cf9da2dd-e1c8-46ab-897a-eac46f1eb085",
+      "reportHash": "cd26d2238079fb8cd76c9e0cd5918d9b75cf59260d3d862b28281fe6bd3baa7c",
+      "configHash": "50c0a43f3c3da35e90b1a177718804f33ec99d8666ae114eede7c7e8fba538be",
+      "conditions": {
+        "baseline": "Previous production inquiry policy at 7c9b135",
+        "candidate": "Stage-aware policy with proposition calibration"
+      },
+      "methods": {
+        "baseline": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 1.0,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 0.75,
+            "joint_validity": 0.75
+          },
+          "calls": 9,
+          "toolCalls": 1,
+          "reportedTokens": 11597
+        },
+        "candidate": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 1.0,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 0.75,
+            "joint_validity": 0.75
+          },
+          "calls": 8,
+          "toolCalls": 0,
+          "reportedTokens": 11998
+        }
+      },
+      "trials": [
+        {
+          "blindId": "8286ed81-3627-4ca6-915e-3dd0db203e42",
+          "method": "baseline",
+          "task": "sample-versus-population",
+          "repeat": 0,
+          "outputArtifact": "f513e9595c50e6e3d306d6378f34aaccf8faa99b75296a2c6aa0c1c38fb909bc"
+        },
+        {
+          "blindId": "3f680506-fd3e-4c2d-b866-826bcfdbf5bb",
+          "method": "candidate",
+          "task": "sample-versus-population",
+          "repeat": 0,
+          "outputArtifact": "50fed3d9f0c94228441173dc7602aaabc4315f6aa924986d36b390f475f548ab"
+        },
+        {
+          "blindId": "0d17d92c-1756-42f2-9eb7-83de01d96d06",
+          "method": "baseline",
+          "task": "observed-versus-causal",
+          "repeat": 0,
+          "outputArtifact": "fce3f38e1844f52e6e875fab1f2a1c18b32ffe125ba39f18cd3f1ce7aabefe39"
+        },
+        {
+          "blindId": "9a103328-1b4d-4466-a1be-b59de6d424ef",
+          "method": "candidate",
+          "task": "observed-versus-causal",
+          "repeat": 0,
+          "outputArtifact": "6b4382c916e9619fd47e0cdfad24341a4a7b0cf50be93bc784661c9b7ef784b9"
+        },
+        {
+          "blindId": "0ff7ef3c-d70b-4b97-859f-a83aa4c3e3de",
+          "method": "baseline",
+          "task": "performance-versus-benefit",
+          "repeat": 0,
+          "outputArtifact": "05d826f0c6a2a3a2a015176b5e2e63239ecb819666701258a783d2096000a452"
+        },
+        {
+          "blindId": "ed4b7a74-246e-4cf6-93aa-94a61837b534",
+          "method": "candidate",
+          "task": "performance-versus-benefit",
+          "repeat": 0,
+          "outputArtifact": "fbc3d7d12496416afc53a7662b8ebc32cd918baa78c33d3de8a4943b6a8b8115"
+        },
+        {
+          "blindId": "5fa7d14e-964d-49cc-87a1-90aacd841461",
+          "method": "baseline",
+          "task": "counterexample-versus-density",
+          "repeat": 0,
+          "outputArtifact": "5610c752252f01d78d34875e030b174b576304050d583dad67f14bff4c588a84"
+        },
+        {
+          "blindId": "c76c7c9a-b1b5-4da7-b78d-1a4216fa4e73",
+          "method": "candidate",
+          "task": "counterexample-versus-density",
+          "repeat": 0,
+          "outputArtifact": "e23e1be68ae40672f1c35ab3573010c571c27fb0795e477f4cb88f25b578d4d2"
+        },
+        {
+          "blindId": "03f91fd6-7e58-4ac8-8228-08df1fc90380",
+          "method": "candidate",
+          "task": "sample-versus-population",
+          "repeat": 1,
+          "outputArtifact": "7785650967cc3db9fca63fb283d7caf87224adb6f50ead49cf17e881e17418fe"
+        },
+        {
+          "blindId": "db65de83-101e-4c28-bb43-e9e936bbd5a2",
+          "method": "baseline",
+          "task": "sample-versus-population",
+          "repeat": 1,
+          "outputArtifact": "1d39f2e287aadfda2084cf7184bd920a6ea8f21bb1fb4bc2c427328697caecc9"
+        },
+        {
+          "blindId": "ce8673b9-1710-42cd-ac2a-446d1e9fb84e",
+          "method": "candidate",
+          "task": "observed-versus-causal",
+          "repeat": 1,
+          "outputArtifact": "4d714c1968967afe65131583539c44c49405f72fb4426d0dd2f229a8f1acd1ec"
+        },
+        {
+          "blindId": "dd817f38-d10e-4a64-8c68-9e93be42d62d",
+          "method": "baseline",
+          "task": "observed-versus-causal",
+          "repeat": 1,
+          "outputArtifact": "d3a633f260af403df930978e69af2fe799c2ab5b64454ec2ef408599de6d4817"
+        },
+        {
+          "blindId": "82493c0c-7351-4c6d-924a-b77c1430c2be",
+          "method": "baseline",
+          "task": "performance-versus-benefit",
+          "repeat": 1,
+          "outputArtifact": "041d73535b1db2ba2cc401415f721672adb1272b6b2369c477982bc12de34b58"
+        },
+        {
+          "blindId": "2994fa69-2c49-4da2-bef2-5512c1758ccb",
+          "method": "candidate",
+          "task": "performance-versus-benefit",
+          "repeat": 1,
+          "outputArtifact": "38a3ca7c9a6b75e2ae591390c4f81bcb8b7c427c45786cba66fb39e61f282ac7"
+        },
+        {
+          "blindId": "32dd762f-be54-4980-be57-3e32eedf5d12",
+          "method": "candidate",
+          "task": "counterexample-versus-density",
+          "repeat": 1,
+          "outputArtifact": "a85d0f0be270aa1a9d07f0ad871aafa942d17f684cef4e65969fe5b0808d7062"
+        },
+        {
+          "blindId": "6a3d4fca-1efd-4d9b-9c1d-0bce637333e1",
+          "method": "baseline",
+          "task": "counterexample-versus-density",
+          "repeat": 1,
+          "outputArtifact": "5d9301d2b116efbc181ad6f9107b0efb61815a36f7d4cb0535df1788183b5ebe"
+        }
+      ],
+      "runtimeArchiveAvailable": true
+    },
+    {
+      "stage": "confirmation",
+      "id": "8f71a759-d3da-4d5d-baf3-60703cea1b7b",
+      "reportHash": "aba9a4e432111a0b4e8a32d42c46dc078a89217116daca54bd31d2ee5bbb69b9",
+      "configHash": "2414a73be1f210bddeee7913e099703b939663ff734e2efbbf9a1fa813d44a2f",
+      "conditions": {
+        "baseline": "Previous production inquiry policy at 7c9b135",
+        "candidate": "Compact inquiry policy"
+      },
+      "methods": {
+        "baseline": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 1.0,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 1.0
+          },
+          "calls": 12,
+          "toolCalls": 4,
+          "reportedTokens": 14593
+        },
+        "candidate": {
+          "trials": 8,
+          "completed": 8,
+          "metrics": {
+            "critical_recall": 1.0,
+            "evidence_precision": 1.0,
+            "claim_scope": 1.0,
+            "next_information": 1.0,
+            "operational_plan": 1.0,
+            "joint_validity": 1.0
+          },
+          "calls": 12,
+          "toolCalls": 4,
+          "reportedTokens": 14668
+        }
+      },
+      "trials": [
+        {
+          "blindId": "8f9cd413-2594-4bb8-a9d5-710eba81a54d",
+          "method": "baseline",
+          "task": "patients-versus-visits",
+          "repeat": 0,
+          "outputArtifact": "3c3bffa3bd71d0cdc5b130236912221a6736d44190f9ebfa73eca25582d759ee"
+        },
+        {
+          "blindId": "e4fad864-ba07-4360-adcc-43c314f9e7d4",
+          "method": "candidate",
+          "task": "patients-versus-visits",
+          "repeat": 0,
+          "outputArtifact": "08fc961f93d1ec3d16829de5daa251b1045c1f6d14609d901a8020c51ef65ab3"
+        },
+        {
+          "blindId": "f625b914-4f37-47bc-ae47-f86139365be3",
+          "method": "baseline",
+          "task": "randomization-versus-precision",
+          "repeat": 0,
+          "outputArtifact": "db2411642285170c08eb2584853b6b2defc0a3387f6dae445faf53cb465e6848"
+        },
+        {
+          "blindId": "bf1f6f0f-bed9-46d9-8dc1-66b0e52119e7",
+          "method": "candidate",
+          "task": "randomization-versus-precision",
+          "repeat": 0,
+          "outputArtifact": "49cad791e461b818251df8244d9890f23201d2c10b865e30a6ea512a6d6f15eb"
+        },
+        {
+          "blindId": "46436d7a-a0f8-4ccd-937a-41715656364d",
+          "method": "baseline",
+          "task": "computation-versus-acquisition",
+          "repeat": 0,
+          "outputArtifact": "a4eee44db12afa37526aa0701a74fbf2e351b2fe81adc4e0e905f6b99945f930"
+        },
+        {
+          "blindId": "d2ad5a48-4228-443a-ab5a-44f2c369aaa5",
+          "method": "candidate",
+          "task": "computation-versus-acquisition",
+          "repeat": 0,
+          "outputArtifact": "f4c2f3156254bb541131a871f57c5316434e3d6f5b1cd49c7ea1d1f0241af9be"
+        },
+        {
+          "blindId": "cca325de-bcae-4f8f-b4db-d9fc2d085bd4",
+          "method": "baseline",
+          "task": "ranking-versus-calibration",
+          "repeat": 0,
+          "outputArtifact": "dd15cfe4326180341598ae1408b3b69c8d25486cb1c5e11e3f6da44a76512d98"
+        },
+        {
+          "blindId": "0b8cb757-ff67-41a3-93a1-63c7ec42ffc5",
+          "method": "candidate",
+          "task": "ranking-versus-calibration",
+          "repeat": 0,
+          "outputArtifact": "f2ebb938f53baa4951cdca33e13bf5698a315c6b178d0c688b8b2394bab04dc7"
+        },
+        {
+          "blindId": "6289b06c-53aa-43ff-8388-a175805edb55",
+          "method": "candidate",
+          "task": "patients-versus-visits",
+          "repeat": 1,
+          "outputArtifact": "14bff83ce55887fb7a0cbe9ccd32656067d0e5ebc8f4c92a6a8ce45d0e250cad"
+        },
+        {
+          "blindId": "766011a3-8944-4816-b075-ca8001e4db00",
+          "method": "baseline",
+          "task": "patients-versus-visits",
+          "repeat": 1,
+          "outputArtifact": "b39e71057c824cc5c19a52c6c8fd17ec4d9b7a7d5e7caddc8ceb49d73b0aa878"
+        },
+        {
+          "blindId": "f933483b-b18f-494d-b3d4-552ee7c9370c",
+          "method": "candidate",
+          "task": "randomization-versus-precision",
+          "repeat": 1,
+          "outputArtifact": "3dbb5ed7377f1d7fffb841714c8b44ae72b7a8de7f469e36e7ef69a6eb82a915"
+        },
+        {
+          "blindId": "d85fcb4d-9a8a-4c84-adae-163acf6e1ed5",
+          "method": "baseline",
+          "task": "randomization-versus-precision",
+          "repeat": 1,
+          "outputArtifact": "2023d0162a415bfa978fa0b3ce242037aec30435a8211c29c6b47dd9d164dd75"
+        },
+        {
+          "blindId": "19b7ef30-3bc0-4c51-abff-12bf362504ff",
+          "method": "baseline",
+          "task": "computation-versus-acquisition",
+          "repeat": 1,
+          "outputArtifact": "87a1cb1449de44114db054ac6464b973ba0c3d0a30055cad6fa758b0486ab5ba"
+        },
+        {
+          "blindId": "cf9730df-62c4-40d0-bb4b-674813634401",
+          "method": "candidate",
+          "task": "computation-versus-acquisition",
+          "repeat": 1,
+          "outputArtifact": "2259ab2c143dd94766f4128417c530bd80cde67fa3faf65cfad149517fa30db7"
+        },
+        {
+          "blindId": "136cd3c4-da42-44e5-ad8b-97aa6efefd7c",
+          "method": "candidate",
+          "task": "ranking-versus-calibration",
+          "repeat": 1,
+          "outputArtifact": "3ce360b84c45debe8e31af0547ad5724e4aac6a861e18c7491950ac862148525"
+        },
+        {
+          "blindId": "1b016e04-8367-409a-bc7b-c24c771331e0",
+          "method": "baseline",
+          "task": "ranking-versus-calibration",
+          "repeat": 1,
+          "outputArtifact": "21ef2f55896d5fe59c8d7335cd0a82bf7178a1667eb47a006e5f14317d988d81"
+        }
+      ],
+      "runtimeArchiveAvailable": true
+    }
+  ],
+  "completedTrials": 80,
+  "distinctCases": 20,
+  "notes": [
+    "Do not pool quality scores across stages: policies, rubrics and contracts differ.",
+    "The original scores, including regressions and rubric errors, are preserved.",
+    "The baseline is the previous production inquiry policy with the same current toolset within each comparison, not the previous whole installation.",
+    "Confirmation retained all checks at the same minimum number of calls; a cost reduction was not demonstrated on that set.",
+    "Scoring and visible-output audits are by the implementation agent; no independent human reviewer is claimed.",
+    "Original execution paths in the protocols identify the actual host run; reruns generate new paths/IDs.",
+    "Early stages retain critical runtime digests; full executable parent snapshots were added before calibration and confirmation."
+  ]
+}

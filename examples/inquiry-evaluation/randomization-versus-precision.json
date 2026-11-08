@@ -1,0 +1,37 @@
+{
+  "case_id": "randomization-versus-precision",
+  "question": "Judge each scoped proposition separately and choose the warranted next action. Retain known sample results and distinguish a contradicted assertion from one that lacks evidence. This is a review only; do not execute a study. Return JSON in the supplied schema and set split_plan to null.",
+  "facts": {
+    "F1": "A randomized trial in adults aged 18\u201365 observed 20 outcomes among 100 assigned treatment and 10 among 100 assigned comparator, with complete follow-up.",
+    "F2": "The observed treatment-minus-comparator risk-difference estimate has a reported 95% interval [0.01,0.19]; randomization does not remove its sampling uncertainty.",
+    "F3": "No adults over 65 were enrolled and no data on that population are accessible for this review."
+  },
+  "propositions": {
+    "C1": "The observed assignment-group risk difference is 20/100 minus 10/100. Return that sample difference as value.",
+    "C2": "Randomization made the reported estimate have zero sampling uncertainty.",
+    "C3": "The effect estimate in adults over 65 has been established by these data."
+  },
+  "actions": {
+    "retain_scope": "Report the trial estimate and its uncertainty; state that evidence for adults over 65 is currently unavailable.",
+    "assert_older_effect": "Assert the identical estimate for older adults without data.",
+    "repeat_interval": "Reread the supplied interval as new evidence."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+  }
+}

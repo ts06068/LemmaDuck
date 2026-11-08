@@ -1,0 +1,43 @@
+{
+  "case_id": "performance-versus-benefit",
+  "question": "Judge each explicitly scoped proposition separately. Retain directly supplied or calculated sample facts while distinguishing a contradiction from lack of evidence for a stronger claim. Return only the requested JSON object; use the supplied evidence and do not invent measurements.",
+  "facts": {
+    "F1": "A frozen discharge-time predictor achieved AUROC 0.81 on a prespecified later-calendar test cohort of 500 new patients; this is the documented test result.",
+    "F2": "An audit confirmed patient-disjoint partitions, features available by discharge and preprocessing fitted only in training. No patient appears in both training and test.",
+    "F3": "No intervention trial or observed clinical decision-benefit analysis has been conducted. Test-set predictions, labels and prespecified threshold costs are accessible for an offline decision analysis."
+  },
+  "propositions": {
+    "C1": "The documented test-cohort AUROC is 0.81. Return that documented value.",
+    "C2": "The AUROC result establishes that deploying this predictor reduces mortality.",
+    "C3": "The audit found the same patients in training and test."
+  },
+  "actions": {
+    "decision_analysis": "Use the available held-out predictions, labels and prespecified costs to assess threshold utility, while retaining that real deployment benefit remains untested.",
+    "deploy_assuming_benefit": "Deploy because AUROC alone proves reduced mortality.",
+    "repeat_auc": "Reread the documented AUROC as if it established clinical benefit."
+  },
+  "output_schema": {
+    "judgments": [
+      {
+        "id": "a supplied proposition ID",
+        "status": "supported, contradicted, or not_established",
+        "evidence": [
+          "supplied fact IDs"
+        ],
+        "value": "the requested numeric value, otherwise null"
+      }
+    ],
+    "next_action": {
+      "id": "a supplied action ID",
+      "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+      "reason": "specific reason tied to the consequential uncertainty"
+    },
+    "split_plan": "null except when the case requests a prediction plan, then assignment, feature_cutoff, validation, and preprocessing_fit as in the supplied requirements"
+  },
+  "prediction_plan_requirements": {
+    "assignment": "patient_disjoint",
+    "feature_cutoff": "at_prediction",
+    "validation": "forward_time",
+    "preprocessing_fit": "training_only"
+  }
+}

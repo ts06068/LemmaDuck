@@ -1,0 +1,61 @@
+{
+  "initial_prompt": {
+    "case_id": "computation-versus-acquisition",
+    "question": "The frozen scientific facts and action options have not been supplied. Obtain them with read_case_material, then judge the provided propositions. Return the schema; set split_plan to null.",
+    "output_schema": {
+      "judgments": [
+        {
+          "id": "a supplied proposition ID",
+          "status": "supported, contradicted, or not_established",
+          "evidence": [
+            "supplied fact IDs"
+          ],
+          "value": "the requested numeric value, otherwise null"
+        }
+      ],
+      "next_action": {
+        "id": "a supplied action ID",
+        "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+        "reason": "specific reason tied to the consequential uncertainty"
+      },
+      "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+    }
+  },
+  "tool_material": {
+    "case_id": "computation-versus-acquisition",
+    "question": "Judge each scoped proposition separately and choose the warranted next action. Retain known sample results and distinguish a contradicted assertion from one that lacks evidence. This is a review only; do not execute a study. Return JSON in the supplied schema and set split_plan to null.",
+    "facts": {
+      "F1": "The verified numerical mean from the instrument file is 27.5 units. Two separate analysis programs agree on that value.",
+      "F2": "Both programs used the same single raw instrument acquisition; there has not been a second measurement acquisition.",
+      "F3": "A separately calibrated instrument is available to collect new measurements now, but its results do not yet exist."
+    },
+    "propositions": {
+      "C1": "The verified numerical mean in the existing acquisition is 27.5 units. Return that value.",
+      "C2": "Two independent measurement acquisitions have been observed.",
+      "C3": "Reproducibility across independent instruments has already been established."
+    },
+    "actions": {
+      "independent_acquisition": "Collect the available independent calibrated measurement to test whether the observed signal survives a separate acquisition process.",
+      "same_file_again": "Reprocess the same raw file as if it were a new acquisition.",
+      "declare_instrument_reliability": "Declare cross-instrument reliability without collecting the available measurement."
+    },
+    "output_schema": {
+      "judgments": [
+        {
+          "id": "a supplied proposition ID",
+          "status": "supported, contradicted, or not_established",
+          "evidence": [
+            "supplied fact IDs"
+          ],
+          "value": "the requested numeric value, otherwise null"
+        }
+      ],
+      "next_action": {
+        "id": "a supplied action ID",
+        "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+        "reason": "specific reason tied to the consequential uncertainty"
+      },
+      "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+    }
+  }
+}

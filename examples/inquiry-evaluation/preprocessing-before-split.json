@@ -1,0 +1,48 @@
+{
+  "case_id": "preprocessing-before-split",
+  "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+  "facts": {
+    "F1": "The goal is future discharge-time prediction in patients not used for training; all raw features are available at discharge.",
+    "F2": "Imputation, scaling and synthetic minority oversampling were fitted to the entire cohort before a random episode split.",
+    "F3": "The same original patient contributes original or synthetic-derived records to both training and test partitions.",
+    "F4": "A reported AUROC of 0.98 is promoted as prospective performance. Original patient IDs, dates and unsplit raw data are available."
+  },
+  "actions": {
+    "rebuild_pipeline": "Split original patients into disjoint forward-time partitions first; fit imputation/scaling/oversampling on training data only, then evaluate the untouched test partition.",
+    "patient_labels_only": "Rename record IDs after oversampling and retain the full-cohort preprocessing.",
+    "publish_auc": "Publish the existing AUROC without re-evaluation."
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "temporal_leakage",
+    "patient_leakage",
+    "preprocessing_leakage",
+    "positivity",
+    "site_confounding",
+    "unmeasured_confounding",
+    "population_change",
+    "selection_bias",
+    "competing_risk_estimand",
+    "unit_mismatch",
+    "biological_inconsistency",
+    "verification_scope"
+  ],
+  "output_schema": {
+    "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+    "findings": [
+      {
+        "issue": "an allowed issue code",
+        "status": "established, possible, or not_supported",
+        "evidence": [
+          "fact IDs that support this finding"
+        ]
+      }
+    ],
+    "next_action": {
+      "id": "one of the supplied action IDs",
+      "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+      "reason": "specific reason and what the result changes"
+    },
+    "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+  }
+}

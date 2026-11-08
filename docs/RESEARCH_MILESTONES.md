@@ -74,3 +74,10 @@ validation. Real study usefulness, discovery/invention, and transferable capabil
 still require independently authored cases and prospective collaboration with domain
 scientists. These remain evaluation needs, not implemented model training or proven
 scientific achievements.
+
+The subsequent [improvement cycles](IMPROVEMENT_LOG.md) added informative-action
+comparison, immutable live protocols and runtime archives, nested-interruption and
+quota controls, refusal of unsupported formal proofs, and clean medical scaffolding.
+The [80-trial evidence bundle](evaluations/2026-11-09-improvement/README.md) retains
+both apparent improvements and regressions. The final fresh confirmation tied the
+previous policy at the minimum calls; it does not demonstrate scientific superiority.

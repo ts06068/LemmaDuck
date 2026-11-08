@@ -222,7 +222,10 @@ def init_project(args):
     if dest.exists() or dest.is_symlink():
         raise ValueError("Choose a new directory. Existing projects can be opened directly with 'duck agent PATH'.")
     dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copytree(src, dest, ignore=shutil.ignore_patterns("__pycache__", "*.pyc"), dirs_exist_ok=False)
+    ignored = ["__pycache__", "*.pyc", ".venv", "venv", "node_modules", ".git", ".jj", ".env", ".env.*", "auth.json", "credentials*.json"]
+    if args.kind == "observational":
+        ignored.extend(["nhefs.csv", "runtime.json"])
+    shutil.copytree(src, dest, ignore=shutil.ignore_patterns(*ignored), dirs_exist_ok=False)
     print(f"Created {args.kind} project at {dest}")
 
 

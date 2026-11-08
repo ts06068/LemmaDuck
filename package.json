@@ -79,7 +79,9 @@
     "release-manifest.json",
     "examples/observational-evaluation/",
     "scripts/evaluate-medical.mjs",
-    "scripts/export-research-review.mjs"
+    "scripts/export-research-review.mjs",
+    "examples/inquiry-evaluation/",
+    "scripts/evaluate-inquiry.mjs"
   ],
   "lemmaduckDistro": "base",
   "keywords": [

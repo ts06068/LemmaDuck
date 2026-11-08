@@ -1,0 +1,48 @@
+{
+  "case_id": "unknown-overlap",
+  "question": "Review the supplied study or research result. Distinguish demonstrated defects from unverified concerns. Choose a feasible next action that addresses the actual uncertainty, or stop at a justified limit. Return only the specified JSON object; do not invent evidence or launch a clinical study.",
+  "facts": {
+    "F1": "The protocol permits either treatment at every hospital, and baseline confounders are recorded.",
+    "F2": "No patient-level treatment-by-covariate counts or propensity distribution have been inspected. Positivity violation is neither demonstrated nor ruled out.",
+    "F3": "An analyst claims the causal effect is identified because the hospital protocol permits both drugs; conditional exchangeability is also unverified.",
+    "F4": "The patient-level baseline and treatment table is accessible and has not been analyzed."
+  },
+  "actions": {
+    "inspect_empirical_support": "Inspect the accessible treatment-by-covariate support and propensity/weight diagnostics before asserting positivity or choosing an effect population.",
+    "assert_zero_overlap": "State that positivity is definitely violated without seeing treatment counts.",
+    "repeat_protocol": "Read the same hospital protocol again as proof of empirical overlap."
+  },
+  "allowed_issue_codes": [
+    "immortal_time",
+    "temporal_leakage",
+    "patient_leakage",
+    "preprocessing_leakage",
+    "positivity",
+    "site_confounding",
+    "unmeasured_confounding",
+    "population_change",
+    "selection_bias",
+    "competing_risk_estimand",
+    "unit_mismatch",
+    "biological_inconsistency",
+    "verification_scope"
+  ],
+  "output_schema": {
+    "conclusion": "one of descriptive_only, association_only, prediction_not_validated, prediction_valid_under_design, conditional_causal, insufficient_information",
+    "findings": [
+      {
+        "issue": "an allowed issue code",
+        "status": "established, possible, or not_supported",
+        "evidence": [
+          "fact IDs that support this finding"
+        ]
+      }
+    ],
+    "next_action": {
+      "id": "one of the supplied action IDs",
+      "new_information": "boolean: does this acquire evidence not already supplied, rather than restate a known fact?",
+      "reason": "specific reason and what the result changes"
+    },
+    "split_plan": "null except for prediction cases; then an object with assignment (patient_disjoint or episode_random), feature_cutoff (at_prediction or all_available), validation (forward_time or random), preprocessing_fit (training_only or full_cohort)"
+  }
+}

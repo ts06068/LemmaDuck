@@ -1,0 +1,546 @@
+{
+  "version": 2,
+  "previousPolicyCommit": "7c9b1353d02c873c836af983389750accd2da104",
+  "purpose": "Same-author component evaluation; cases and rubric frozen before development trials; transfer cases not used for prompt tuning",
+  "cases": [
+    {
+      "id": "late-exposure",
+      "stage": "development"
+    },
+    {
+      "id": "clean-prediction",
+      "stage": "development"
+    },
+    {
+      "id": "aligned-comparator",
+      "stage": "development"
+    },
+    {
+      "id": "competing-events",
+      "stage": "development"
+    },
+    {
+      "id": "complete-case-population",
+      "stage": "development"
+    },
+    {
+      "id": "units-before-mechanism",
+      "stage": "development"
+    },
+    {
+      "id": "unknown-overlap",
+      "stage": "development"
+    },
+    {
+      "id": "preprocessing-before-split",
+      "stage": "development"
+    },
+    {
+      "id": "energy-units",
+      "stage": "transfer"
+    },
+    {
+      "id": "test-is-not-proof",
+      "stage": "transfer"
+    },
+    {
+      "id": "landmark-prediction",
+      "stage": "transfer"
+    },
+    {
+      "id": "replicate-measurement",
+      "stage": "transfer"
+    }
+  ],
+  "rubric": {
+    "late-exposure": {
+      "required": [
+        "immortal_time"
+      ],
+      "established": {
+        "immortal_time": [
+          "F1",
+          "F2"
+        ],
+        "temporal_leakage": [
+          "F2"
+        ]
+      },
+      "possible": {
+        "unmeasured_confounding": [
+          "F3"
+        ]
+      },
+      "conclusions": [
+        "association_only",
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "align_assignment": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "clean-prediction": {
+      "required": [],
+      "established": {},
+      "possible": {},
+      "conclusions": [
+        "prediction_valid_under_design"
+      ],
+      "next_actions": {
+        "state_limit": false
+      },
+      "split_plan": {
+        "assignment": "patient_disjoint",
+        "feature_cutoff": "at_prediction",
+        "validation": "forward_time",
+        "preprocessing_fit": "training_only"
+      },
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "aligned-comparator": {
+      "required": [],
+      "established": {},
+      "possible": {},
+      "conclusions": [
+        "conditional_causal"
+      ],
+      "next_actions": {
+        "negative_control": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "competing-events": {
+      "required": [
+        "competing_risk_estimand"
+      ],
+      "established": {
+        "competing_risk_estimand": [
+          "F1",
+          "F2"
+        ]
+      },
+      "possible": {},
+      "conclusions": [
+        "insufficient_information",
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "cumulative_incidence": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "complete-case-population": {
+      "required": [
+        "population_change"
+      ],
+      "established": {
+        "population_change": [
+          "F1",
+          "F2"
+        ]
+      },
+      "possible": {
+        "selection_bias": [
+          "F1",
+          "F3"
+        ],
+        "unmeasured_confounding": [
+          "F3"
+        ]
+      },
+      "conclusions": [
+        "association_only",
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "audit_missingness": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "units-before-mechanism": {
+      "required": [
+        "unit_mismatch"
+      ],
+      "established": {
+        "unit_mismatch": [
+          "F1",
+          "F2"
+        ]
+      },
+      "possible": {},
+      "conclusions": [
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "resolve_units": false
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "unknown-overlap": {
+      "required": [],
+      "established": {},
+      "possible": {
+        "positivity": [
+          "F1",
+          "F2"
+        ],
+        "unmeasured_confounding": [
+          "F3"
+        ]
+      },
+      "conclusions": [
+        "association_only",
+        "insufficient_information"
+      ],
+      "next_actions": {
+        "inspect_empirical_support": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "preprocessing-before-split": {
+      "required": [
+        "preprocessing_leakage",
+        "patient_leakage"
+      ],
+      "established": {
+        "preprocessing_leakage": [
+          "F2"
+        ],
+        "patient_leakage": [
+          "F3"
+        ]
+      },
+      "possible": {},
+      "conclusions": [
+        "prediction_not_validated"
+      ],
+      "next_actions": {
+        "rebuild_pipeline": true
+      },
+      "split_plan": {
+        "assignment": "patient_disjoint",
+        "feature_cutoff": "at_prediction",
+        "validation": "forward_time",
+        "preprocessing_fit": "training_only"
+      },
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "energy-units": {
+      "required": [
+        "unit_mismatch"
+      ],
+      "established": {
+        "unit_mismatch": [
+          "F1",
+          "F2"
+        ]
+      },
+      "possible": {},
+      "conclusions": [
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "normalize_and_revise": false
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "test-is-not-proof": {
+      "required": [
+        "verification_scope"
+      ],
+      "established": {
+        "verification_scope": [
+          "F1",
+          "F2",
+          "F3"
+        ]
+      },
+      "possible": {},
+      "conclusions": [
+        "insufficient_information",
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "prove_or_counterexample": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "landmark-prediction": {
+      "required": [],
+      "established": {},
+      "possible": {},
+      "conclusions": [
+        "prediction_valid_under_design"
+      ],
+      "next_actions": {
+        "external_landmark_evaluation": true
+      },
+      "split_plan": {
+        "assignment": "patient_disjoint",
+        "feature_cutoff": "at_prediction",
+        "validation": "forward_time",
+        "preprocessing_fit": "training_only"
+      },
+      "facts": [
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    },
+    "replicate-measurement": {
+      "required": [],
+      "established": {},
+      "possible": {},
+      "conclusions": [
+        "insufficient_information",
+        "descriptive_only"
+      ],
+      "next_actions": {
+        "independent_measurement": true
+      },
+      "split_plan": null,
+      "facts": [
+        "F1",
+        "F2",
+        "F3"
+      ],
+      "allowed_issues": [
+        "immortal_time",
+        "temporal_leakage",
+        "patient_leakage",
+        "preprocessing_leakage",
+        "positivity",
+        "site_confounding",
+        "unmeasured_confounding",
+        "population_change",
+        "selection_bias",
+        "competing_risk_estimand",
+        "unit_mismatch",
+        "biological_inconsistency",
+        "verification_scope"
+      ]
+    }
+  }
+}

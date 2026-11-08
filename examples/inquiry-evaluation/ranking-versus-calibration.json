@@ -1,0 +1,61 @@
+{
+  "initial_prompt": {
+    "case_id": "ranking-versus-calibration",
+    "question": "The frozen scientific facts and action options have not been supplied. Obtain them with read_case_material, then judge the provided propositions. Return the schema; set split_plan to null.",
+    "output_schema": {
+      "judgments": [
+        {
+          "id": "a supplied proposition ID",
+          "status": "supported, contradicted, or not_established",
+          "evidence": [
+            "supplied fact IDs"
+          ],
+          "value": "the requested numeric value, otherwise null"
+        }
+      ],
+      "next_action": {
+        "id": "a supplied action ID",
+        "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+        "reason": "specific reason tied to the consequential uncertainty"
+      },
+      "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+    }
+  },
+  "tool_material": {
+    "case_id": "ranking-versus-calibration",
+    "question": "Judge each scoped proposition separately and choose the warranted next action. Retain known sample results and distinguish a contradicted assertion from one that lacks evidence. This is a review only; do not execute a study. Return JSON in the supplied schema and set split_plan to null.",
+    "facts": {
+      "F1": "The recorded temporal test-set calibration slope is 0.7346, and its AUROC is 0.88. These are the reported metrics for that test set.",
+      "F2": "A separate calibration-development cohort and a separate, untouched later validation cohort are accessible. Neither has been used for recalibration.",
+      "F3": "No study has measured whether deploying this predictor improves patient outcomes."
+    },
+    "propositions": {
+      "C1": "The recorded test-set calibration slope is 0.7346. Return that value.",
+      "C2": "The recorded calibration slope is exactly 1.",
+      "C3": "The high AUROC establishes an improvement in patient outcomes from deployment."
+    },
+    "actions": {
+      "recalibrate_then_validate": "Use the separate calibration-development cohort for recalibration and evaluate on the untouched later cohort; do not tune on the reported test set.",
+      "tune_on_reported_test": "Tune the predictor on the reported test set and reuse its performance as fresh validation.",
+      "deploy_on_auc": "Assume deployment improves outcomes because ranking AUROC is high."
+    },
+    "output_schema": {
+      "judgments": [
+        {
+          "id": "a supplied proposition ID",
+          "status": "supported, contradicted, or not_established",
+          "evidence": [
+            "supplied fact IDs"
+          ],
+          "value": "the requested numeric value, otherwise null"
+        }
+      ],
+      "next_action": {
+        "id": "a supplied action ID",
+        "new_information": "boolean: whether this acquires evidence beyond the supplied facts",
+        "reason": "specific reason tied to the consequential uncertainty"
+      },
+      "split_plan": "Always null for this judgment task; do not propose or repeat a prediction split plan."
+    }
+  }
+}

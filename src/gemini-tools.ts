@@ -1,4 +1,4 @@
-import { researchToolDefinitions } from "./research-tools.js";
+import { researchToolDefinitions, researchReadTools } from "./research-tools.js";
 import { packageVersion } from "./paths.js";
 import { createServer } from "node:http";
 import { randomUUID } from "node:crypto";
@@ -38,11 +38,11 @@ export async function startGeminiTools(store: TaskStore, options: {
   const shell = await createManagedShell(store);
   const tools = new Map([...createReadOnlyTools(store.project), ...(options.review ? [] : createCodingTools(store.project))].map(tool => [tool.name, tool]));
   for (const tool of connectionToolDefinitions(store, { review: () => options.review, approve: (detail, signal) => options.approve(detail, signal || lifecycle.signal) })) tools.set(tool.name, tool);
-  for (const tool of researchToolDefinitions(store, () => options.review)) if (!options.review || tool.name === "inspect_research") tools.set(tool.name, tool);
+  for (const tool of researchToolDefinitions(store, () => options.review)) if (!options.review || researchReadTools.includes(tool.name)) tools.set(tool.name, tool);
   tools.set("inspect_vcs", vcsTool(store.project));
   const advertised = [...taskTools, ...[...tools.values()].map(tool => ({
     name: tool.name, description: tool.name === "bash" ? shell.definition.description : tool.description, inputSchema: tool.parameters,
-    annotations: { readOnlyHint: ["read", "grep", "find", "ls", "inspect_vcs", "list_connections", "list_connection_tools", "inspect_research"].includes(tool.name), openWorldHint: tool.name === "bash" },
+    annotations: { readOnlyHint: ["read", "grep", "find", "ls", "inspect_vcs", "list_connections", "list_connection_tools", ...researchReadTools].includes(tool.name), openWorldHint: tool.name === "bash" },
   }))];
   const mcp = new Server({ name: "lemmaduck", version: packageVersion }, { capabilities: { tools: {} } });
   mcp.setRequestHandler(ListToolsRequestSchema, async () => ({ tools: advertised }));
@@ -97,7 +97,7 @@ export async function startGeminiTools(store: TaskStore, options: {
       return { isError: true, content: [{ type: "text", text: Buffer.byteLength(text) > RESULT_BYTES ? resultEnvelope(text, artifact, interrupted ? "unknown" : "failed") : text }] };
     } finally {
       shell.forget(id); pending.delete(active); finish();
-      if (store.task.operations.find(op => op.id === id)?.status === "unknown") options.interrupt?.();
+      if (store.task.operations.some(op => op.status === "unknown")) options.interrupt?.();
     }
   });
   const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: () => randomUUID(), enableJsonResponse: true });

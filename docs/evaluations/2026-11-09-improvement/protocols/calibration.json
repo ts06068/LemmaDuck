@@ -1,0 +1,241 @@
+{
+  "config": {
+    "purpose": "research-evaluation",
+    "identity": {
+      "provider": "openai-codex",
+      "model": "gpt-6-sol",
+      "tools": [
+        "inspect_research",
+        "compare_research_actions",
+        "record_research",
+        "run_research_experiment",
+        "read_case_material"
+      ]
+    },
+    "baseline": {
+      "executable": "/home/ts06067/.local/share/lemmaduck/tools/node-22.22.1/bin/node",
+      "script": "driver.mjs",
+      "files": []
+    },
+    "candidate": {
+      "executable": "/home/ts06067/.local/share/lemmaduck/tools/node-22.22.1/bin/node",
+      "script": "driver.mjs",
+      "files": []
+    },
+    "evaluator": {
+      "executable": "/usr/bin/python3",
+      "script": "score-propositions.py",
+      "files": []
+    },
+    "tasks": [
+      {
+        "id": "sample-versus-population",
+        "input": "sample-versus-population.json",
+        "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/sample-versus-population-truth.json",
+        "context": "inquiry-calibration-sample-versus-population"
+      },
+      {
+        "id": "observed-versus-causal",
+        "input": "observed-versus-causal.json",
+        "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/observed-versus-causal-truth.json",
+        "context": "inquiry-calibration-observed-versus-causal"
+      },
+      {
+        "id": "performance-versus-benefit",
+        "input": "performance-versus-benefit.json",
+        "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/performance-versus-benefit-truth.json",
+        "context": "inquiry-calibration-performance-versus-benefit"
+      },
+      {
+        "id": "counterexample-versus-density",
+        "input": "counterexample-versus-density.json",
+        "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/counterexample-versus-density-truth.json",
+        "context": "inquiry-calibration-counterexample-versus-density"
+      }
+    ],
+    "outcomes": {
+      "critical_recall": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      },
+      "evidence_precision": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      },
+      "claim_scope": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      },
+      "next_information": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      },
+      "operational_plan": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      },
+      "joint_validity": {
+        "direction": "higher",
+        "minimum": 0,
+        "maximum": 1,
+        "failureScore": 0
+      }
+    },
+    "repeats": 2,
+    "seed": 20261110,
+    "timeoutMs": 180000,
+    "live": {
+      "maxCalls": 3,
+      "maxToolCalls": 8,
+      "maxOutputTokens": 4096,
+      "maxReportedTokens": 24000,
+      "reasoning": "low"
+    },
+    "policies": {
+      "baseline": {
+        "name": "Previous production inquiry policy at 7c9b135",
+        "text": "Use inspect_research to recover scientific state and schemas. Record sourced observations, an important question, competing hypotheses, then experiment plans with distinct predicted measurement ranges before executing. Include measurement/selection artifacts where plausible. Compare candidate tests by importance, discrimination, feasibility, and cost; scores are ordinal judgments, not measured information gain. Only the owner can approve an exact bounded scope in the CLI. run_research_experiment executes approved frozen adapters and their independent verifier; it cannot approve or expand scope. Preserve negative and inconclusive results and open anomalies. Distinguish a completed process, a verified measurement, compatibility with a hypothesis, and causal identification. Claims must link current verified runs. Observational studies register population, time zero, exposure/comparator, outcome window, confounders, missingness, estimand, and identification assumptions; ambiguous temporal alignment permits association only. Domain feedback is a proposal until the owner records it; rule/capability promotion requires reviewed regression and distinct transfer evidence. Cite artifact IDs and do not replace contradictions with a confident summary."
+      },
+      "candidate": {
+        "name": "Stage-aware policy with proposition calibration",
+        "text": "Match the work to the uncertainty. For a supplied review or explanation, use the provided evidence directly; do not inspect empty state, reread an already complete case, or create records merely to follow a workflow. Use tools when their result could change a decision or verify a material uncertainty.\nSeparate demonstrated findings from plausible concerns and unsupported assertions. Cite the specific observation supporting a finding; missing evidence for an assumption does not establish its violation. Distinguish a completed calculation, a verified measurement, predictive validity, and causal identification. State conditional conclusions under explicitly granted assumptions rather than refusing all observational causal inference. State exactly which proposition the evidence supports: retain directly established local results even when a stronger scientific claim is unverified; do not erase known information with a blanket uncertain conclusion.\nFor new investigation, identify the consequential unknown and competing explanations. Compare feasible next actions by what different outcomes would change; an answer already supplied adds no information unless new independent replication addresses measurement reliability. compare_research_actions can expose redundant or nondiscriminating proposals without writing records. If the needed data are unavailable, name the missing evidence and stop at the supported claim.\nBefore actual execution, recover relevant state and schemas, record sourced observations and hypotheses, and freeze discriminating predictions. Inspect only the records and schemas needed for the current step. Experiment scores are ordinal judgments, not measured information gain. Only the owner approves exact bounded scope; run_research_experiment cannot approve or expand it. Claims must link current verified runs. Preserve contradictions, negative/inconclusive results and open anomalies. Revise explanations, never past predictions to fit an outcome.\nFor observational work, check population, time zero, exposure/comparator, outcome window, confounding, missingness and estimand. Ambiguous timing permits association only. For prediction, require features available at prediction time and explicitly patient-disjoint partitions when evaluating new patients; keep every patient's records in one partition. Check your actionable recommendation for contradictions before answering.\nDomain feedback remains a proposal until owner review; rules and capabilities need regression and distinct transfer evidence. Record evidence and decisions when advancing an investigation, without turning a short answer into a bookkeeping exercise."
+      }
+    }
+  },
+  "methods": {
+    "baseline": {
+      "executable": {
+        "path": "/home/ts06067/.local/share/lemmaduck/tools/node-22.22.1/bin/node",
+        "sha256": "243fd8938011479f41b3de101842150fa990f33fbbb3f7aabd330857f2d79e1d"
+      },
+      "script": "driver.mjs",
+      "files": [
+        {
+          "path": "driver.mjs",
+          "sha256": "08852fb77df6009737d4e021e8b84654323f28245a425304a60789dfaa2dad19"
+        }
+      ]
+    },
+    "candidate": {
+      "executable": {
+        "path": "/home/ts06067/.local/share/lemmaduck/tools/node-22.22.1/bin/node",
+        "sha256": "243fd8938011479f41b3de101842150fa990f33fbbb3f7aabd330857f2d79e1d"
+      },
+      "script": "driver.mjs",
+      "files": [
+        {
+          "path": "driver.mjs",
+          "sha256": "08852fb77df6009737d4e021e8b84654323f28245a425304a60789dfaa2dad19"
+        }
+      ]
+    }
+  },
+  "evaluator": {
+    "executable": {
+      "path": "/usr/bin/python3",
+      "sha256": "b8d8288faefdd300201f43fcf00f6f539a27218eeed3a3dff5ab10b9c4c99700"
+    },
+    "script": "score-propositions.py",
+    "files": [
+      {
+        "path": "score-propositions.py",
+        "sha256": "d632d9ec54cf89ed2f096f4df17e9c9bf32068c9fdbf88439957be4f9ee7a046"
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "sample-versus-population",
+      "input": "/workspace/lemmaduck/review/improvement-cycle3-calibration/project/sample-versus-population.json",
+      "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/sample-versus-population-truth.json",
+      "context": "inquiry-calibration-sample-versus-population",
+      "inputHash": "41a270411f2663a34f699875ae1a62ec901f4c432b4b019096b30b178809fda7",
+      "truthHash": "8b04a93ebc97a06c6acf8c071cbad938cb9a4a723027541de2b4e2afda4b3d5f"
+    },
+    {
+      "id": "observed-versus-causal",
+      "input": "/workspace/lemmaduck/review/improvement-cycle3-calibration/project/observed-versus-causal.json",
+      "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/observed-versus-causal-truth.json",
+      "context": "inquiry-calibration-observed-versus-causal",
+      "inputHash": "c6fac508d162f8e56035898ab9483dfbc7d9454b8a6e3ec01e691a137d53b334",
+      "truthHash": "f5780c53b936a3e638fb5361ede83a32be08cf2478a6f958f1233cd6d7a9634a"
+    },
+    {
+      "id": "performance-versus-benefit",
+      "input": "/workspace/lemmaduck/review/improvement-cycle3-calibration/project/performance-versus-benefit.json",
+      "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/performance-versus-benefit-truth.json",
+      "context": "inquiry-calibration-performance-versus-benefit",
+      "inputHash": "4fb2dbb8de024f03029edea9079191a5f0ac425c067c9048b74bf540f7ad1528",
+      "truthHash": "896269b36200a21a9920d45dddc124bd2df45f861374aae9939caf0cbe7085ee"
+    },
+    {
+      "id": "counterexample-versus-density",
+      "input": "/workspace/lemmaduck/review/improvement-cycle3-calibration/project/counterexample-versus-density.json",
+      "truth": "/workspace/lemmaduck/review/improvement-cycle3-calibration/counterexample-versus-density-truth.json",
+      "context": "inquiry-calibration-counterexample-versus-density",
+      "inputHash": "77aae2e2ee2ab7dce36a0f3eb1e70d55f647f6c325cc651e92495e354b257844",
+      "truthHash": "c52cf4c017b41d37c4b1e5cc3796014d79326604d453d41afdc727422fc0d9ae"
+    }
+  ],
+  "liveRuntime": {
+    "gateway": "3d319dbdb75a6f6b76fd2b042d7debe96babab80dd5775e13d850ea4cc138499",
+    "tools": "cfafb57c10692fa2b780db4de1a41c9afdbb1840cecb8709456a784008d19e12",
+    "actions": "8f38c8395c1a1e37a7b2751d718dfe7339ffb761a96fd94573be143073c75769",
+    "dependencyLock": "65b409b8f9f76e55d47fffdb273481490f6c51277c9f523a8331584a3fcfc42b",
+    "instructions": {
+      "baseline": "Use inspect_research to recover scientific state and schemas. Record sourced observations, an important question, competing hypotheses, then experiment plans with distinct predicted measurement ranges before executing. Include measurement/selection artifacts where plausible. Compare candidate tests by importance, discrimination, feasibility, and cost; scores are ordinal judgments, not measured information gain. Only the owner can approve an exact bounded scope in the CLI. run_research_experiment executes approved frozen adapters and their independent verifier; it cannot approve or expand scope. Preserve negative and inconclusive results and open anomalies. Distinguish a completed process, a verified measurement, compatibility with a hypothesis, and causal identification. Claims must link current verified runs. Observational studies register population, time zero, exposure/comparator, outcome window, confounders, missingness, estimand, and identification assumptions; ambiguous temporal alignment permits association only. Domain feedback is a proposal until the owner records it; rule/capability promotion requires reviewed regression and distinct transfer evidence. Cite artifact IDs and do not replace contradictions with a confident summary.",
+      "candidate": "Match the work to the uncertainty. For a supplied review or explanation, use the provided evidence directly; do not inspect empty state, reread an already complete case, or create records merely to follow a workflow. Use tools when their result could change a decision or verify a material uncertainty.\nSeparate demonstrated findings from plausible concerns and unsupported assertions. Cite the specific observation supporting a finding; missing evidence for an assumption does not establish its violation. Distinguish a completed calculation, a verified measurement, predictive validity, and causal identification. State conditional conclusions under explicitly granted assumptions rather than refusing all observational causal inference. State exactly which proposition the evidence supports: retain directly established local results even when a stronger scientific claim is unverified; do not erase known information with a blanket uncertain conclusion.\nFor new investigation, identify the consequential unknown and competing explanations. Compare feasible next actions by what different outcomes would change; an answer already supplied adds no information unless new independent replication addresses measurement reliability. compare_research_actions can expose redundant or nondiscriminating proposals without writing records. If the needed data are unavailable, name the missing evidence and stop at the supported claim.\nBefore actual execution, recover relevant state and schemas, record sourced observations and hypotheses, and freeze discriminating predictions. Inspect only the records and schemas needed for the current step. Experiment scores are ordinal judgments, not measured information gain. Only the owner approves exact bounded scope; run_research_experiment cannot approve or expand it. Claims must link current verified runs. Preserve contradictions, negative/inconclusive results and open anomalies. Revise explanations, never past predictions to fit an outcome.\nFor observational work, check population, time zero, exposure/comparator, outcome window, confounding, missingness and estimand. Ambiguous timing permits association only. For prediction, require features available at prediction time and explicitly patient-disjoint partitions when evaluating new patients; keep every patient's records in one partition. Check your actionable recommendation for contradictions before answering.\nDomain feedback remains a proposal until owner review; rules and capabilities need regression and distinct transfer evidence. Record evidence and decisions when advancing an investigation, without turning a short answer into a bookkeeping exercise."
+    },
+    "comparison": "Instructions differ; model, declared tools, inputs, adapter and ceilings are shared."
+  },
+  "runtimeFiles": {
+    "dist/acp.js": "d5faad9b6323f19c206fbd0c0c3ba3deb4801aa136c46750bcc6efa0bdcac313",
+    "dist/artifacts.js": "e687cf33374815cc35e84ddd7dc49fa6231ec6055e383d834c397d072ad467df",
+    "dist/cli.js": "c983eb7de756f9daba555c5ec9837c66676bddd17b19e81df5794c995339bba4",
+    "dist/coding.js": "c3c37d27e5905e0a39414f26aaf70637c9f83e58806ed1e35f4b3c9357cefa3f",
+    "dist/config.js": "bf10c62707a477408a4ca291a5210b49f18400dcc67ca9771bba84db67c18849",
+    "dist/connection-tools.js": "08949c537798066a894a8fa5dfaf8b9083e57c56b5330608d17e744043fc1c88",
+    "dist/connectors.js": "f156fbccacd28a1fe866df43d15a4f5b54235f9e1ecb9aadda6566260288fcd8",
+    "dist/dependencies.js": "6001dd89ce85e4d20df2bab66298ffd4db9a1e899952aad739a83ab96d60d837",
+    "dist/extension.js": "be2efe42b2610d2532670d3488de8b52b80794efb1e3da4ece69a9fc61235d42",
+    "dist/gemini-tools.js": "03a7dc02ac0f403ae5f1952b705bdc23062e92f288b05bad3904cc1b5b694798",
+    "dist/gemini.js": "963cdf2576b3be8ab4fb891937db3be61e0878e98e5b0026e033f6f492bf9cc3",
+    "dist/google-login.js": "7a9e5d26197c6fd9dd7cfcce1b004e1a38c63e32bc83dc2f9ccb5412031947b5",
+    "dist/google-profile.js": "4ee02bb44b80e584c2cda5a85fd6bac0b5bc1969d4742c58799157d7c96264e4",
+    "dist/paths.js": "6b7c8d0d9a2ef6ade0c9263234a9c41aa40ecfa04f57a0fe4b3c380b6b6c5c43",
+    "dist/provider-command.js": "88ce45449237298a2df6e7adb2c289784514ff975af77319d557f274bd615677",
+    "dist/providers.js": "53451b071dadd427fbf690511696973667ee4e7f58cb1c7d5aba184058ac44ce",
+    "dist/research-actions.js": "8f38c8395c1a1e37a7b2751d718dfe7339ffb761a96fd94573be143073c75769",
+    "dist/research-command.js": "c0a00c74a650284d7271ae0d4c284692333751b869e219fc6df6d7af96dcad97",
+    "dist/research-demo.js": "e3596dcd937b88fbb54ca33dd248070c0313423707ca272d9b60aa5e90c64381",
+    "dist/research-evaluation.js": "a685bdd37b2c17d9d6f2ad1a427780e538c6a1a3012b9f2f4c58ab825f221825",
+    "dist/research-medical.js": "5501cc2e07f3147d6f3053409bea87bc25b2ca191b3c4c6ccaf64f4ed0aef910",
+    "dist/research-model.js": "3d319dbdb75a6f6b76fd2b042d7debe96babab80dd5775e13d850ea4cc138499",
+    "dist/research-runner.js": "516b6c61e4a6d1b25cf96223883053b01407949f3061b236137645e0231a1fff",
+    "dist/research-tools.js": "cfafb57c10692fa2b780db4de1a41c9afdbb1840cecb8709456a784008d19e12",
+    "dist/research.js": "039bf574b32dae8550ed73aca0f7dd33bd8d354d003522393215aafa9c497b25",
+    "dist/routing.js": "6b8fe548002680f6b717222bb96697b0ad940133f02e5a3363e0a2732fc54ffe",
+    "dist/security.js": "b3b98ae4e2c0e455222cad41431cda7b1b65dc23931923ac6fa11d493cc0e9ce",
+    "dist/shell.js": "ad157aca49baf914b2c284e861dff6fd04e5e107785a4a7c2c7a6d7e8a5cd3e6",
+    "dist/state.js": "09f7000655775888c62dfed76a0a4da8eff5b1f05e71a36f6da8620db7437bbf",
+    "dist/task-tools.js": "c0e22a81c10ff66a203c4e548f55d132dc412e59722d106d83bacfab6adfb50f",
+    "dist/ui.js": "a5afe4538cac7c6a26124e954ac1d1c728a2b04398e2346f2a519be753b76de9",
+    "dist/vcs-tool.js": "531103adef639ce63d4af4bb4859d5c29633dbbd0d49fad1fd8638adffdb0beb",
+    "dist/vcs.js": "60412197bc2cfca5280af8bcde1f54955b400b0ca02a1070bcf493e9d4d49357",
+    "dist/workflow.js": "a13f1d7d65999b540fef4ffd15c2d321d5617722f0c9f921838076ce737fcc5e",
+    "dist/workspace-ui.js": "39e8231e235a456f1483ac61b3c03fdf70c539e1a3904feaab5a6cd4d89c52c6",
+    "package.json": "e71ea595de226fa18708110eb4068dafb7d190b7fe98e664aaf304c550fdce9b",
+    "npm-shrinkwrap.json": "65b409b8f9f76e55d47fffdb273481490f6c51277c9f523a8331584a3fcfc42b",
+    "tsconfig.json": "fa52bb58c59d769d75f3189cc90c688b2950ce9870beabb33af9ecd6ba87d9df"
+  }
+}

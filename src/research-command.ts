@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { compareResearchActions } from "./research-actions.js";
 import { confinedPath } from "./security.js";
 import { ResearchStore, researchSchemas, type ResearchKind } from "./research.js";
 import { ResearchRunner } from "./research-runner.js";
@@ -9,6 +10,11 @@ export async function researchCommand(argv: string[]): Promise<void> {
   const [path, action = "status", ...args] = argv;
   if (!path) throw new Error("Use: duck research PROJECT status|schema KIND|record KIND FILE|revise ID FILE|approve FILE|run EXPERIMENT SCOPE|cycle SCOPE|reconcile RUN NOTE|promote KIND FILE");
   const project = projectPath(path);
+  if (action === "compare") {
+    if (!args[0]) throw new Error("Use: duck research PROJECT compare ACTIONS.json");
+    console.log(JSON.stringify(compareResearchActions(JSON.parse(readFileSync(confinedPath(project, args[0]), "utf8"))), null, 2));
+    return;
+  }
   const release = ["status", "schema", "show", "next"].includes(action) ? () => {} : acquireProjectLock(project);
   try {
     const store = new TaskStore(project); const research = new ResearchStore(store); const runner = new ResearchRunner(research);

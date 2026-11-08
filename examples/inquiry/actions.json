@@ -1,0 +1,70 @@
+{
+  "question": "Does the discrepancy arise from unit conversion or a real difference?",
+  "hypotheses": [
+    "unit-error",
+    "real-difference"
+  ],
+  "actions": [
+    {
+      "id": "reread-same-output",
+      "purpose": "learn",
+      "available": true,
+      "answerKnown": true,
+      "independentEvidence": false,
+      "cost": 1,
+      "outcomes": [
+        {
+          "observation": "same two numbers",
+          "compatibleHypotheses": [
+            "unit-error",
+            "real-difference"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "normalize-units",
+      "purpose": "learn",
+      "available": true,
+      "answerKnown": false,
+      "independentEvidence": false,
+      "cost": 2,
+      "outcomes": [
+        {
+          "observation": "agreement after conversion",
+          "compatibleHypotheses": [
+            "unit-error"
+          ]
+        },
+        {
+          "observation": "difference persists",
+          "compatibleHypotheses": [
+            "real-difference"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "independent-measurement",
+      "purpose": "replicate",
+      "available": false,
+      "answerKnown": false,
+      "independentEvidence": true,
+      "cost": 6,
+      "outcomes": [
+        {
+          "observation": "agrees",
+          "compatibleHypotheses": [
+            "unit-error"
+          ]
+        },
+        {
+          "observation": "disagrees",
+          "compatibleHypotheses": [
+            "real-difference"
+          ]
+        }
+      ]
+    }
+  ]
+}
