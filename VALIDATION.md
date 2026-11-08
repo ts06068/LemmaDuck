@@ -16,7 +16,17 @@ Local TypeScript compilation passed. Python launcher/package checks passed all
 missed its 40-second cold-start budget. After separating readiness from interaction
 timeouts, the final focused suite passed all 25 tests, including that provider check,
 quota stopping, parent provenance, scientific invariants, and deadline termination.
-The CI result for the final commit is recorded below when available. An installed ChatGPT subscription
+[CI for implementation commit `2736783ac8bd078607f7d42c84ac266f86299222`](https://github.com/ts06068/LemmaDuck/actions/runs/42504062714)
+passed all four jobs. The loopback-only engine suite passed 76 tests, with its single
+medical-environment test intentionally deferred to the statistical job. That job passed
+both medical adapter tests with no skips and reproduced the pinned public study.
+Root Python tests passed 12/12, editor Python suites passed 4/4 each, native Emacs and
+Neovim checks passed, all three npm installation/upgrades passed, and real OMP
+`rpc`/`rpc-ui` startup checks passed without external networking. The installed-source
+launcher, `duck doctor`, and compiled parent-runtime provenance check also passed.
+The persistent medical study is in the owner-controlled `review/observational-study`
+directory; private review packets and ratings are excluded from Git. Published pilot
+answers and explicitly AI-attributed ratings are in the evaluation evidence directory. An installed ChatGPT subscription
 passed the live worker smoke checks. The medical-method comparison completed all
 24 planned live trials and did not demonstrate an inquiry advantage. A user-requested
 clinical epidemiology persona rated every answer; this is self-review, not independent
