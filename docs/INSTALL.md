@@ -90,11 +90,11 @@ manage the installed package, but updates require selecting a new release URL:
 
 ```sh
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/base-v0.5.3/lemmaduck-base-0.5.3.npm.tgz
+  https://github.com/ts06068/LemmaDuck/releases/download/base-v0.5.3/lemmaduck-base-0.5.3.npm.tgz
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/emacs-v0.1.0-alpha.4/lemmaduck-emacs-0.1.0-alpha.4.npm.tgz
+  https://github.com/ts06068/LemmaDuck/releases/download/emacs-v0.1.0-alpha.4/lemmaduck-emacs-0.1.0-alpha.4.npm.tgz
 npm install --global --prefix "$HOME/.local" \
-  https://github.com/ts06068/lemmaduck/releases/download/neovim-v0.1.0-alpha.4/lemmaduck-neovim-0.1.0-alpha.4.npm.tgz
+  https://github.com/ts06068/LemmaDuck/releases/download/neovim-v0.1.0-alpha.4/lemmaduck-neovim-0.1.0-alpha.4.npm.tgz
 ```
 
 Use the registry channels for name-based updates. Direct-URL installs do not gain

@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -18,6 +20,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci --include=dev --ignore-scripts --no-audit --no-fund
+      - run: python3 scripts/check_commits.py
       - run: npm run check
       - run: npm run build
       - name: Install the pinned Jujutsu test binary

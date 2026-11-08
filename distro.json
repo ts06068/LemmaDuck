@@ -4,7 +4,7 @@
   "name": "LemmaDuck Base",
   "version": "0.5.3",
   "channel": "stable",
-  "repository": "https://github.com/ts06068/lemmaduck",
+  "repository": "https://github.com/ts06068/LemmaDuck",
   "githubPackage": "@ts06068/lemmaduck-base",
   "integration": "paseo",
   "host": "Linux x86_64",

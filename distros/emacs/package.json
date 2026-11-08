@@ -4,7 +4,7 @@
   "description": "LemmaDuck Emacs distro: isolated editor starter for the shared LemmaDuck engine",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ts06068/lemmaduck.git",
+    "url": "git+https://github.com/ts06068/LemmaDuck.git",
     "directory": "distros/emacs"
   },
   "publishConfig": {

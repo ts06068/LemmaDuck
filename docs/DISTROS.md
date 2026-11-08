@@ -1,7 +1,7 @@
 # LemmaDuck distros
 
 One repository contains three workspaces and one shared engine. Clone
-`ts06068/lemmaduck` once. Base and the engine remain at the root; editor-specific
+`ts06068/LemmaDuck` once. Base and the engine remain at the root; editor-specific
 code lives in `distros/`. Editor configuration and task state remain separate.
 
 | Distro | Source directory | Release tag | GitHub Packages name |
@@ -32,7 +32,7 @@ live conversation from another client are not implemented. Details:
 
 ## Releases in one repository
 
-All three release channels live in [this repository's Releases](https://github.com/ts06068/lemmaduck/releases).
+All three release channels live in [this repository's Releases](https://github.com/ts06068/LemmaDuck/releases).
 Use a consistent identity at every layer:
 
 - Title: exactly the tag, such as `base-v0.5.3` or `emacs-v0.1.0-alpha.4`.

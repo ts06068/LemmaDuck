@@ -4,11 +4,11 @@
 
 **Distro: `emacs` · Version: `0.1.0-alpha.4` · Preview**
 
-An isolated Emacs workspace for the shared [LemmaDuck engine](https://github.com/ts06068/lemmaduck).
+An isolated Emacs workspace for the shared [LemmaDuck engine](https://github.com/ts06068/LemmaDuck).
 Code development uses OMP. Research, writing and assistant work use the managed Pi worker.
 Model routing, account sign-in, connector permissions and task records stay in the engine.
 
-[Base](https://github.com/ts06068/lemmaduck) · [Emacs](https://github.com/ts06068/lemmaduck/tree/main/distros/emacs) · [Neovim](https://github.com/ts06068/lemmaduck/tree/main/distros/neovim) · [Releases](https://github.com/ts06068/lemmaduck/releases?q=emacs-v)
+[Base](https://github.com/ts06068/LemmaDuck) · [Emacs](https://github.com/ts06068/LemmaDuck/tree/main/distros/emacs) · [Neovim](https://github.com/ts06068/LemmaDuck/tree/main/distros/neovim) · [Releases](https://github.com/ts06068/LemmaDuck/releases?q=emacs-v)
 
 ## Getting started
 
@@ -36,7 +36,7 @@ unchanged. The OS editor binary is a separate prerequisite.
 2. From the repository root, enter this distro and check the local programs:
 
 ```sh
-git clone https://github.com/ts06068/lemmaduck.git
+git clone https://github.com/ts06068/LemmaDuck.git
 cd lemmaduck
 ./duck setup --full
 export PATH="$HOME/.local/bin:$PATH"
@@ -78,7 +78,7 @@ Native ACP/RPC chat buffers, cross-client attachment to a live conversation, and
 
 ## Releases and packages
 
-All releases are published in the main `ts06068/lemmaduck` repository. Tags are **`emacs-vVERSION`**. Release titles are also **`emacs-vVERSION`**.
+All releases are published in the main `ts06068/LemmaDuck` repository. Tags are **`emacs-vVERSION`**. Release titles are also **`emacs-vVERSION`**.
 Download assets begin with **`lemmaduck-emacs-VERSION`**, and each archive contains a `release-manifest.json` with distro, version, engine reference and source commit. Verify downloads against the attached SHA-256 file.
 
 An editor-only release archive can also be extracted and launched with `./bin/lemmaduck-emacs`; install the shared engine separately using the main repository. Development and release commands below assume the full monorepo checkout.

@@ -1,7 +1,7 @@
 {
   "schema": "lemmaduck.design.v1",
   "as_of": "2026-11-01",
-  "repository": "ts06068/lemmaduck",
+  "repository": "ts06068/LemmaDuck",
   "cli": "lemmaduck",
   "status": "design_contract",
   "modules": [

@@ -26,7 +26,7 @@
     "tsx": "4.22.4",
     "typescript": "6.0.3"
   },
-  "description": "A Paseo workspace with OMP for development and Pi for research, writing and assistant tasks.",
+  "description": "A lab copilot for reproducible research, writing, and code.",
   "bin": {
     "duck": "duck",
     "lemmaduck": "lemmaduck"
@@ -39,11 +39,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ts06068/lemmaduck.git"
+    "url": "git+https://github.com/ts06068/LemmaDuck.git"
   },
-  "homepage": "https://github.com/ts06068/lemmaduck",
+  "homepage": "https://github.com/ts06068/LemmaDuck",
   "bugs": {
-    "url": "https://github.com/ts06068/lemmaduck/issues"
+    "url": "https://github.com/ts06068/LemmaDuck/issues"
   },
   "files": [
     "dist/*.js",

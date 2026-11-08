@@ -4,10 +4,10 @@
   "name": "LemmaDuck Neovim",
   "version": "0.1.0-alpha.4",
   "channel": "preview",
-  "repository": "https://github.com/ts06068/lemmaduck",
+  "repository": "https://github.com/ts06068/LemmaDuck",
   "githubPackage": "@ts06068/lemmaduck-neovim",
   "engine": {
-    "repository": "https://github.com/ts06068/lemmaduck",
+    "repository": "https://github.com/ts06068/LemmaDuck",
     "version": "0.5.3",
     "sourceDirectory": ".",
     "revision": "same-checkout"

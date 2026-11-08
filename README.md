@@ -1,142 +1,159 @@
-<h1 align="center"><a id="-lemmaduck"></a><img src="assets/brand/lemmaduck.webp" width="40" height="40" alt="Rubber duck"> LemmaDuck</h1>
-<p align="center"><strong>Your lab copilot for research, writing, and code.</strong><br>Talk to the duck. Test your hunch.</p>
+# LemmaDuck
 
-<p align="center">
-  <a href="#quick-start">Quick Start</a> ·
-  <a href="#usage">Usage</a> ·
-  <a href="#how-it-works">How It Works</a> ·
-  <a href="#documentation">Documentation</a> ·
-  <a href="https://github.com/ts06068/lemmaduck/releases">Releases</a>
-</p>
+<img src="assets/brand/lemmaduck.webp" alt="LemmaDuck proof duck" width="160" height="160">
 
-LemmaDuck brings your model accounts, research tasks, and development tools into one workspace. Work in Paseo on desktop or tablet, or use the Emacs and Neovim distros with the same shared engine.
+A lab copilot for reproducible research, writing, and code.
 
-<table align="center">
-  <tr>
-    <td align="center" width="33%">
-      <a href="#quick-start"><img src="assets/brand/lemmaduck.webp" width="176" height="176" alt="LemmaDuck Base proof duck"></a><br>
-      <strong><a href="#quick-start">Base</a></strong><br>Paseo desktop &amp; tablet
-    </td>
-    <td align="center" width="33%">
-      <a href="distros/emacs"><img src="assets/brand/lemmaduck-emacs.png" width="176" height="176" alt="LemmaDuck Emacs with a purple lambda beret"></a><br>
-      <strong><a href="distros/emacs">Emacs</a></strong><br>Editor workspace · preview
-    </td>
-    <td align="center" width="33%">
-      <a href="distros/neovim"><img src="assets/brand/lemmaduck-neovim.png" width="176" height="176" alt="LemmaDuck Neovim with a green cap"></a><br>
-      <strong><a href="distros/neovim">Neovim</a></strong><br>Editor workspace · preview
-    </td>
-  </tr>
-</table>
+Talk to the duck. Test your hunch. LemmaDuck brings your model accounts, project tools, and saved research tasks into one workspace. Use Paseo on desktop or tablet, or open the same workers in Emacs and Neovim.
 
-The editor previews run the shared workers in editor terminals.
+The GitHub repository is named **LemmaDuck**. Commands, npm packages, and local storage keep their lowercase names so existing installations continue to work. The source checkout can also keep its existing directory name.
 
-<a id="getting-started-with-paseo"></a>
+## Table of Contents
 
-<a id="quick-start"></a>
+- [Background](#background)
+- [Install](#install)
+- [Usage](#usage)
+- [Documentation](#documentation)
+- [Development](#development)
+- [Maintainers](#maintainers)
+- [Acknowledgements](#acknowledgements)
+- [Contributing](#contributing)
+- [License](#license)
 
-## 🚀 Quick Start
+## Background
 
-**Host requirements:** Linux x86-64, Node.js 22.19+, Python 3.12+, and Git.
+Research runs across conversations, code, data, and manuscripts. LemmaDuck keeps a task's selected inputs, decisions, execution records, and handoffs together so you can return to the work and inspect its evidence.
 
-Complete the one-time [GitHub Packages login](docs/INSTALL.md#one-time-registry-login), then install Base:
+- **Research and writing:** Pi runs the managed worker, with checkpoints, explicit model switches, and read-only review.
+- **Code:** OMP runs development sessions with the project's tools and instructions.
+- **Models:** choose ChatGPT, Claude, Gemini, or an explicitly configured API or local provider. Set provider, model, and reasoning preferences by task.
+- **Connected projects:** allow specific MCP tools for named accounts, including GitHub, Linear, and Jira. Modifying actions have approval and receipt records.
+- **Workspaces:** Base uses Paseo. The Emacs and Neovim previews run the shared workers in editor terminals.
+
+A saved execution record establishes what ran. Scientific conclusions still require appropriate methods, evidence, and review. See [validation coverage](VALIDATION.md) for what has been exercised.
+
+## Install
+
+### Dependencies
+
+Run the engine on **Linux x86-64** with **Node.js 22.19+**, **Python 3.12+**, and **Git**. Emacs and Neovim are separate prerequisites for their editor distributions.
+
+For Windows with a remote Linux or GPU server, install on the server over SSH. GPU jobs use the server's configured Python/CUDA environment. WSL is optional for that arrangement. [Choose an execution host](docs/GETTING_STARTED.md#getting-started-with-paseo).
+
+### Base
+
+Complete the one-time GitHub Packages login, then install Base in your user prefix:
 
 ```sh
+npm config set @ts06068:registry https://npm.pkg.github.com --location=user
+npm login --scope=@ts06068 --auth-type=legacy --registry=https://npm.pkg.github.com
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-base@latest
 export PATH="$HOME/.local/bin:$PATH"
 duck setup --full
+duck doctor
 duck paseo
 ```
 
-`duck` is the everyday command; `lemmaduck` remains available for compatibility.
+Use your GitHub username and a classic token with `read:packages` at the private login prompt. Public release archives provide an [installation path without registry login](docs/INSTALL.md#install-without-registry-authentication).
 
-Connect with [Paseo Desktop or Android](https://paseo.sh/download). The [getting started guide](docs/GETTING_STARTED.md) walks through host connection, model sign-in, and your first research task.
+Connect [Paseo Desktop or Android](https://paseo.sh/download) to the execution host. Follow [the walkthrough](docs/GETTING_STARTED.md) to sign into your model accounts and start a task.
 
-**🖥️ Windows → Linux GPU server:** SSH into the server, install LemmaDuck there, and run `duck code /path/to/project` or `duck agent /path/to/project`. WSL is not required on Windows for this setup. VS Code Remote–SSH and [Paseo Remote SSH](https://paseo.sh/docs/connectivity#ssh) also work; GPU jobs use the server's configured CUDA/Python environment. For long sessions over plain SSH, run `duck` inside tmux.
+### Editors
 
-<a id="install-with-an-agent"></a>
-
-<details>
-<summary>🤖 Install with an AI agent — copy this prompt</summary>
-
-Paste this into your coding agent. Add your server's SSH alias and preferred editor if needed.
-
-```text
-Install LemmaDuck from https://github.com/ts06068/lemmaduck on my execution host.
-Read the current README, docs/INSTALL.md, docs/GETTING_STARTED.md, and
-docs/PROVIDERS.md first, then carry out the setup.
-
-Identify the execution host; ask if it is unclear. When I use Windows with a
-remote Linux server, install on that server. Use Base unless I request Emacs
-or Neovim. Check the documented OS, architecture, runtime, and editor requirements.
-
-Install or update via npm in my user prefix ($HOME/.local), using the documented
-package names and channels. Preserve existing projects, configuration, and
-credentials. Use existing registry authentication, or let me log in privately;
-the documented public release archive is an alternative. Never request secrets
-in chat. Add the command directory to PATH, then run duck setup --full.
-
-Verify duck --version and duck doctor, plus the selected editor's --doctor.
-Guide me through my chosen model's login and let me confirm its account settings.
-Report installed versions, checks that passed, any remaining manual steps, and
-the commands to start a project and update later. Do not mark unfinished setup
-or untested model access as verified.
-```
-
-</details>
-
-<details>
-<summary>Use Emacs or Neovim</summary>
-
-Install Base first, then add the editor distro you want. The editor itself must be installed on the host.
+Install Base first, then add the editor you use:
 
 ```sh
-# Emacs
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-emacs@preview
 duck-emacs /path/to/project
 
-# Neovim
 npm install --global --prefix "$HOME/.local" @ts06068/lemmaduck-neovim@preview
 duck-neovim /path/to/project
 ```
 
-[Emacs guide](distros/emacs/README.md) · [Neovim guide](distros/neovim/README.md)
+Both editor distributions are previews. They provide terminal workers, project navigation, and context copying. Native chat buffers and cross-client attachment to a live conversation are not implemented. [Emacs guide](distros/emacs/README.md) · [Neovim guide](distros/neovim/README.md).
 
-</details>
+To update, rerun the npm install command for your chosen channel, run `duck setup --full`, and reopen the workers. [Versions and updates](docs/INSTALL.md) · [Source installation](docs/INSTALLATION.md).
 
-[Update with npm](docs/INSTALL.md#update) · [Install without registry login](docs/INSTALL.md#install-without-registry-authentication) · [Install from source](docs/INSTALLATION.md)
+## Usage
 
-<a id="usage"></a>
+### CLI
 
-## 🛠️ Usage
-
-After [connecting a model account](docs/PROVIDERS.md), create a research project:
+Create a research project after connecting a [model account](docs/PROVIDERS.md):
 
 ```sh
 duck init "$HOME/projects/my-study" --kind research
 duck agent "$HOME/projects/my-study"
 ```
 
-For software development, run `duck code /path/to/repo`. To return to saved research work, run `duck agent /path/to/project` again.
+Inside Pi:
 
-<a id="how-it-works"></a>
+```text
+/ask Compare the competing explanations in protocol.md and propose a discriminating test.
+/task
+/checkpoint
+/handoff
+```
 
-## ✨ How It Works
+`/ask` routes a new segment. Follow-up messages stay with its worker. `/switch` selects another worker, and `/review` opens a read-only review segment. Return with `duck agent` using the same host, account, and project path.
 
-- 🔬 **Research and writing.** Pi manages goals, source files, checkpoints, reviews, and handoffs so you can return to an ongoing task.
-- 💻 **Code development.** OMP runs coding sessions with the project's tools and instructions, alongside Git or Jujutsu.
-- 🧠 **Your choice of models.** Use ChatGPT, Claude, Gemini, or explicitly configured API and local-model providers. Set preferred providers, models, and reasoning levels by task.
-- 🔗 **Connected projects.** Configure GitHub, Linear, and Jira connectors, and keep issue references with your research tasks.
+For software development:
 
-<a id="documentation"></a>
+```sh
+duck code /path/to/repository
+```
 
-## 📚 Documentation
+For a reproducible exercise that needs no model account:
+
+```sh
+duck init "$HOME/projects/duck-first-study" --kind demo
+cd "$HOME/projects/duck-first-study"
+python3 reproduce.py
+python3 reproduce.py --check
+```
+
+The synthetic draft claims a mean of 25. The three observations yield 20. The script writes the discrepancy and a manifest that detects changed inputs or outputs.
+
+`duck` is the everyday command. `lemmaduck` remains available for compatibility.
+
+## Documentation
 
 | Guide | Contents |
 | --- | --- |
-| [Getting started](docs/GETTING_STARTED.md) | Host setup, account sign-in, and a complete first-task walkthrough |
-| [Installation and updates](docs/INSTALL.md) | npm packages, release downloads, versions, and upgrades |
-| [Models](docs/PROVIDERS.md) · [Routing](docs/ROUTING.md) | Accounts, local models, and task-based model preferences |
-| [Distros](docs/DISTROS.md) | Base, Emacs, and Neovim workspaces |
-| [Connectors](docs/CONNECTORS.md) · [Version control](docs/VCS.md) | GitHub, Linear, Jira, Git, and Jujutsu |
-| [Task state and recovery](docs/OPERATIONS.md) | Checkpoints, handoffs, and resuming work |
-| [Development](docs/GETTING_STARTED.md#development) · [Validation](VALIDATION.md) | Build commands, tests, and current coverage |
+| [Getting started](docs/GETTING_STARTED.md) | Host selection, setup, account sign-in, and a first task |
+| [Installation](docs/INSTALL.md) | npm packages, public archives, and updates |
+| [Providers](docs/PROVIDERS.md) · [Routing](docs/ROUTING.md) | Model accounts, local endpoints, and task preferences |
+| [Distros](docs/DISTROS.md) | Base, Emacs, and Neovim |
+| [Connectors](docs/CONNECTORS.md) · [Version control](docs/VCS.md) | Scoped MCP tools, Git, and Jujutsu |
+| [Operations](docs/OPERATIONS.md) | Checkpoints, handoffs, and interruption recovery |
+| [Writing](docs/WRITING.md) | Author intent, evidence, and editing rules |
+| [Validation](VALIDATION.md) | Recorded checks and their limits |
+
+## Development
+
+```sh
+npm ci --include=dev --ignore-scripts --no-audit --no-fund
+npm run check
+npm run build
+npm test
+python3 -m unittest discover -s tests -p 'test_*.py'
+```
+
+CI runs Node tests with loopback-only networking and checks both editor distributions. Live account inference and owner-device pairing require separate validation.
+
+## Maintainers
+
+[@ts06068](https://github.com/ts06068).
+
+## Acknowledgements
+
+LemmaDuck builds on Pi, OMP, Paseo, the Agent Client Protocol, and the Model Context Protocol. Workflow sources and tool versions are recorded in `locks/`.
+
+This README follows [Standard Readme](https://github.com/RichardLitt/standard-readme), selected from [Awesome README](https://github.com/matiassingers/awesome-readme): a short description, direct installation and usage examples, and links to detailed guides.
+
+## Contributing
+
+[Open an issue](https://github.com/ts06068/LemmaDuck/issues) for questions or proposed changes. Pull requests are welcome. Describe the behavior, preserve existing user state, and report the checks you ran. Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/), for example `feat(research): track experiment predictions`.
+
+## License
+
+UNLICENSED. This repository has no declared project license. Upstream components retain their own licenses.

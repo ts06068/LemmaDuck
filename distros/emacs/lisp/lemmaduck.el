@@ -2,7 +2,7 @@
 
 ;; Version: 0.1.0
 ;; Package-Requires: ((emacs "29.1"))
-;; URL: https://github.com/ts06068/lemmaduck/tree/main/distros/emacs
+;; URL: https://github.com/ts06068/LemmaDuck/tree/main/distros/emacs
 ;;; Commentary:
 ;; Launch the shared LemmaDuck CLI without duplicating its authentication,
 ;; routing or task storage.  This preview uses Emacs's built-in terminal.

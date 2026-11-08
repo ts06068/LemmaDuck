@@ -53,12 +53,12 @@ if [ ! -d "$repo" ]; then
     if command -v gh >/dev/null 2>&1 && gh auth status --hostname github.com >/dev/null 2>&1; then
         gh repo clone ts06068/lemmaduck "$repo"
     else
-        git clone https://github.com/ts06068/lemmaduck.git "$repo"
+        git clone https://github.com/ts06068/LemmaDuck.git "$repo"
     fi
 fi
 origin=$(git -C "$repo" remote get-url origin)
 case "${origin%.git}" in
-    https://github.com/ts06068/lemmaduck|git@github.com:ts06068/lemmaduck|ssh://git@github.com/ts06068/lemmaduck) ;;
+    https://github.com/ts06068/LemmaDuck|git@github.com:ts06068/lemmaduck|ssh://git@github.com/ts06068/LemmaDuck) ;;
     *) echo "Choose a LemmaDuck checkout at $repo." >&2; exit 1 ;;
 esac
 cd "$repo"

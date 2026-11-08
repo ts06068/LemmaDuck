@@ -32,7 +32,7 @@ class DistroReleaseTests(unittest.TestCase):
                 manifest = json.loads((output / (stem + ".manifest.json")).read_text())
                 self.assertEqual(manifest["id"], distro)
                 self.assertEqual(manifest["sourceCommit"], commit)
-                self.assertEqual(manifest["repository"], "https://github.com/ts06068/lemmaduck")
+                self.assertEqual(manifest["repository"], "https://github.com/ts06068/LemmaDuck")
                 with tarfile.open(output / (stem + ".npm.tgz")) as archive:
                     package = json.load(archive.extractfile("package/package.json"))
                     self.assertEqual(package["name"], f"@ts06068/lemmaduck-{distro}")
