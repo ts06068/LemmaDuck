@@ -111,8 +111,6 @@ python3 reproduce.py --check
 
 The synthetic draft claims a mean of 25. The three observations yield 20. The script writes the discrepancy and a manifest that detects changed inputs or outputs.
 
-`duck` is the everyday command. `lemmaduck` remains available for compatibility.
-
 ## Documentation
 
 | Guide | Contents |
