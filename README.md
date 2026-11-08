@@ -4,9 +4,7 @@
 
 A lab copilot for reproducible research, writing, and code.
 
-Talk to the duck. Test your hunch. LemmaDuck brings your model accounts, project tools, and saved research tasks into one workspace. Use Paseo on desktop or tablet, or open the same workers in Emacs and Neovim.
-
-The GitHub repository is named **LemmaDuck**. Commands, npm packages, and local storage keep their lowercase names so existing installations continue to work. The source checkout can also keep its existing directory name.
+Talk to the duck. Test your hunch. **LemmaDuck** brings your model accounts, project tools, and saved research tasks into one workspace. Use Paseo on desktop or tablet, or open the same workers in Emacs and Neovim.
 
 ## Table of Contents
 
