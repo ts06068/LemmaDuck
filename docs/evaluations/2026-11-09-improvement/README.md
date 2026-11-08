@@ -74,3 +74,11 @@ The [improvement log](../../IMPROVEMENT_LOG.md) records hypotheses, failures, ru
 amendments and decisions. The [case README](../../../examples/inquiry-evaluation/README.md)
 explains reproduction. External scientific usefulness and discovery remain questions
 for domain collaboration and independently authored research cases.
+
+
+The [final installed-worker smoke](worker-smoke.json) passed through the public RPC
+workflow with the real signed-in `gpt-6-sol` account and isolated connector configuration.
+[Implementation CI](https://github.com/ts06068/LemmaDuck/actions/runs/42513664905)
+passed all four jobs, including packaging/upgrades, native editors, real OMP startup
+and public-data medical reproduction. These establish the stated software behavior;
+they do not turn the constructed review cases into independent scientific validation.

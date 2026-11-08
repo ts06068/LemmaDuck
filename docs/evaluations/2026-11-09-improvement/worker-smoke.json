@@ -1,0 +1,27 @@
+{
+  "purpose": "Real installed worker smoke, synthetic task files and isolated connector configuration",
+  "sourceCommit": "becd9245669504d4db58bedc67c1f9dec05013be",
+  "checks": {
+    "provider": "chatgpt",
+    "work": true,
+    "review": true,
+    "cancel": true,
+    "checkpoint": true,
+    "model": "gpt-6-sol",
+    "stopReason": "stop",
+    "warningRetained": true,
+    "failedOutput": true,
+    "failedWarning": true,
+    "cancelled": true,
+    "cancelledSwitchBlocked": true,
+    "timeout": true,
+    "timeoutSwitchBlocked": true,
+    "reviewer": "chatgpt",
+    "reviewMeaning": true,
+    "artifactRead": true,
+    "observedModel": "gpt-6-sol",
+    "reviewModel": "gpt-6-sol"
+  },
+  "privateReportSha256": "2b5e3a2cf0babaa889bf66c3caeae04574a3c994d71f894bae893dab5673de51",
+  "notes": "No authentication data or hidden model reasoning is included. External domain usefulness is not evaluated by this smoke check."
+}

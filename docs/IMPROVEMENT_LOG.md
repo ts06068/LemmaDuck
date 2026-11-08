@@ -214,3 +214,14 @@ policy isolation, caller aliasing, and interrupted/concurrent operations. Four o
 reports and all 163 published artifact digests were independently rechecked. The
 source confirmation protocol is the default; legacy stages remain explicitly available
 for audit/regression rather than being presented as new validation.
+
+
+Completion audit: all four [implementation CI jobs](https://github.com/ts06068/LemmaDuck/actions/runs/42513664905)
+passed on `becd924`: 91 main Node passes plus one medical-environment deferment covered
+by the dedicated two-test medical job; 22 root Python checks; native editor checks;
+three npm installs/upgrades; and real OMP protocols. The source installer, matching
+build fingerprint, installed comparison CLI and doctor passed. The actual `gpt-6-sol`
+worker passed work/review, checkpoint, warning/failed-output retention, cancellation,
+timeout, switch/reconciliation blocking, and artifact retrieval with unrelated
+connectors isolated. No required implementation check remains unverified. General
+scientific benefit, independent expert validation and model training are not claimed.

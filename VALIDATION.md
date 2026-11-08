@@ -1,3 +1,42 @@
+# Inquiry hardening, November 9, 2026
+
+The [improvement log](docs/IMPROVEMENT_LOG.md) records four cycles from observed
+weaknesses through hypotheses, implementation and testing. The [evidence bundle](docs/evaluations/2026-11-09-improvement/README.md)
+retains all 80 live paired trials, original reports/protocols, 163 hash-verified
+artifacts, and real-model experiment/action checks. Scores and regressions were not
+retrospectively changed. These same-author component cases do not establish general
+scientific superiority.
+
+The final compact policy tied the previous policy on every fresh confirmation check
+at the minimum 12 calls each, with 14,593 versus 14,668 reported tokens. A reduction
+in cost was not demonstrated there. The engineering improvements include informative
+read-only action comparison, immutable runtime/configuration snapshots, nested unknown
+outcome interruption, quota/accounting controls, refusal of unsupported formal proofs,
+and clean starter projects. Earlier medical evidence remains current with its
+contradiction preserved.
+
+Local checks passed the complete 87-test Node suite before the final accounting and
+aliasing additions; the focused final model/evaluation tests cover those additions.
+Root Python tests passed 21/21 before the added starter regression, and the updated
+starter suite passed 4/4. [CI for `becd9245669504d4db58bedc67c1f9dec05013be`](https://github.com/ts06068/LemmaDuck/actions/runs/42513664905)
+passed all four jobs. The loopback-only engine run passed 91 of 92 tests, with one
+medical-environment check deferred to the dedicated statistical job; that job passed
+both medical tests with no skips and reproduced the pinned public data. Root Python
+passed 22/22, both editor Python suites and native editor checks passed, all three npm
+installation/upgrades passed, and the real OMP `rpc`/`rpc-ui` checks passed.
+
+The official installed-source setup completed, its build fingerprint matched the
+current source/runtime, `duck doctor` verified the native tools and 5,665 workflow
+files, and the installed model-free action command returned the expected rankings.
+The final real ChatGPT public-worker smoke passed work/review, checkpoint, failed
+output/warning preservation, cancellation, timeout, reconciliation/switch blocking,
+and artifact retrieval using `gpt-6-sol`. Its [safe summary](docs/evaluations/2026-11-09-improvement/worker-smoke.json)
+contains no authentication material or hidden reasoning. The earlier medical task
+retained nine current scientific records and its open contradiction. No updated npm
+release has been published.
+
+---
+
 # Research inquiry implementation validation
 
 Source branch update, November 9, 2026 (Asia/Seoul). The implemented research lifecycle,
